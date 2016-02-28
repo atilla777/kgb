@@ -1,0 +1,38 @@
+h4 Результаты сканирования
+
+table.table-condensed.table-bordered.table-striped
+  thead
+    tr
+      th Scan time
+      th Organization
+      th Host ip
+      th Number
+      th Protocol
+      th State
+      th Service
+      th
+      th
+      th
+
+  tbody
+    - @scanned_ports.each do |scanned_port|
+      tr
+        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%s")
+        td = scanned_port.organization.name
+        td = scanned_port.host_ip
+        td = scanned_port.number
+        td = scanned_port.protocol
+        td
+          - if scanned_port.state == 'open'
+              span.text-danger
+                = scanned_port.state
+          - elsif scanned_port.state == 'filtered'
+              span.text-warning
+                = scanned_port.state
+          - else
+              span.text-success
+                = scanned_port.state
+        td = scanned_port.service
+        td = link_to 'Show', scanned_port
+        td = link_to 'Edit', edit_scanned_port_path(scanned_port)
+        td = link_to 'Destroy', scanned_port, data: {:confirm => 'Are you sure?'}, :method => :delete

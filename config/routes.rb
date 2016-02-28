@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :organizations
+  resources :scanned_ports
+  resources :organizations do
+    get 'scan'
+  end
+
+  root 'organizations#index'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

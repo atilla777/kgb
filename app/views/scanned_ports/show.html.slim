@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Job time:
+  = @scanned_port.job_time
+p
+  strong Organization:
+  = @scanned_port.organization
+p
+  strong Host ip:
+  = @scanned_port.host_ip
+p
+  strong Number:
+  = @scanned_port.number
+p
+  strong Protocol:
+  = @scanned_port.protocol
+p
+  strong State:
+  = @scanned_port.state
+p
+  strong Service:
+  = @scanned_port.service
+
+= link_to 'Edit', edit_scanned_port_path(@scanned_port)
+'|
+= link_to 'Back', scanned_ports_path

@@ -1,0 +1,30 @@
+= form_for @scanned_port do |f|
+  - if @scanned_port.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@scanned_port.errors.count, "error")} prohibited this scanned_port from being saved:"
+      ul
+        - @scanned_port.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :job_time
+    = f.datetime_select :job_time
+  .field
+    = f.label :organization
+    = f.text_field :organization
+  .field
+    = f.label :host_ip
+    = f.text_field :host_ip
+  .field
+    = f.label :number
+    = f.number_field :number
+  .field
+    = f.label :protocol
+    = f.text_field :protocol
+  .field
+    = f.label :state
+    = f.text_field :state
+  .field
+    = f.label :service
+    = f.text_field :service
+  .actions = f.submit

@@ -51,4 +51,5 @@ end
 #++
 gem 'slim-rails'
 gem 'bootstrap-sass'
+gem 'ruby-nmap'
 

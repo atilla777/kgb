@@ -1,6 +1,11 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
 
+  def scan
+    ScanJob.perform_later(params[:organization_id])
+    redirect_to scanned_ports_path
+  end
+
   # GET /organizations
   # GET /organizations.json
   def index

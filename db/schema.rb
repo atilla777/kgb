@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160228050040) do
+ActiveRecord::Schema.define(version: 20160228080223) do
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
@@ -20,5 +20,24 @@ ActiveRecord::Schema.define(version: 20160228050040) do
   end
 
   add_index "organizations", ["name"], name: "index_organizations_on_name"
+
+  create_table "scanned_ports", force: :cascade do |t|
+    t.datetime "job_time"
+    t.integer  "organization_id"
+    t.string   "host_ip"
+    t.integer  "number"
+    t.string   "protocol"
+    t.string   "state"
+    t.string   "service"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "scanned_ports", ["host_ip"], name: "index_scanned_ports_on_host_ip"
+  add_index "scanned_ports", ["number"], name: "index_scanned_ports_on_number"
+  add_index "scanned_ports", ["organization_id"], name: "index_scanned_ports_on_organization_id"
+  add_index "scanned_ports", ["protocol"], name: "index_scanned_ports_on_protocol"
+  add_index "scanned_ports", ["service"], name: "index_scanned_ports_on_service"
+  add_index "scanned_ports", ["state"], name: "index_scanned_ports_on_state"
 
 end
