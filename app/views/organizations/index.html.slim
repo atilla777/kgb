@@ -1,4 +1,5 @@
-h4 Организации
+h4
+  span.text-info Организации
 
 table.table-condensed.table-bordered.table-striped
   thead
@@ -13,12 +14,16 @@ table.table-condensed.table-bordered.table-striped
     - @organizations.each do |organization|
       tr
         td = organization.name
-        td = link_to 'Show', organization
-        td = link_to 'Edit', edit_organization_path(organization)
-        td = link_to 'Destroy', organization, data: {:confirm => 'Are you sure?'}, :method => :delete
-        td = link_to 'Scan', organization_scan_path(organization)
+        td = link_to organization do
+          i.glyphicon.glyphicon-eye-open
+        td = link_to edit_organization_path(organization) do
+          i.glyphicon.glyphicon-edit
+        td = link_to organization, data: {:confirm => 'Are you sure?'}, :method => :delete do
+          i.glyphicon.glyphicon-trash
+        td = link_to organization_scan_path(organization)
+          i.glyphicon.glyphicon-search
 
 br
 
-span.btn.btn-success.btn-xs
-  = link_to 'New Organization', new_organization_path
+  = link_to new_organization_path do
+    span.btn.btn-success.btn-xs Новая организация

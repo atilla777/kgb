@@ -1,4 +1,5 @@
-h4 Результаты сканирования
+h4
+  span.text-info Результаты сканирования
 
 table.table-condensed.table-bordered.table-striped
   thead
@@ -25,6 +26,7 @@ table.table-condensed.table-bordered.table-striped
         td
           - if scanned_port.state == 'open'
               span.text-danger
+                i.glyphicon.glyphicon-warning-sign>
                 = scanned_port.state
           - elsif scanned_port.state == 'filtered'
               span.text-warning
