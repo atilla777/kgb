@@ -1,0 +1,17 @@
+.page-header
+  h1 Войти
+= form_for @user_session do |f|
+  /<%= render 'shared/errors', object: @user_session %>
+      h2 = "#{pluralize(@user.errors.count, "error")} prohibited this user from being saved:"
+      ul
+        - @user.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :email, 'Логин'
+    = f.email_field :email, class: 'form-control'
+  .field
+    = f.label :password, 'Пароль'
+    = f.password_field :password, class: 'form-control'
+  .actions
+    = f.submit class: 'btn btn-primary btn-lg'

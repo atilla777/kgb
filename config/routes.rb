@@ -1,10 +1,16 @@
 Rails.application.routes.draw do
+  root 'organizations#index'
+  resources :users
   resources :scanned_ports
   resources :organizations do
     get 'scan'
   end
 
-  root 'organizations#index'
+  resources :user_sessions, only: [:create, :destroy]
+
+  delete '/sign_out', to: 'user_sessions#destroy', as: :sign_out
+  get '/sign_in', to: 'user_sessions#new', as: :sign_in
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

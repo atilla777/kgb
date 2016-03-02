@@ -8,18 +8,29 @@ html
   body
 
     nav.navbar.navbar-inverse
-      .container-fluid
+      .container
         .navbar-header
           a.navbar-brand href='/organizations/'
             img src='/ghost.png' width='35' height='31'
-        .collapse.navbar-collapse
+        #navbar
           ul.nav.navbar-nav
             li
               a href='/organizations/' Организации
             li
               a href='/scanned_ports/' Просканированные порты
 
+          ul.nav.navbar-nav.pull-right
+          - if current_user
+              li
+                span = current_user.email
+              li = link_to 'Выйти', sign_out_path, method: :delete
+          - else
+              li = link_to 'Войти', sign_in_path
+
     .container
+      - flash.each do |key, value|
+        /.class.alert.alert = key
+        = value
       .row
         .col-lg-12
           = yield

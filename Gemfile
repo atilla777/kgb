@@ -55,4 +55,4 @@ gem 'ruby-nmap'
 #gem 'delayed_job'
 gem 'daemons'
 gem 'delayed_job_active_record'
-
+gem 'authlogic'
