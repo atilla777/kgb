@@ -1,14 +1,14 @@
-h1 Listing users
+h3
+  span.text-info Пользователи
 
-table
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th Name
-      th Phone
-      th Job
-      th Description
-      th Organization
-      th Department
+      th Имя
+      th Телефон
+      th Должность
+      th Организация
+      th Подразделение
       th
       th
       th
@@ -19,13 +19,16 @@ table
         td = user.name
         td = user.phone
         td = user.job
-        td = user.description
         td = user.organization
         td = user.department
-        td = link_to 'Show', user
-        td = link_to 'Edit', edit_user_path(user)
-        td = link_to 'Destroy', user, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = link_to user do
+          i.glyphicon.glyphicon-eye-open aria-hidden="true"
+        td = link_to edit_user_path(user) do
+          i.glyphicon.glyphicon-edit aria-hidden="true"
+        td = link_to user, data: {:confirm => 'Вы уверены?'}, :method => :delete do
+          i.glyphicon.glyphicon-trash aria-hidden="true"
 
 br
 
-= link_to 'New User', new_user_path
+= link_to new_user_path do
+  span.btn.btn-success Новый пользователь

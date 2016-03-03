@@ -8,24 +8,32 @@ html
   body
 
     nav.navbar.navbar-inverse
+      /.container-fluid
       .container
         .navbar-header
-          a.navbar-brand href='/organizations/'
+          a.navbar-brand
+            | KGB
+          a.navbar-brand
             img src='/ghost.png' width='35' height='31'
-        #navbar
+        .collapse.navbar-collapse
           ul.nav.navbar-nav
             li
-              a href='/organizations/' Организации
+              = link_to 'Организации', organizations_path
             li
-              a href='/scanned_ports/' Просканированные порты
+              = link_to 'Пользователи', users_path
+            li
+              = link_to 'Результаты сканирования', scanned_ports_path
 
-          ul.nav.navbar-nav.pull-right
-          - if current_user
+          ul.nav.navbar-nav.navbar-right
+            - if current_user
               li
-                span = current_user.email
-              li = link_to 'Выйти', sign_out_path, method: :delete
-          - else
-              li = link_to 'Войти', sign_in_path
+                span.navbar-text
+                  | Вы вошли как: #{current_user.email}
+              li
+                = link_to 'Выйти', sign_out_path, method: :delete, class: 'navbar-link'
+            - else
+              li
+                = link_to 'Войти', sign_in_path, class: 'navbar-link navbar-right'
 
     .container
       - flash.each do |key, value|

@@ -5,23 +5,38 @@
       ul
         - @user.errors.full_messages.each do |message|
           li = message
-
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :phone
-    = f.text_field :phone
-  .field
-    = f.label :job
-    = f.text_field :job
-  .field
-    = f.label :description
-    = f.text_area :description
-  .field
-    = f.label :organization
-    = f.text_field :organization
-  .field
-    = f.label :department
-    = f.text_field :department
-  .actions = f.submit
+  fieldset
+    .control-group
+      = f.label :name, class: 'controll-label'
+      .controls
+        = f.text_field :name, class: 'input-xlarge'
+      = f.label :phone, class: 'control-label'
+      .controls
+        = f.text_field :phone
+      = f.label :job, class: 'control-label'
+      .controls
+        = f.text_field :job
+      = f.label :description, class: 'control-label'
+      .controls
+        = f.text_area :description
+      = f.label :organization_id, class: 'control-label'
+      .controls
+        = f.collection_select :organization_id, @organizations, :id, :name, class: 'control-label'
+      = f.label :department, class: 'control-label'
+      .controls
+        = f.text_field :department
+      = f.label :email, class: 'control-label'
+      .controls
+        = f.text_field :email
+      = f.label :active, class: 'control-label'
+      .controls
+        = f.check_box :active
+      = f.label :password, class: 'control-label'
+      .controls
+        = f.password_field :password
+      = f.label :password, class: 'control-label'
+      .controls
+        = f.password_field :password_confirmation
+      /.btn.group.horizontal role="group" aria-label="..."
+      .actions
+          = f.submit class: 'btn btn-success'

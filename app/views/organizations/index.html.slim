@@ -1,7 +1,7 @@
-h4
+h3
   span.text-info Организации
 
-table.table-condensed.table-bordered.table-striped
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
       th Имя
@@ -18,7 +18,7 @@ table.table-condensed.table-bordered.table-striped
           i.glyphicon.glyphicon-eye-open
         td = link_to edit_organization_path(organization) do
           i.glyphicon.glyphicon-edit
-        td = link_to organization, data: {:confirm => 'Are you sure?'}, :method => :delete do
+        td = link_to organization, data: {:confirm => 'Вы уверены?'}, :method => :delete do
           i.glyphicon.glyphicon-trash
         td = link_to organization_scan_path(organization)
           i.glyphicon.glyphicon-search
@@ -26,4 +26,4 @@ table.table-condensed.table-bordered.table-striped
 br
 
   = link_to new_organization_path do
-    span.btn.btn-success.btn-xs Новая организация
+    span.btn.btn-success Новая организация
