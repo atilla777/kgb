@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
     c.merge_validates_length_of_password_confirmation_field_options if: :active
     c.merge_validates_length_of_password_field_options if: :active
     c.merge_validates_format_of_email_field_options if: :active
+    c.merge_validates_uniqueness_of_email_field_options if: :active
   end
 
   before_save :set_activity
@@ -17,6 +18,7 @@ class User < ActiveRecord::Base
   belongs_to :organization
 
   validates :name, length: {minimum: 3, maximum: 255}
+    validates_uniqueness_of_email_field_options = false
 
   private
 
