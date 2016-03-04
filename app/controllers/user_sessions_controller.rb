@@ -10,6 +10,7 @@ class UserSessionsController < ApplicationController
       flash[:success] = "Welcome back!"
       redirect_to root_path
     else
+      flash[:danger] = "Wrong email or password!"
       render :new
     end
   end
