@@ -32,6 +32,12 @@ rails db:migrate
 ```
 rails s
 ```
+* запускаем процесс выполнения сканирования
+```
+rake jobs:work
+ или фоновым процессом
+bin/delayed_job start
+```
 * запускаем браузер и переходим по ссылке
 ```
 http://localhost:3000
