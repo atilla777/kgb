@@ -26,7 +26,9 @@ ru:
     delete: Удалить
     confirm: Вы уверены?
     back: Назад
-    new: Новый
+    new: Новая запись -
+    create: Сохранить
+    scan_now: Сканировать сейчас
   user_sessions:
     login: Войти в систему
     password: пароль
@@ -38,6 +40,12 @@ ru:
       user:
         one: Пользователь
         other: Пользователи
+      job:
+        one: Работа
+        other: Работы
+      scanned_port:
+        one: Результат сканирования
+        other: Результаты сканирования
     attributes:
       user:
         name: 'Имя'
@@ -46,8 +54,20 @@ ru:
         organization: 'Организация'
         job: 'Должность'
         department: 'Подразделение'
+        description: Описание
+        organization_id: Организация
+        active: Разрешено входить в систему
         password: 'Пароль'
         password_confirmation: 'Подтверждение пароля'
+      job:
+        name: Название
+        options: Опции сканирования
+        ports: Порты
+        hosts: IP адреса
+        organization_id: Организация
+        description: Описание
+      scanned_port:
+        job_id:  Работа
   date:
     abbr_day_names:
     - Вс
@@ -218,9 +238,9 @@ ru:
     select:
       prompt: 'Выберите: '
     submit:
-      create: Создать %{model}
-      submit: Сохранить %{model}
-      update: Сохранить %{model}
+      create: Создать - %{model}
+      submit: Сохранить - %{model}
+      update: Сохранить - %{model}
   number:
     currency:
       format:

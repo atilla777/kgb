@@ -74,7 +74,7 @@ class UsersController < ApplicationController
     end
 
     def set_organizations
-      @organizations = Organization.all
+      @organizations = Organization.all.order(:name)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

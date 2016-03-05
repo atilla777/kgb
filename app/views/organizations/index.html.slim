@@ -8,7 +8,6 @@ table.display.table.table-striped.table-bordered#index_table
       th
       th
       th
-      th
 
   tbody
     - @organizations.each do |organization|
@@ -20,8 +19,6 @@ table.display.table.table-striped.table-bordered#index_table
           i.glyphicon.glyphicon-edit
         td = link_to organization, data: {:confirm => 'Вы уверены?'}, :method => :delete do
           i.glyphicon.glyphicon-trash
-        td = link_to organization_scan_path(organization)
-          i.glyphicon.glyphicon-search
 
 br
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302182833) do
+ActiveRecord::Schema.define(version: 20160305134144) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -28,6 +28,19 @@ ActiveRecord::Schema.define(version: 20160302182833) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "jobs", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.text     "ports"
+    t.text     "hosts"
+    t.text     "options"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "organization_id"
+  end
+
+  add_index "jobs", ["organization_id"], name: "index_jobs_on_organization_id"
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name"
@@ -47,14 +60,28 @@ ActiveRecord::Schema.define(version: 20160302182833) do
     t.string   "service"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "job_id"
   end
 
   add_index "scanned_ports", ["host_ip"], name: "index_scanned_ports_on_host_ip"
+  add_index "scanned_ports", ["job_id"], name: "index_scanned_ports_on_job_id"
   add_index "scanned_ports", ["number"], name: "index_scanned_ports_on_number"
   add_index "scanned_ports", ["organization_id"], name: "index_scanned_ports_on_organization_id"
   add_index "scanned_ports", ["protocol"], name: "index_scanned_ports_on_protocol"
   add_index "scanned_ports", ["service"], name: "index_scanned_ports_on_service"
   add_index "scanned_ports", ["state"], name: "index_scanned_ports_on_state"
+
+  create_table "schedules", force: :cascade do |t|
+    t.integer  "job_id"
+    t.integer  "week_day"
+    t.integer  "month_day"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "schedules", ["job_id"], name: "index_schedules_on_job_id"
+  add_index "schedules", ["month_day"], name: "index_schedules_on_month_day"
+  add_index "schedules", ["week_day"], name: "index_schedules_on_week_day"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

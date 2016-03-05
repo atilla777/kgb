@@ -28,6 +28,10 @@ class User < ActiveRecord::Base
 
   private
 
+  def set_organizations
+    @organizations = Organization.all
+  end
+
   # установка полей разрешающих пользователю вход в систему
   # (authlogic разрешит вход пользователю только если поля active, approved и confirmed имеют значения true)
   def set_activity

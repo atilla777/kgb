@@ -1,10 +1,12 @@
 Rails.application.routes.draw do
+  resources :jobs do
+    get 'scan'
+  end
+  resources :schedules
   root 'organizations#index'
   resources :users
   resources :scanned_ports
-  resources :organizations do
-    get 'scan'
-  end
+  resources :organizations
 
   resources :user_sessions, only: [:create, :destroy]
 

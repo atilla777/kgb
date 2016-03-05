@@ -22,7 +22,11 @@ html
             li
               = link_to 'Пользователи', users_path
             li
+              = link_to 'Работы', jobs_path
+            li
               = link_to 'Результаты сканирования', scanned_ports_path
+            li
+              = link_to 'Рассписание', schedules_path
 
           ul.nav.navbar-nav.navbar-right
             - if current_user

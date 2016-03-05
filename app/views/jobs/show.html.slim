@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @job.name
+p
+  strong Description:
+  = @job.description
+p
+  strong Ports:
+  = @job.ports
+p
+  strong Hosts:
+  = @job.hosts
+p
+  strong Options:
+  = @job.options
+
+= link_to 'Edit', edit_job_path(@job)
+'|
+= link_to 'Back', jobs_path

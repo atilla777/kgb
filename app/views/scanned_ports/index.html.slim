@@ -1,11 +1,12 @@
 h3
-  span.text-primary Результаты сканирования
+  span.text-primary
+    = ScannedPort.model_name.human count: 2
 
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
       th Scan time
-      th Organization
+      th = t('activerecord.attributes.scanned_port.job_id')
       th Host ip
       th Number
       th Protocol
@@ -13,13 +14,12 @@ table.display.table.table-striped.table-bordered#index_table
       th Service
       th
       th
-      th
 
   tbody
     - @scanned_ports.each do |scanned_port|
       tr
         td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%s")
-        td = scanned_port.organization.name
+        td = scanned_port.job.name
         td = scanned_port.host_ip
         td = scanned_port.number
         td = scanned_port.protocol
@@ -36,5 +36,4 @@ table.display.table.table-striped.table-bordered#index_table
                 = scanned_port.state
         td = scanned_port.service
         td = link_to 'Show', scanned_port
-        td = link_to 'Edit', edit_scanned_port_path(scanned_port)
         td = link_to 'Destroy', scanned_port, data: {:confirm => 'Are you sure?'}, :method => :delete

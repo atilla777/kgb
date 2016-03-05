@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Job:
+  = @schedule.job
+p
+  strong Week day:
+  = @schedule.week_day
+p
+  strong Month day:
+  = @schedule.month_day
+
+= link_to 'Edit', edit_schedule_path(@schedule)
+'|
+= link_to 'Back', schedules_path

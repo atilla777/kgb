@@ -15,23 +15,23 @@
     .col-sm-10
       = f.text_field :phone, class: 'form-control', placeholder: 'телефонный номер'
   .form-group
-    = f.label :job, 'Должность', class: 'col-sm-2 control-label'
+    = f.label :job, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.text_field :job, class: 'form-control', placeholder: 'должность'
   .form-group
-    = f.label :description, 'Описание', class: 'col-sm-2 control-label'
+    = f.label :description, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.text_area :description, rows: 6, class: 'form-control', placeholder: 'дополнительная информация'
   .form-group
-    = f.label :organization_id, 'Организация', class: 'col-sm-2 control-label'
+    = f.label :organization_id, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.collection_select :organization_id, @organizations, :id, :name, class: 'form-control', placeholder: 'организация'
   .form-group
-    = f.label :department, 'Подразделение', class: 'col-sm-2 control-label'
+    = f.label :department, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.text_field :department, class: 'form-control', placeholder: 'подразделение'
   .form-group
-    = f.label :email, 'Почта', class: 'col-sm-2 control-label'
+    = f.label :email, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.text_field :email, class: 'form-control', placeholder: 'email'
   .form-group
@@ -39,18 +39,17 @@
       .checkbox
          label
            = f.check_box :active
-           | Разрешить вход пользователя в систему
+           | #{t('activerecord.attributes.user.active')}
   .form-group
-    = f.label :password, 'Пароль', class: 'col-sm-2 control-label'
+    = f.label :password, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.password_field :password, class: 'form-control', placeholder: 'пароль (от 6 символов)'
   .form-group
-    = f.label :password, 'Пароль', class: 'col-sm-2 control-label'
+    = f.label :password, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.password_field :password_confirmation, class: 'form-control', placeholder: 'подтвердить пароль'
   .actions.form-group
     .col-sm-offset-2.col-sm-10
       => link_to users_path do
-        span.btn.btn-info
-          | Пользователи
-      = f.submit 'Cохранить', class: 'btn btn-success'
+        span.btn.btn-info = User.model_name.human count: 2
+      = f.submit t('actions.create'), class: 'btn btn-success'

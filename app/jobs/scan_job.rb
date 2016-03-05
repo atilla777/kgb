@@ -6,14 +6,14 @@ class ScanJob < ActiveJob::Base
   queue_as :default
 
   def perform(*args)
-    organization_id = args[0]
-
+    job_id = args[0]
+    job = Job.find(job_id)
     # имя работы
     job_time = DateTime.now
     # путь к папке с результатами сканирования (относительно папки rails приложения)
     result_folder = "tmp"
     # имя файла с результатами сканирования
-    result_file = "#{job_time.strftime("%Y.%m.%d-%H.%m.%s")}_nmap.xml"
+    result_file = "#{job_id}_#{job_time.strftime("%Y.%m.%d-%H.%m.%s")}_nmap.xml"
     # полный путь к файлу с результатами сканирования (относительно папки rails приложения)
     result_path = "#{result_folder}/#{result_file}"
 
@@ -26,9 +26,8 @@ class ScanJob < ActiveJob::Base
       nmap.os_fingerprint = true
       nmap.xml = result_path
       nmap.verbose = true
-      nmap.ports = [20,21,22,23,25,80,110,443,512,522,8080,1080]
-      nmap.targets = ['www.ya.ru']
-
+      nmap.ports = job.ports
+      nmap.targets = job.hosts
 
     end
 
@@ -43,7 +42,8 @@ class ScanJob < ActiveJob::Base
           #puts "  #{port.number}/#{port.protocol}\t#{port.state}\t#{port.service}"
           # сохранение результата в базе§
           scanned_port = ScannedPort.new(job_time: job_time,
-                 organization_id: organization_id,
+                 job_id: job.id,
+                 organization_id: job.organization_id,
                  #host_id: host.ip,
                  host_ip: host.ip,
                  #port_id:,
