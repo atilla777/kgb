@@ -15,3 +15,6 @@
 //= require turbolinks
 //= require_tree .
 //= require bootstrap-sprockets
+$(document).on("ready page:change", function() {
+  $('[data-toggle="tooltip"]').tooltip();
+});

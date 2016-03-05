@@ -8,8 +8,10 @@ class User < ActiveRecord::Base
     # не проверять пароль и электронную почту для пользователя которому не разрешен вход (поле active для которого не установлено)
     c.merge_validates_confirmation_of_password_field_options if: :active
     c.merge_validates_length_of_password_confirmation_field_options if: :active
+    # !!! сделать проверку уникальности этого поля (password), если это поле не пустое
     c.merge_validates_length_of_password_field_options if: :active
     c.merge_validates_format_of_email_field_options if: :active
+    # !!! сделать проверку уникальности этого поля (email), если это поле не пустое
     c.merge_validates_uniqueness_of_email_field_options if: :active
   end
 
@@ -18,7 +20,7 @@ class User < ActiveRecord::Base
   belongs_to :organization
 
   validates :name, length: {minimum: 3, maximum: 255}
-    validates_uniqueness_of_email_field_options = false
+  validates :phone, length: {maximum: 25}
 
   private
 

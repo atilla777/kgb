@@ -20,13 +20,26 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 ---
 ru:
+  actions:
+    view: Показать
+    edit: Редактировать
+    delete: Удалить
+    confirm: Вы уверены?
+    back: Назад
+    new: Новый
   activerecord:
     models:
-      user: Пользователь
+      user:
+        one: Пользователь
+        other: Пользователи
     attributes:
       user:
         name: 'Имя'
+        phone: 'Телефон'
         email: 'Почта'
+        organization: 'Организация'
+        job: 'Должность'
+        department: 'Подразделение'
         password: 'Пароль'
         password_confirmation: 'Подтверждение пароля'
   date:
@@ -194,7 +207,7 @@ ru:
         few: "%{model}: сохранение не удалось из-за %{count} ошибок"
         many: "%{model}: сохранение не удалось из-за %{count} ошибок"
         one: "%{model}: сохранение не удалось из-за %{count} ошибки"
-        other: "%{model}: сохранение не удалось из-за %{count} ошибки"
+        other: "%{model}: сохранение не удалось из-за %{count} ошибок"
   helpers:
     select:
       prompt: 'Выберите: '

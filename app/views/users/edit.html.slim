@@ -1,9 +1,5 @@
-h3
-  span.text-info Редактировать пользователя
+.col-sm-offset-1.col-sm-11
+  h3
+    span.text-primary = "#{t('actions.edit')} #{User.model_name.human}"
 
 == render 'form'
-
-= link_to 'Show', @user
-'|
-= link_to 'Back', users_path
-

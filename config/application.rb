@@ -28,8 +28,8 @@ module Kgb
     #++
     config.active_job.queue_adapter = :delayed_job
     #++ предотавращает изменение меток полей (label) с ошибками валидации при использовании Bootsrap в оформлении форм
-    config.action_view.field_error_proc = Proc.new { |html_tag, instance| 
-      html_tag
+    config.action_view.field_error_proc = Proc.new { |html_tag, instance|
+      "<div class='text-danger has-error' >#{html_tag}</div>".html_safe
     }
   end
 end
