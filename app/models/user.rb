@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
 
   validates :name, length: {minimum: 3, maximum: 255}
   validates :phone, length: {maximum: 25}
+  validates :job, length: {maximum: 255}
+  validates :department, length: {maximum: 255}
+  validates :organization_id, numericality: {only_integer: true}
+  validates :email, uniqueness: {allow_blank: true}
 
   private
 
