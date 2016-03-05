@@ -2,22 +2,23 @@ class UserSessionsController < ApplicationController
 
   def new
     @user_session = UserSession.new
+    render :layout => false
   end
 
   def create
     @user_session = UserSession.new(user_session_params)
     if @user_session.save
-      flash[:success] = "Welcome back!"
+      flash[:success] = t('user_sessions.welcome')
       redirect_to root_path
     else
-      flash[:danger] = "Wrong email or password!"
-      render :new
+      flash[:danger] = t('user_sessions.wrong')
+      render :new, layout: false
     end
   end
 
   def destroy
     current_user_session.destroy
-    flash[:success] = "Goodbye!"
+    flash[:success] = t('user_sessions.goodbay')
     redirect_to root_path
   end
 

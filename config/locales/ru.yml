@@ -27,6 +27,12 @@ ru:
     confirm: Вы уверены?
     back: Назад
     new: Новый
+  user_sessions:
+    login: Войти в систему
+    password: пароль
+    welcome: С возвращением!
+    wrong: Неверный email или пароль
+    goodbay: Всего доброго!
   activerecord:
     models:
       user:
