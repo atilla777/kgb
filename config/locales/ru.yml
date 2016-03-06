@@ -29,6 +29,10 @@ ru:
     new: Новая запись -
     create: Сохранить
     scan_now: Сканировать сейчас
+  flashes:
+    create: Запись %{model} успешно создана.
+    update: Запись %{model} успешно отредактирована.
+    destroy: Запись %{model} успешно удалена.
   user_sessions:
     login: Войти в систему
     password: пароль

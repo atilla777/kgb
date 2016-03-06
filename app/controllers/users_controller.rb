@@ -31,7 +31,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        flash[:success] = "Запись #{User.model_name.human} успешно создана."
+        flash[:success] = t('flashes.create', model: User.model_name.human)
         format.html { redirect_to @user}
         format.json { render :show, status: :created, location: @user }
       else
@@ -46,7 +46,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        flash[:success] = "Запись #{User.model_name.human} успешно обнавлена."
+        flash[:success] = t('flashes.update', model: User.model_name.human)
         format.html { redirect_to @user}
         format.json { render :show, status: :ok, location: @user }
       else
@@ -61,7 +61,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     respond_to do |format|
-      flash[:success] = "Запись #{User.model_name.human} успешно удалена."
+      flash[:success] = t('flashes.destroy', model: User.model_name.human)
       format.html { redirect_to users_url}
       format.json { head :no_content }
     end
