@@ -1,12 +1,21 @@
-= form_for @organization do |f|
+= form_for @organization, html: {class: 'form-horizontal'} do |f|
   - if @organization.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@organization.errors.count, "error")} prohibited this organization from being saved:"
-      ul
-        - @organization.errors.full_messages.each do |message|
-          li = message
-
-  .field
-    = f.label :name
-    = f.text_field :name
-  .actions = f.submit
+    .col-sm-offset-1.col-sm-11
+      #error_explanation
+        h2 = t('errors.template.header', count: @organization.errors.count, model: Organization.model_name.human)
+        ul
+          - @organization.errors.full_messages.each do |message|
+            li = message
+  .form-group
+    = f.label :name, class: 'col-sm-2 control-label required'
+    .col-sm-10
+        = f.text_field :name, class: 'form-control', placeholder: 'название'
+  .form-group
+    = f.label :description, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_area :description, rows: 6, class: 'form-control', placeholder: 'описание'
+  .actions.form-group
+    .col-sm-offset-2.col-sm-10
+      => link_to organizations_path do
+        span.btn.btn-info = Organization.model_name.human count: 2
+      = f.submit t('actions.create'), class: 'btn btn-success'

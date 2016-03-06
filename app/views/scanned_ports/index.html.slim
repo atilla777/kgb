@@ -15,12 +15,11 @@ table.display.table.table-striped.table-bordered#index_table
       th = t('activerecord.attributes.scanned_port.legality')
       th = t('activerecord.attributes.scanned_port.service')
       th
-      th
 
   tbody
     - @scanned_ports.each do |scanned_port|
       tr
-        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%s")
+        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%S")
         td = scanned_port.job.name
         td = scanned_port.host_ip
         td = scanned_port.number
@@ -59,5 +58,10 @@ table.display.table.table-striped.table-bordered#index_table
           - else
               = scanned_port.show_history_legality
         td = scanned_port.service
-        td = link_to 'Show', scanned_port
-        td = link_to 'Destroy', scanned_port, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td
+          = link_to scanned_port, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+            i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          = link_to edit_scanned_port_path(scanned_port), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
+            i.glyphicon.glyphicon-edit aria-hidden="true"
+          = link_to scanned_port, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+            i.glyphicon.glyphicon-trash aria-hidden="true"

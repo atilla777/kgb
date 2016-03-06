@@ -41,6 +41,9 @@ ru:
     goodbay: Всего доброго!
   activerecord:
     models:
+      organization:
+        one: Организация
+        other: Организации
       user:
         one: Пользователь
         other: Пользователи
@@ -54,6 +57,9 @@ ru:
         one: Сервис
         other: Сервисы
     attributes:
+      organization:
+        name: Название
+        description: Описание
       user:
         name: 'Имя'
         phone: 'Телефон'

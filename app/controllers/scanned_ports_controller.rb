@@ -4,7 +4,7 @@ class ScannedPortsController < ApplicationController
   # GET /scanned_ports
   # GET /scanned_ports.json
   def index
-    @scanned_ports = ScannedPort.all
+    @scanned_ports = ScannedPort.all#.order(job_time: :asc)
   end
 
   # GET /scanned_ports/1
