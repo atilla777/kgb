@@ -1,0 +1,43 @@
+= form_for @service, html: {class: 'form-horizontal'} do |f|
+  - if @service.errors.any?
+    .col-sm-offset-1.col-sm-11
+      #error_explanation
+        h2 = t('errors.template.header', count: @service.errors.count, model: Service.model_name.human)
+        ul
+          - @service.errors.full_messages.each do |message|
+            li = message
+  .form-group
+    = f.label :name, class: 'col-sm-2 control-label required'
+    .col-sm-10
+        = f.text_field :name, class: 'form-control', placeholder: 'название'
+  .form-group
+    = f.label :organization_id, class: 'col-sm-2 control-label required'
+    .col-sm-10
+      = f.collection_select :organization_id, @organizations, :id, :name, class: 'form-control'
+  .form-group
+    = f.label :host_ip, class: 'col-sm-2 control-label required'
+    .col-sm-10
+      = f.text_field :host_ip, class: 'form-control', placeholder: 'IP адрес хоста'
+  .form-group
+    = f.label :port, class: 'col-sm-2 control-label required'
+    .col-sm-10
+      = f.text_field :port, class: 'form-control', placeholder: 'номер порта (от 0 до 65535)'
+  .form-group
+    = f.label :protocol, class: 'col-sm-2 control-label required'
+    .col-sm-10
+      = f.collection_select :protocol, Service.protocols, :first, :last, class: 'form-control'
+  .form-group
+    = f.label :description, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_area :description, rows: 6, class: 'form-control', placeholder: 'дополнительная информация'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :legality
+           | #{t('activerecord.attributes.service.legality')}
+  .actions.form-group
+    .col-sm-offset-2.col-sm-10
+      => link_to services_path do
+        span.btn.btn-info = Service.model_name.human count: 2
+      = f.submit t('actions.create'), class: 'btn btn-success'

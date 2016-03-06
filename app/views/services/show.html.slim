@@ -1,0 +1,57 @@
+.col-sm-offset-1.col-sm-11
+  table.table.table-striped.table-hover
+    caption.text-primary
+      h3 = Service.model_name.human
+    thead
+      th.col-md-1
+      th.col-md-7
+    tbody
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :name
+        td
+          = @service.name
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :organization_id
+        td
+          = @service.organization.name
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :host_ip
+        td
+          = @service.host_ip
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :port
+        td
+          = @service.port
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :protocol
+        td
+          = @service.show_protocol
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :legality
+        td
+          = @service.show_legality
+      tr
+        td.text-right.text-info
+          strong
+            = Service.human_attribute_name :description
+        td
+          = simple_format @service.description
+
+  => link_to services_path do
+    span.btn.btn-info
+      = Service.model_name.human count: 2
+  = link_to edit_service_path(@service) do
+    span.btn.btn-warning
+      = t('actions.edit')

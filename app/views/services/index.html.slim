@@ -1,0 +1,37 @@
+h3
+  span.text-primary
+    = Service.model_name.human count: 2
+
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th = t('activerecord.attributes.service.name')
+      th = t('activerecord.attributes.service.organization_id')
+      th = t('activerecord.attributes.service.legality')
+      th = t('activerecord.attributes.service.host_ip')
+      th = t('activerecord.attributes.service.port')
+      th = t('activerecord.attributes.service.protocol')
+      th
+
+  tbody
+    - @services.each do |row|
+      tr
+        td = row.name
+        td = row.organization.name
+        td = row.show_legality
+        td = row.host_ip
+        td = row.port
+        td = row.show_protocol
+        td
+          = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+            i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          = link_to edit_service_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
+            i.glyphicon.glyphicon-edit aria-hidden="true"
+          = link_to row, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+            i.glyphicon.glyphicon-trash aria-hidden="true"
+
+br
+
+= link_to new_service_path do
+  span.btn.btn-success = t('helpers.submit.create', model: Service.model_name.human)
+    i.glyphicon.glyphicon-info-sign aria-hidden="true"

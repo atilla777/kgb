@@ -45,7 +45,7 @@
 
   => link_to jobs_path do
     span.btn.btn-info
-      = t('actions.back')
+      = Job.model_name.human count: 2
   = link_to edit_job_path(@job) do
     span.btn.btn-warning
       = t('actions.edit')

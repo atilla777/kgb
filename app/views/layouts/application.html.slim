@@ -20,13 +20,22 @@ html
             li
               = link_to 'Организации', organizations_path
             li
-              = link_to 'Пользователи', users_path
-            li
               = link_to 'Работы', jobs_path
             li
               = link_to 'Результаты сканирования', scanned_ports_path
             li
-              = link_to 'Рассписание', schedules_path
+              = link_to 'Сервисы', services_path
+
+            li role="presentation" class="dropdown"
+              a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+                | Справочники
+                span class='caret'
+              ul class="dropdown-menu"
+                li
+                  = link_to 'Пользователи', users_path
+                li
+                  = link_to 'Рассписание', schedules_path
+
 
           ul.nav.navbar-nav.navbar-right
             - if current_user

@@ -50,6 +50,9 @@ ru:
       scanned_port:
         one: Результат сканирования
         other: Результаты сканирования
+      service:
+        one: Сервис
+        other: Сервисы
     attributes:
       user:
         name: 'Имя'
@@ -72,6 +75,21 @@ ru:
         description: Описание
       scanned_port:
         job_id:  Работа
+        start_time: Время сканирования
+        host_ip: Хост
+        number: Порт
+        protocol: Протокол
+        state: Состояние
+        service: Сервис
+        legality: Легальность на момент сканирования
+      service:
+        name: Название
+        organization_id: Организация
+        host_ip: Адрес хоста
+        port: Порт
+        protocol: Протокол
+        legality: Легальность
+        description: Описание
   date:
     abbr_day_names:
     - Вс

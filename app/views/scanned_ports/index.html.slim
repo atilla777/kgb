@@ -5,13 +5,15 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th Scan time
+      th = t('activerecord.attributes.scanned_port.start_time')
       th = t('activerecord.attributes.scanned_port.job_id')
-      th Host ip
-      th Number
-      th Protocol
-      th State
-      th Service
+      th = t('activerecord.attributes.scanned_port.host_ip')
+      th = t('activerecord.attributes.scanned_port.number')
+      th = t('activerecord.attributes.scanned_port.protocol')
+      th = t('activerecord.attributes.scanned_port.state')
+      th = t('activerecord.attributes.service.legality')
+      th = t('activerecord.attributes.scanned_port.legality')
+      th = t('activerecord.attributes.scanned_port.service')
       th
       th
 
@@ -26,7 +28,7 @@ table.display.table.table-striped.table-bordered#index_table
         td
           - if scanned_port.state == 'open'
               span.text-danger
-                i.glyphicon.glyphicon-warning-sign>
+                i.glyphicon.glyphicon-flash>
                 = scanned_port.state
           - elsif scanned_port.state == 'filtered'
               span.text-warning
@@ -34,6 +36,28 @@ table.display.table.table-striped.table-bordered#index_table
           - else
               span.text-success
                 = scanned_port.state
+        td
+          - service = Service.legality_key(scanned_port.state, scanned_port.host_ip, scanned_port.number, scanned_port.protocol)
+
+          - if  service == 1
+              span.text-success
+                = 'Да'
+          - elsif service == 0
+              span.text-danger
+                i.glyphicon.glyphicon-warning-sign>
+                = 'Нет'
+          - else
+            = 'Не требуется'
+        td
+          - if scanned_port.legality == 1
+              span.text-success
+                = scanned_port.show_history_legality
+          - elsif scanned_port.legality == 0
+              span.text-danger
+                i.glyphicon.glyphicon-warning-sign>
+                = scanned_port.show_history_legality
+          - else
+              = scanned_port.show_history_legality
         td = scanned_port.service
         td = link_to 'Show', scanned_port
         td = link_to 'Destroy', scanned_port, data: {:confirm => 'Are you sure?'}, :method => :delete

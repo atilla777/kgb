@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160305134144) do
+ActiveRecord::Schema.define(version: 20160306101024) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -61,10 +61,12 @@ ActiveRecord::Schema.define(version: 20160305134144) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.integer  "job_id"
+    t.integer  "legality"
   end
 
   add_index "scanned_ports", ["host_ip"], name: "index_scanned_ports_on_host_ip"
   add_index "scanned_ports", ["job_id"], name: "index_scanned_ports_on_job_id"
+  add_index "scanned_ports", ["legality"], name: "index_scanned_ports_on_legality"
   add_index "scanned_ports", ["number"], name: "index_scanned_ports_on_number"
   add_index "scanned_ports", ["organization_id"], name: "index_scanned_ports_on_organization_id"
   add_index "scanned_ports", ["protocol"], name: "index_scanned_ports_on_protocol"
@@ -82,6 +84,24 @@ ActiveRecord::Schema.define(version: 20160305134144) do
   add_index "schedules", ["job_id"], name: "index_schedules_on_job_id"
   add_index "schedules", ["month_day"], name: "index_schedules_on_month_day"
   add_index "schedules", ["week_day"], name: "index_schedules_on_week_day"
+
+  create_table "services", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "organization_id"
+    t.integer  "legality"
+    t.string   "host_ip"
+    t.integer  "port"
+    t.integer  "protocol"
+    t.text     "description"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "services", ["host_ip"], name: "index_services_on_host_ip"
+  add_index "services", ["legality"], name: "index_services_on_legality"
+  add_index "services", ["organization_id"], name: "index_services_on_organization_id"
+  add_index "services", ["port"], name: "index_services_on_port"
+  add_index "services", ["protocol"], name: "index_services_on_protocol"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

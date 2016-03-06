@@ -51,7 +51,7 @@
 
   => link_to users_path do
     span.btn.btn-info
-      = t('actions.back')
+      = User.model_name.human count: 2
   = link_to edit_user_path(@user) do
     span.btn.btn-warning
       = t('actions.edit')
