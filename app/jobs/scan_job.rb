@@ -13,7 +13,7 @@ class ScanJob < ActiveJob::Base
     # путь к папке с результатами сканирования (относительно папки rails приложения)
     result_folder = "tmp"
     # имя файла с результатами сканирования
-    result_file = "#{job_id}_#{job_time.strftime("%Y.%m.%d-%H.%m.%s")}_nmap.xml"
+    result_file = "#{job_id}_#{job_time.strftime("%Y.%m.%d-%H.%M.%S")}_nmap.xml"
     # полный путь к файлу с результатами сканирования (относительно папки rails приложения)
     result_path = "#{result_folder}/#{result_file}"
 

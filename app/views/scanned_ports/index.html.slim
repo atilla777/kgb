@@ -5,7 +5,7 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.scanned_port.start_time')
+      th.default_sort data-sort='desc' = t('activerecord.attributes.scanned_port.start_time')
       th = t('activerecord.attributes.scanned_port.job_id')
       th = t('activerecord.attributes.scanned_port.host_ip')
       th = t('activerecord.attributes.scanned_port.number')
@@ -19,7 +19,7 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @scanned_ports.each do |scanned_port|
       tr
-        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%S")
+        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%M.%S")
         td = scanned_port.job.name
         td = scanned_port.host_ip
         td = scanned_port.number

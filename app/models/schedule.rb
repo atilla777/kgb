@@ -10,7 +10,6 @@ class Schedule < ActiveRecord::Base
 
   belongs_to :job
 
-  scope :today_schedules, ->{where(week_day: Time.now.wday).where(month_day: Time.now.day).joins(:jobs)}
 =begin
   def show_week_day
     if self.week_day.present?

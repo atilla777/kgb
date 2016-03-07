@@ -10,4 +10,8 @@ class Job < ActiveRecord::Base
   validates :hosts, presence: true
   validates :organization_id, numericality: {only_integer: true}
 
+
+  scope :today_jobs, ->{joins(:schedules).merge(Schedule.where("week_day = :week_day OR month_day = :month_day",
+                                                               {week_day: Time.now.wday, month_day: Time.now.day}))}
+
 end
