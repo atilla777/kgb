@@ -1,4 +1,5 @@
 Rails.application.config.after_initialize do
     # добавить проверку того, что планировщик сегодня не запускался
-    DailyPlannerJob.perform_later
+    Delayed::Job.destroy_all # удаляем все задачи (задачу планировщика на завтара и запланированные им работы по сканированию на сегодня )
+    DailyPlannerJob.perform_later # запускаем планировщик работ по сканированию (в свою очередь он запланирует все работы на сегодня)
 end

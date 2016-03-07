@@ -27,6 +27,7 @@ bundle install
 * создаем базу данных sqlite
 ```
 rails db:migrate
+rake db:seed
 ```
 * запускаем приложение (вариант 1)
 ```
@@ -51,3 +52,7 @@ foreman start
 ```
 http://localhost:3000
 ```
+* Логин для входа:
+kgb@ussr.su
+* Пароль:
+smersh

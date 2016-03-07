@@ -37,13 +37,10 @@ class ScanJob < ActiveJob::Base
     Nmap::XML.new(result_path) do |xml|
       xml.each_host do |host|
         #puts "[#{host.ip}]"
-
         host.each_port do |port|
           #puts "  #{port.number}/#{port.protocol}\t#{port.state}\t#{port.service}"
           # сохранение результата в базе§
-
           legality = Service.legality_key(port.state, host.ip, port.number, port.protocol)
-
           scanned_port = ScannedPort.new(job_time: job_time,
                  job_id: job.id,
                  organization_id: job.organization_id,
