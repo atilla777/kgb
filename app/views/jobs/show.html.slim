@@ -1,51 +1,19 @@
 .col-sm-offset-1.col-sm-11
-  table.table.table-striped.table-hover
-    caption.text-primary
-      h3 = Job.model_name.human
-    thead
-      th.col-md-1
-      th.col-md-7
-    tbody
-      tr
-        td.text-right.text-info
-          strong
-            = Job.human_attribute_name :name
-        td
-          = @job.name
-      tr
-        td.text-right.text-info
-          strong
-            = Job.human_attribute_name :organization_id
-        td
-          = @job.organization.name
-      tr
-        td.text-right.text-info
-          strong
-            = Job.human_attribute_name :options
-        td
-          = @job.options
-      tr
-        td.text-right.text-info
-          strong
-            = Job.human_attribute_name :ports
-        td
-          = @job.ports
-      tr
-        td.text-right.text-info
-          strong
-            = Job.human_attribute_name :hosts
-        td
-          = @job.hosts
-      tr
-        td.text-right.text-info
-          strong
-            = Job.human_attribute_name :description
-        td
-          = simple_format @job.description
+  h3
+    span.text-primary
+      = "#{Job.model_name.human} - #{@job.name}"
+  ul.nav.nav-tabs role="tablist"
+    li role="presentation" class="active"
+      a href="#main_info" aria-controls="main_info" role="tab" data-toggle="tab"
+        = t('navigations.main_info')
 
-  => link_to jobs_path do
-    span.btn.btn-info
-      = Job.model_name.human count: 2
-  = link_to edit_job_path(@job) do
-    span.btn.btn-warning
-      = t('actions.edit')
+    li role="presentation"
+      a href="#schedules" aria-controls="schedules" role="tab" data-toggle="tab"
+        = Schedule.model_name.human count: 2
+
+
+  .tab-content
+    div role="tabpanel" class="tab-pane active" id="main_info"
+      = render 'main_info'
+    div role="tabpanel" class="tab-pane" id="schedules"
+      = render 'schedules/job_schedules'

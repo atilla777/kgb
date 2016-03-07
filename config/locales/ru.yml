@@ -20,6 +20,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 ---
 ru:
+  navigations:
+    main_info: Основная информация
+    week_days: Дни недели
   actions:
     view: Показать
     edit: Редактировать
@@ -28,6 +31,7 @@ ru:
     back: Назад
     new: Новая запись -
     create: Сохранить
+    add: Добавить
     scan_now: Сканировать сейчас
   flashes:
     create: Запись %{model} успешно создана.
@@ -56,6 +60,9 @@ ru:
       service:
         one: Сервис
         other: Сервисы
+      schedule:
+        one: Запланированный день выполнения
+        other: Запланированные дни выполнения
     attributes:
       organization:
         name: Название
@@ -96,6 +103,10 @@ ru:
         protocol: Протокол
         legality: Легальность
         description: Описание
+      schedule:
+        job_id: Работа
+        week_day: День недели
+        month_day: День месяца
   date:
     abbr_day_names:
     - Вс

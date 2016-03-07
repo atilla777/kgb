@@ -1,0 +1,48 @@
+table.table.table-striped.table-hover
+  thead
+    th.col-md-1
+    th.col-md-7
+  tbody
+    tr
+      td.text-right.text-info
+        strong
+          = Job.human_attribute_name :name
+      td
+        = @job.name
+    tr
+      td.text-right.text-info
+        strong
+          = Job.human_attribute_name :organization_id
+      td
+        = @job.organization.name
+    tr
+      td.text-right.text-info
+        strong
+          = Job.human_attribute_name :options
+      td
+        = @job.options
+    tr
+      td.text-right.text-info
+        strong
+          = Job.human_attribute_name :ports
+      td
+        = @job.ports
+    tr
+      td.text-right.text-info
+        strong
+          = Job.human_attribute_name :hosts
+      td
+        = @job.hosts
+    tr
+      td.text-right.text-info
+        strong
+          = Job.human_attribute_name :description
+      td
+        = simple_format @job.description
+
+=> link_to jobs_path do
+  span.btn.btn-info
+    = Job.model_name.human count: 2
+= link_to edit_job_path(@job) do
+  span.btn.btn-warning
+    = t('actions.edit')

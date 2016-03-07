@@ -1,0 +1,18 @@
+#ajax_renewable
+  table.table.table-bordered.table-condensed
+    caption
+      span.text-success
+        = t('navigations.week_days')
+    tbody
+      tr
+       - (0..6).each do |day_number|
+         - if schedule = Schedule.where(job_id: @job.id, week_day: day_number).first
+           td.success
+             = link_to schedule_path(schedule, job_id: @job.id ), remote: true, :method => :delete, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+               i.glyphicon.glyphicon-ok aria-hidden="true"
+               =< t('date.day_names')[day_number]
+         - else
+           td.danger
+             = link_to schedules_path(job_id: @job.id, week_day: day_number), remote: true, method: :post, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.add')  do
+               i.glyphicon.glyphicon-remove aria-hidden="true"
+               =< t('date.day_names')[day_number]
