@@ -13,7 +13,7 @@
   <% else %>
     <% color = 'text-success' %>
   <% end %>
-  <% new_row << "<span class = '#{color}'> #{row.state} </span>" %>
+  <% new_row << "<span class = '#{color}'> #{row.port_state} </span>" %>
   <% if row.service_legality_id == 0 %>
     <% color = 'text-danger' %>
   <% elsif row.service_legality_id == 2 %>

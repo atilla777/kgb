@@ -13,7 +13,7 @@ class ScannedPortsController < ApplicationController
               {field: 'scanned_ports.host_ip', as: 'host_ip'},
               {field: 'scanned_ports.number', as: 'number'},
               {field: 'scanned_ports.protocol', as: 'protocol'},
-              {field: 'scanned_ports.state', as: 'state', map_to: ScannedPort.states},
+              {field: 'scanned_ports.state', as: 'port_state', map_to: ScannedPort.states},
               {field: 'scanned_ports.state', as: 'state_id', invisible: true},
               #{field: 'services.legality', as: 'service_legality'},
               {field: 'services.legality', as: 'service_legality',
