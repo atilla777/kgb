@@ -1,0 +1,46 @@
+﻿<%= dt_response(@datatable) do |new_row, row| %>
+  <% new_row << row.job_time.strftime("%d.%m.%Y-%H.%M.%S") %>
+  <% new_row << %(
+    <a href = '/jobs/#{row.job_id}' class = 'btn btn-link btn-xs'> #{row.job_name}</a>
+    ) %>
+  <% new_row << row.host_ip %>
+  <% new_row << row.number %>
+  <% new_row << row.protocol %>
+  <% if row.state_id == 'open' %>
+    <% color = 'text-danger' %>
+  <% elsif row.state_id == 'filtered' %>
+    <% color = 'text-warning' %>
+  <% else %>
+    <% color = 'text-success' %>
+  <% end %>
+  <% new_row << "<span class = '#{color}'> #{row.state} </span>" %>
+  <% if row.service_legality_id == 0 %>
+    <% color = 'text-danger' %>
+  <% elsif row.service_legality_id == 2 %>
+    <% color = 'text-danger' %>
+  <% elsif row.service_legality_id == 3 %>
+    <% color = 'text-muted' %>
+  <% else %>
+    <% color = 'text-success' %>
+  <% end %>
+  <% new_row << "<span class = '#{color}'> #{row.service_legality} </span>" %>
+  <% if row.history_legality_id == 0 %>
+    <% color = 'text-danger' %>
+  <% elsif row.history_legality_id == 2 %>
+    <% color = 'text-warning' %>
+  <% elsif row.history_legality_id == 1 %>
+    <% color = 'text-success' %>
+  <% else %>
+    <% color = 'text-muted' %>
+  <% end %>
+  <% new_row << "<span class = '#{color}'> #{row.history_legality} </span>" %>
+  <% new_row << row.service %>
+  <% new_row << %(
+    <a href="/scanned_ports/#{row.id}/edit" class ='btn btn-default btn-xs'>
+      <i aria-hidden="true" class="glyphicon glyphicon-edit" data-toggle="tooltip" data-placement="top" title="#{t('actions.edit')}"></i>
+    </a>
+    <a data-confirm='#{t('actions.confirm')}' data-method='delete' href ="/incidents/#{row.id}" class ='btn btn-default btn-xs'>
+      <i aria-hidden="true" class="glyphicon glyphicon-trash"  data-toggle="tooltip" data-placement="top" title="#{t('actions.delete')}"></i>
+    </a>
+  ) %>
+<% end %>

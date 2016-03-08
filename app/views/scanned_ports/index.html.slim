@@ -2,66 +2,13 @@ h3
   span.text-primary
     = ScannedPort.model_name.human count: 2
 
-table.display.table.table-striped.table-bordered#index_table
-  thead
-    tr
-      th.default_sort data-sort='desc' = t('activerecord.attributes.scanned_port.start_time')
-      th = t('activerecord.attributes.scanned_port.job_id')
-      th = t('activerecord.attributes.scanned_port.host_ip')
-      th = t('activerecord.attributes.scanned_port.number')
-      th = t('activerecord.attributes.scanned_port.protocol')
-      th = t('activerecord.attributes.scanned_port.state')
-      th = t('activerecord.attributes.service.legality')
-      th = t('activerecord.attributes.scanned_port.legality')
-      th = t('activerecord.attributes.scanned_port.service')
-      th
-
-  tbody
-    - @scanned_ports.each do |scanned_port|
-      tr
-        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%M.%S")
-        td = scanned_port.job.name
-        td = scanned_port.host_ip
-        td = scanned_port.number
-        td = scanned_port.protocol
-        td
-          - if scanned_port.state == 'open'
-              span.text-danger
-                i.glyphicon.glyphicon-flash>
-                = scanned_port.state
-          - elsif scanned_port.state == 'filtered'
-              span.text-warning
-                = scanned_port.state
-          - else
-              span.text-success
-                = scanned_port.state
-        td
-          - service = Service.legality_key(scanned_port.state, scanned_port.host_ip, scanned_port.number, scanned_port.protocol)
-
-          - if  service == 1
-              span.text-success
-                = 'Да'
-          - elsif service == 0
-              span.text-danger
-                i.glyphicon.glyphicon-warning-sign>
-                = 'Нет'
-          - else
-            = 'Не требуется'
-        td
-          - if scanned_port.legality == 1
-              span.text-success
-                = scanned_port.show_history_legality
-          - elsif scanned_port.legality == 0
-              span.text-danger
-                i.glyphicon.glyphicon-warning-sign>
-                = scanned_port.show_history_legality
-          - else
-              = scanned_port.show_history_legality
-        td = scanned_port.service
-        td
-          = link_to scanned_port, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-            i.glyphicon.glyphicon-info-sign aria-hidden="true"
-          = link_to edit_scanned_port_path(scanned_port), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
-            i.glyphicon.glyphicon-edit aria-hidden="true"
-          = link_to scanned_port, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
-            i.glyphicon.glyphicon-trash aria-hidden="true"
+= dt_big_table(dt_fields: [t('activerecord.attributes.scanned_port.start_time'),\
+                          t('activerecord.attributes.scanned_port.job_id'),\
+                          t('activerecord.attributes.scanned_port.host_ip'),\
+                          t('activerecord.attributes.scanned_port.number'),\
+                          t('activerecord.attributes.scanned_port.protocol'),\
+                          t('activerecord.attributes.scanned_port.state'),\
+                          t('activerecord.attributes.service.legality'),\
+                          t('activerecord.attributes.scanned_port.legality'),\
+                          t('activerecord.attributes.scanned_port.service'),\
+  ''], dt_method: '/scanned_ports/datatable', sort: [0, :desc])

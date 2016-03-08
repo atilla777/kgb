@@ -1,6 +1,9 @@
 class ScannedPort < ActiveRecord::Base
 
-  LEGALITIES = {0 => 'Нет', 1 => 'Да', 2 => 'Неизвестно', 3 => 'Не требуется'}
+  include Datatableable
+
+  LEGALITIES = {0 => I18n.t('types.h_illegal'), 1 => I18n.t('types.h_legal'), 2 => I18n.t('types.h_unknown'), 3 => I18n.t('types.not_needed')}
+  STATES = {'open' => I18n.t('types.open'), 'closed' => I18n.t('types.closed'), 'filtered' => I18n.t('types.filtered')}
 
   belongs_to :organization
   belongs_to :job
@@ -11,6 +14,18 @@ class ScannedPort < ActiveRecord::Base
 
   def show_history_legality
     LEGALITIES[self.legality]
+  end
+
+  def show_state
+    STATES[self.state]
+  end
+
+  def self.states
+    STATES
+  end
+
+  def self.legalities
+    LEGALITIES
   end
 
 end

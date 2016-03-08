@@ -58,3 +58,6 @@ gem 'delayed_job_active_record'
 gem 'authlogic'
 gem 'pundit'
 gem 'rolify'
+group :development do
+  gem 'meta_request'
+end 

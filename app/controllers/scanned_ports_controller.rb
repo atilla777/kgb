@@ -1,6 +1,55 @@
 class ScannedPortsController < ApplicationController
   before_action :set_scanned_port, only: [:show, :edit, :update, :destroy]
 
+  # ++ paginate
+  # для использования вместе с хелпером в application_helper
+  # dt_big_table(params)
+  # и view datatable.json.erb
+  def datatable
+    fields = [{field: 'scanned_ports.job_time', as: 'job_time'},
+              {field: 'scanned_ports.id', as: 'id', invisible: true},
+              {field: 'scanned_ports.job_id', as: 'job_id', invisible: true},
+              {field: 'jobs.name', as: 'job_name', joins: 'jobs', on: 'jobs.id = scanned_ports.job_id'},
+              {field: 'scanned_ports.host_ip', as: 'host_ip'},
+              {field: 'scanned_ports.number', as: 'number'},
+              {field: 'scanned_ports.protocol', as: 'protocol'},
+              {field: 'scanned_ports.state', as: 'state', map_to: ScannedPort.states},
+              {field: 'scanned_ports.state', as: 'state_id', invisible: true},
+              #{field: 'services.legality', as: 'service_legality'},
+              {field: 'services.legality', as: 'service_legality',
+map_by_sql:  "CASE
+              WHEN (SELECT services.legality FROM services WHERE services.host_ip = scanned_ports.host_ip AND services.port = scanned_ports.number)
+              IS NULL AND (scanned_ports.state == 'open' OR scanned_ports.state == 'filtered')
+              THEN '#{t('types.unknown')}'
+              WHEN (SELECT services.legality FROM services WHERE services.host_ip = scanned_ports.host_ip AND services.port = scanned_ports.number)
+              = 0 AND (scanned_ports.state == 'open' OR scanned_ports.state == 'filtered') THEN '#{t('types.illegal')}'
+              WHEN (SELECT services.legality FROM services WHERE services.host_ip = scanned_ports.host_ip AND services.port = scanned_ports.number)
+              = 1 THEN '#{t('types.legal')}'
+              ELSE '#{t('types.no_sense')}' END"
+              },
+              {field: 'services.legality', as: 'service_legality_id', invisible: true,
+map_by_sql:  "CASE
+              WHEN (SELECT services.legality FROM services WHERE services.host_ip = scanned_ports.host_ip AND services.port = scanned_ports.number)
+              IS NULL AND (scanned_ports.state == 'open' OR scanned_ports.state == 'filtered') THEN 2
+              WHEN (SELECT services.legality FROM services WHERE services.host_ip = scanned_ports.host_ip AND services.port = scanned_ports.number)
+              = 0 AND (scanned_ports.state == 'open' OR scanned_ports.state == 'filtered') THEN 0
+              WHEN (SELECT services.legality FROM services WHERE services.host_ip = scanned_ports.host_ip AND services.port = scanned_ports.number)
+              = 1 THEN 1
+              ELSE 3 END"
+              },
+               {field: 'scanned_ports.legality', as: 'history_legality', map_to: ScannedPort.legalities},
+               {field: 'scanned_ports.legality', as: 'history_legality_id', invisible: true},
+              {field: 'scanned_ports.service', as: 'service'}]
+              #{field: 'users.name', as: 'registrator', joins: 'users', on: 'incidents.user_id = users.id'}
+              #{field: 'organizations.name', as: 'organization_name', joins: 'organizations', on: 'incidents.organization_id = organizations.id'},
+              #{field: 'organizations.id', as: 'organization_id', invisible: true},
+              #{field: 'incidents.violator', as: 'violator_name', map_by_sql:  "CASE WHEN incidents.violator IS NULL OR incidents.violator = '' THEN (SELECT users.name FROM user_incidents LEFT JOIN users ON users.id = user_incidents.user_id WHERE user_incidents.incident_id = incidents.id AND user_incidents.role = 0 AND lower(users.name) LIKE '%%' LIMIT 1) ELSE incidents.violator END"},
+    @datatable = ScannedPort.dt_all(params, fields)
+    respond_to do |format|
+      format.json {render 'datatable'}
+    end
+  end
+
   # GET /scanned_ports
   # GET /scanned_ports.json
   def index

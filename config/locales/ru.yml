@@ -20,6 +20,18 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 ---
 ru:
+  types:
+    legal: Легален
+    illegal: Нелегален
+    unknown: Неизвестно
+    h_unknown: Не было известно
+    h_legal: Был легален
+    h_illegal: Не был легален
+    no_sense: Не важно
+    not_needed: Не было важно
+    open: Открыт
+    closed: Закрыт
+    filtered: Фильтруется
   navigations:
     main_info: Основная информация
     week_days: Дни недели

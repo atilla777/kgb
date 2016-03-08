@@ -40,7 +40,7 @@ class Service < ActiveRecord::Base
   def self.legality_key(state, host_ip, port, protocol)
     service = Service.where(host_ip: host_ip, port: port, protocol: Service.show_protocol_number(protocol)).first
     if state == :closed
-      legality = 3 # unused
+      legality = 3 # no means
     else
       if service.present?
         if service.legality == 1

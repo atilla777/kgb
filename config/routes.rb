@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   resources :schedules
   root 'organizations#index'
   resources :users
-  resources :scanned_ports
+  resources :scanned_ports do
+    collection do
+      get 'datatable' # pagination
+    end
+  end
   resources :organizations
 
   resources :user_sessions, only: [:create, :destroy]
