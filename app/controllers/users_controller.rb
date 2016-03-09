@@ -5,12 +5,15 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
+    authorize User
     @users = User.all
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
+    @roles = @user.roles
+    @allowed_roles = User.roles.keys
   end
 
   # GET /users/new

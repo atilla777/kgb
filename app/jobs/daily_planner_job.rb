@@ -8,8 +8,8 @@ class DailyPlannerJob < ActiveJob::Base
     end
 
     # После планирования работ на сегодняшний день, перезапустить планировщик работ завтра
-    #DailyPlannerJob.set(wait: 2.minutes).perform_later # запускать каждые 2 минуты (для отладки)
-    DailyPlannerJob.set(wait_until: Date.tomorrow.midnight).perform_later
+    DailyPlannerJob.set(wait: 2.minutes).perform_later # запускать каждые 2 минуты (для отладки)
+    #DailyPlannerJob.set(wait_until: Date.tomorrow.midnight).perform_later
   end
 
 end

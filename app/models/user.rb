@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   rolify
 
+  ROLES = {admin: I18n.t('roles.admin'), editor: I18n.t('roles.editor')}
   # опции authlogic
   acts_as_authentic do |c|
     c.crypto_provider = Authlogic::CryptoProviders::Sha512 # алгоритм хэширования пароля
@@ -26,6 +27,10 @@ class User < ActiveRecord::Base
   validates :department, length: {maximum: 255}
   validates :organization_id, numericality: {only_integer: true}
   validates :email, uniqueness: {allow_blank: true}
+
+  def self.roles
+    ROLES
+  end
 
   private
 

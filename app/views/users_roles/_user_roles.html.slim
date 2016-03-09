@@ -1,0 +1,23 @@
+#ajax_renewable
+  table.table.table-bordered.table-condensed
+    caption
+      span.text-success
+        = t('navigations.roles')
+    thead
+      tr
+        th.col-md-4
+          = t('roles.exist')
+        th.col-md-4
+          = t('roles.allowed')
+    tbody
+      tr
+        td
+          - @roles.each do |role|
+            = link_to users_roles_path(user_id: @user.id, role: role.name), remote: true, :method => :delete, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+              i.glyphicon.glyphicon-ok aria-hidden="true"
+              =< User.roles[role.name.to_sym]
+        td
+          - @allowed_roles.each do |role|
+            = link_to users_roles_path(user_id: @user.id, role: role), remote: true, method: :post, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.add')  do
+              i.glyphicon.glyphicon-remove aria-hidden="true"
+              =< User.roles[role]

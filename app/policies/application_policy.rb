@@ -7,7 +7,11 @@ class ApplicationPolicy
   end
 
   def index?
-    false
+    if @user.id == User.where(name: 'Admin').first&.id
+      true
+    else
+      false
+    end
   end
 
   def show?

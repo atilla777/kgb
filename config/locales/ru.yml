@@ -20,6 +20,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 ---
 ru:
+  roles:
+    admin: Администратор
+    editor: Редактор
+    exist: Назначенные
+    allowed: Доступные
+  messages:
+    not_allowed: Нет прав доступа.
   types:
     legal: Легален
     illegal: Нелегален
@@ -35,6 +42,7 @@ ru:
   navigations:
     main_info: Основная информация
     week_days: Дни недели
+    roles: Назначение ролей
   actions:
     view: Показать
     edit: Редактировать

@@ -1,53 +1,18 @@
 .col-sm-offset-1.col-sm-11
-  table.table.table-striped.table-hover
-    caption.text-primary
-      h3 = User.model_name.human
-    thead
-      th.col-md-1
-      th.col-md-7
-    tbody
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :name
-        td
-          = @user.name
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :phone
-        td
-          = @user.phone
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :job
-        td
-          = @user.job
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :department
-        td
-          = @user.department
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :organization
-        td
-          = @user&.organization&.name
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :phone
-        td
-          = @user.phone
-      tr
-        td.text-right.text-info
-          strong
-            = User.human_attribute_name :description
-        td
-          = simple_format @user.description
+  h3 = User.model_name.human
+  ul.nav.nav-tabs role="tablist"
+    li role="presentation" class="active"
+      a href="#main_info" aria-controls="main_info" role="tab" data-toggle="tab"
+        = t('navigations.main_info')
+    li role="presentation"
+      a href="#user_roles" aria-controls="user_roles" role="tab" data-toggle="tab"
+        = t('navigations.roles')
+
+  .tab-content
+    div role="tabpanel" class="tab-pane active" id="main_info"
+      = render 'main_info'
+    div role="tabpanel" class="tab-pane" id="user_roles"
+      = render 'users_roles/user_roles'
 
   => link_to users_path do
     span.btn.btn-info

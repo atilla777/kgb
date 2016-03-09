@@ -1,0 +1,48 @@
+table.table.table-striped.table-hover
+  thead
+    tr
+      th.col-md-1
+      th.col-md-7
+  tbody
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :name
+      td
+        = @user.name
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :phone
+      td
+        = @user.phone
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :job
+      td
+        = @user.job
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :department
+      td
+        = @user.department
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :organization
+      td
+        = @user&.organization&.name
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :phone
+      td
+        = @user.phone
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :description
+      td
+        = simple_format @user.description
