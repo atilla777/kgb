@@ -12,21 +12,25 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    authorize @user
     set_user_roles
   end
 
   # GET /users/new
   def new
+    authorize User
     @user = User.new
   end
 
   # GET /users/1/edit
   def edit
+    authorize @user
   end
 
   # POST /users
   # POST /users.json
   def create
+    authorize User
     @user = User.new(user_params)
     if @user.active == false
     end
@@ -46,6 +50,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    authorize @user
     respond_to do |format|
       if @user.update(user_params)
         flash[:success] = t('flashes.update', model: User.model_name.human)
@@ -61,6 +66,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
+    authorize User
     @user.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: User.model_name.human)
@@ -78,12 +84,12 @@ class UsersController < ApplicationController
     def set_organizations
       @organizations = Organization.all.order(:name)
     end
-    
-  def set_user_roles
-    @roles = @user.roles
-    user_roles_names = @roles.map{|role| role.name.to_sym}
-    @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
-  end
+
+    def set_user_roles
+      @roles = @user.roles
+      user_roles_names = @roles.map{|role| role.name.to_sym}
+      @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
+    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
