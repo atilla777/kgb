@@ -12,8 +12,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @roles = @user.roles
-    @allowed_roles = User.roles.keys
+    set_user_roles
   end
 
   # GET /users/new
@@ -79,6 +78,12 @@ class UsersController < ApplicationController
     def set_organizations
       @organizations = Organization.all.order(:name)
     end
+    
+  def set_user_roles
+    @roles = @user.roles
+    user_roles_names = @roles.map{|role| role.name.to_sym}
+    @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
+  end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
