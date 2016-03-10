@@ -72,5 +72,5 @@ class ApplicationPolicy
       scope
     end
   end
-  
+
 end

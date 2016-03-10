@@ -6,6 +6,10 @@ class UsersRolesPolicy < ApplicationPolicy
     end
   end
 
+  def show?
+    @user.has_role? :admin
+  end
+
   def create?
     @user.has_role? :admin
   end
@@ -13,5 +17,5 @@ class UsersRolesPolicy < ApplicationPolicy
   def destroy?
     @user.has_role? :admin
   end
-  
+
 end

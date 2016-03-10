@@ -23,6 +23,7 @@ ru:
   roles:
     admin: Администратор
     editor: Редактор
+    viewer: Читатель
     exist: Назначенные
     allowed: Доступные
   messages:

@@ -1,5 +1,7 @@
 .col-sm-offset-1.col-sm-11
-  h3 = User.model_name.human
+  h3
+    span.text-primary
+      = "#{User.model_name.human} - #{@user.name}"
   ul.nav.nav-tabs role="tablist"
     li role="presentation" class="active"
       a href="#main_info" aria-controls="main_info" role="tab" data-toggle="tab"
@@ -21,4 +23,4 @@
       = User.model_name.human count: 2
   = link_to edit_user_path(@user) do
     span.btn.btn-warning
-      = t('actions.edit'
+      = t('actions.edit')

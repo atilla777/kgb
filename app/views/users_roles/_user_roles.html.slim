@@ -14,10 +14,12 @@
         td
           - @roles.each do |role|
             = link_to users_roles_path(user_id: @user.id, role: role.name), remote: true, :method => :delete, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
-              i.glyphicon.glyphicon-ok aria-hidden="true"
-              =< User.roles[role.name.to_sym]
+              span.text-success
+                i.glyphicon.glyphicon-ok aria-hidden="true"
+                =< User.roles[role.name.to_sym]
         td
           - @allowed_roles.each do |role|
             = link_to users_roles_path(user_id: @user.id, role: role), remote: true, method: :post, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.add')  do
-              i.glyphicon.glyphicon-remove aria-hidden="true"
-              =< User.roles[role]
+              span.text-danger
+                i.glyphicon.glyphicon-remove aria-hidden="true"
+                =< User.roles[role]
