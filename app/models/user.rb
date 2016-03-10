@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   rolify
 
-  ROLES = {admin: I18n.t('roles.admin'), editor: I18n.t('roles.editor')}
+  ROLES = {admin: I18n.t('roles.admin'), editor: I18n.t('roles.editor'), viewer: I18n.t('roles.viewer')
   # опции authlogic
   acts_as_authentic do |c|
     c.crypto_provider = Authlogic::CryptoProviders::Sha512 # алгоритм хэширования пароля
