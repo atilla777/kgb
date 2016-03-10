@@ -7,7 +7,7 @@ class ApplicationPolicy
   end
 
   def index?
-    if @user.id == User.where(name: 'Admin').first&.id
+    if @user.has_any_role? :admin, :editor, :viewer
       true
     else
       false
@@ -15,11 +15,21 @@ class ApplicationPolicy
   end
 
   def show?
-    scope.where(:id => record.id).exists?
+    if scope.where(:id => record.id).exists?
+      true
+    elsif
+      @user.has_any_role? :admin, :editor, :viewer
+    else
+      false
+    end
   end
 
   def create?
-    false
+    if @user.has_any_role? :admin, :editor
+      true
+    else
+      false
+    end
   end
 
   def new?
@@ -27,7 +37,11 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    if @user.has_any_role? :admin, :editor
+      true
+    else
+      false
+    end
   end
 
   def edit?
@@ -35,7 +49,11 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    if @user.has_any_role? :admin, :editor
+      true
+    else
+      false
+    end
   end
 
   def scope
@@ -54,4 +72,5 @@ class ApplicationPolicy
       scope
     end
   end
+  
 end
