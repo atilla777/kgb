@@ -4,21 +4,37 @@ class UsersRolesController < ApplicationController
 
   def create
     authorize :users_roles
-    @user.add_role(params[:role])
-    set_user_roles
-    respond_to do |format|
-      # РІРѕР·СЂР°С‰Р°РµС‚СЃСЏ РѕС‚РІРµС‚ РЅР° ajax Р·Р°РїСЂРѕСЃ (Р·Р°РїСЂРѕСЃ СЃРѕ СЃС‚СЂР°РЅРёС†С‹ СЃРІРµРґРµРЅРёР№ Рѕ СЂР°Р±РѕС‚Рµ)
-      format.js {render 'user_roles_renew'}
+    if params[:organization_id].present?
+      organization = Organization.find(params[:organization_id])
+      @user.add_role(Organization.beholder_role_name, organization)
+      set_user_roles
+      respond_to do |format|
+        format.js {render 'organization_roles_renew'}
+      end
+    else
+      @user.add_role(params[:role])
+      set_user_roles
+      respond_to do |format|
+        format.js {render 'user_roles_renew'}
+      end
     end
   end
 
   def destroy
     authorize :users_roles
-    @user.remove_role(params[:role])
-    set_user_roles
-    respond_to do |format|
-      # РІРѕР·СЂР°С‰Р°РµС‚СЃСЏ РѕС‚РІРµС‚ РЅР° ajax Р·Р°РїСЂРѕСЃ (Р·Р°РїСЂРѕСЃ СЃРѕ СЃС‚СЂР°РЅРёС†С‹ СЃРІРµРґРµРЅРёР№ Рѕ СЂР°Р±РѕС‚Рµ)
-      format.js {render 'user_roles_renew'}
+    if params[:organization_id].present?
+      organization = Organization.find(params[:organization_id])
+      @user.remove_role(Organization.beholder_role_name, organization)
+      set_user_roles
+      respond_to do |format|
+        format.js {render 'organization_roles_renew'}
+      end
+    else
+      @user.remove_role(params[:role])
+      set_user_roles
+      respond_to do |format|
+        format.js {render 'user_roles_renew'}
+      end
     end
   end
 
@@ -29,9 +45,13 @@ class UsersRolesController < ApplicationController
   end
 
   def set_user_roles
+    # глобальные роли
     @roles = @user.roles
     user_roles_names = @roles.map{|role| role.name.to_sym}
     @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
+    # роли организации (к информации каких организаций  имеет доступ пользователь)
+    @assigned_organizations = Organization.with_role(Organization.beholder_role_name, @user)
+    @allowed_organizations = Organization.all
   end
 
 end

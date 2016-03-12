@@ -17,6 +17,7 @@
     - if policy(:users_roles).show?
       div role="tabpanel" class="tab-pane" id="user_roles"
         = render 'users_roles/user_roles'
+        = render 'users_roles/organization_roles'
 
   => link_to users_path do
     span.btn.btn-info

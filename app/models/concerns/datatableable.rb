@@ -37,6 +37,7 @@
       result[:select_string] = []
       result[:joins_string] = []
       where_conditions = []
+      result[:filter_string] = []
       fields.each do |f|
         unless f.fetch(:invisible, false)
           result[:dt_fields] << f # список полей отображаемых в столбцах TadaTable (могут участвовать в сортировке)
@@ -44,6 +45,9 @@
         where_conditions << dt_where_string(params, f) # часть WHERE sql запроса
         end
         result[:select_string] << dt_select_string(f)
+        if f[:filter]
+          result[:filter_string] << f.fetch(:filter)
+        end
       end
       where_conditions = where_conditions.join(' OR ')
       result[:select_string] = result[:select_string].join(', ')
@@ -106,6 +110,9 @@
 
     def dt_relation(dt_params) # scope
       relation = self.select(dt_params[:select_string]).where(dt_params[:where_string])
+      if dt_params[:filter_string]
+        relation = relation.where(dt_params[:filter_string])
+      end
       if dt_params[:joins_string]
         relation = relation.joins(dt_params[:joins_string])
       end

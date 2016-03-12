@@ -1,0 +1,25 @@
+#organization_roles_renew
+  table.table.table-bordered.table-condensed
+    caption
+      span.text-warning
+        = t('navigations.organization_roles')
+    thead
+      tr
+        th.col-md-4
+          = t('roles.exist')
+        th.col-md-4
+          = t('roles.allowed')
+    tbody
+      tr
+        td
+          - @assigned_organizations.each do |organization|
+            = link_to users_roles_path(user_id: @user.id, organization_id: organization.id), remote: true, :method => :delete, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+              span.text-success
+                i.glyphicon.glyphicon-ok aria-hidden="true"
+                =< organization.name
+        td
+          - @allowed_organizations.each do |organization|
+            = link_to users_roles_path(user_id: @user.id, organization_id: organization.id), remote: true, method: :post, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.add')  do
+              span.text-danger
+                i.glyphicon.glyphicon-remove aria-hidden="true"
+                =< organization.name

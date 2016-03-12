@@ -86,9 +86,13 @@ class UsersController < ApplicationController
     end
 
     def set_user_roles
+      # глобальные роли
       @roles = @user.roles
       user_roles_names = @roles.map{|role| role.name.to_sym}
       @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
+      # роли организации (к информации каких организаций  имеет доступ пользователь)
+      @assigned_organizations = Organization.with_role(Organization.beholder_role_name, @user)
+      @allowed_organizations = Organization.all
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
