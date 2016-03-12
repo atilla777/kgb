@@ -93,6 +93,7 @@ class UsersController < ApplicationController
       # роли организации (к информации каких организаций  имеет доступ пользователь)
       @assigned_organizations = Organization.with_role(Organization.beholder_role_name, @user)
       @allowed_organizations = Organization.all
+      @allowed_organizations = @allowed_organizations.select{ |organization| @assigned_organizations.exclude?(organization) }
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
