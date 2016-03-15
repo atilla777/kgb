@@ -48,6 +48,7 @@ ru:
     roles: Роли
     global_roles: Назначение глобальных ролей
     organization_roles: Назначение ролей организации
+    dashboard: Панель управления
   actions:
     view: Показать
     edit: Редактировать
