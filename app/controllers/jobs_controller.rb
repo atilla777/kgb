@@ -12,12 +12,7 @@ class JobsController < ApplicationController
   def index
     authorize Job
     #
-    if current_user.has_any_role? :admin, :editor, :viewer
-      @jobs = Job.all
-    else
-      organizations_ids = policy_scope(Organization).pluck(:id)
-      @jobs = Job.where("organization_id IN (#{organizations_ids.join(', ')})").load
-    end
+   @jobs = policy_scope(Job)
   end
 
   # GET /jobs/1
