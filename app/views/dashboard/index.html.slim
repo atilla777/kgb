@@ -6,24 +6,22 @@ table.display.table.table-striped.table-bordered#index_table
     tr
       th = t('activerecord.attributes.organization.name')
       th
-      th
 
   tbody
     - @organizations.each do |row|
       tr
-        td = link_to row.name, row, class: 'btn btn-link btn-xs'
         td
-          - row.current_services.each do |service|
+          = link_to row.name, row, class: 'btn btn-link btn-xs'
+          - row.ip_addresses.each do |ip|
             ul.list-inline
-              li.bg-info = service.host_ip
-              li = service.number
-              li = service.protocol
-              li = service.state
+              li.bg-primary = ip
 
         td
-          = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-            i.glyphicon.glyphicon-info-sign aria-hidden="true"
-          = link_to edit_organization_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
-            i.glyphicon.glyphicon-edit aria-hidden="true"
-          = link_to row, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
-            i.glyphicon.glyphicon-trash aria-hidden="true"
+          - row.detected_services.each do |service|
+            ul.list-inline
+              li.bg-info = service.host_ip
+              li.bg-success = service.number
+              li.bg-warning = service.protocol
+              li.bg-danger = service.state
+              li  = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+                  i.glyphicon.glyphicon-ok aria-hidden="true"
