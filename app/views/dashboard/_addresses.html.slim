@@ -1,0 +1,18 @@
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th = t('activerecord.attributes.organization.name')
+      th = t('activerecord.attributes.service.host_ip')
+
+  tbody
+    - @organizations.each do |row|
+      tr
+        td
+          = link_to row.name, row, class: 'btn btn-link btn-xs'
+
+        td
+          - row.ip_addresses.each do |ip|
+            ul.list-inline
+              li.bg-primary = ip
+              li  = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+                  i.glyphicon.glyphicon-ok aria-hidden="true"
