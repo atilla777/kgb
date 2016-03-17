@@ -65,8 +65,8 @@ ActiveRecord::Schema.define(version: 20160307152055) do
   create_table "scanned_ports", force: :cascade do |t|
     t.datetime "job_time"
     t.integer  "organization_id"
-    t.string   "host_ip"
-    t.integer  "number"
+    t.string   "host"
+    t.integer  "port"
     t.string   "protocol"
     t.string   "state"
     t.string   "service"
@@ -76,11 +76,11 @@ ActiveRecord::Schema.define(version: 20160307152055) do
     t.integer  "legality"
   end
 
-  add_index "scanned_ports", ["host_ip"], name: "index_scanned_ports_on_host_ip"
+  add_index "scanned_ports", ["host"], name: "index_scanned_ports_on_host"
   add_index "scanned_ports", ["job_id"], name: "index_scanned_ports_on_job_id"
   add_index "scanned_ports", ["legality"], name: "index_scanned_ports_on_legality"
-  add_index "scanned_ports", ["number"], name: "index_scanned_ports_on_number"
   add_index "scanned_ports", ["organization_id"], name: "index_scanned_ports_on_organization_id"
+  add_index "scanned_ports", ["port"], name: "index_scanned_ports_on_port"
   add_index "scanned_ports", ["protocol"], name: "index_scanned_ports_on_protocol"
   add_index "scanned_ports", ["service"], name: "index_scanned_ports_on_service"
   add_index "scanned_ports", ["state"], name: "index_scanned_ports_on_state"
@@ -101,15 +101,15 @@ ActiveRecord::Schema.define(version: 20160307152055) do
     t.string   "name"
     t.integer  "organization_id"
     t.integer  "legality"
-    t.string   "host_ip"
+    t.string   "host"
     t.integer  "port"
-    t.integer  "protocol"
+    t.string   "protocol"
     t.text     "description"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
 
-  add_index "services", ["host_ip"], name: "index_services_on_host_ip"
+  add_index "services", ["host"], name: "index_services_on_host"
   add_index "services", ["legality"], name: "index_services_on_legality"
   add_index "services", ["organization_id"], name: "index_services_on_organization_id"
   add_index "services", ["port"], name: "index_services_on_port"

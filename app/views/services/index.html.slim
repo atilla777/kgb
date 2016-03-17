@@ -8,7 +8,7 @@ table.display.table.table-striped.table-bordered#index_table
       th = t('activerecord.attributes.service.name')
       th = t('activerecord.attributes.service.organization_id')
       th = t('activerecord.attributes.service.legality')
-      th = t('activerecord.attributes.service.host_ip')
+      th = t('activerecord.attributes.service.host')
       th = t('activerecord.attributes.service.port')
       th = t('activerecord.attributes.service.protocol')
       th
@@ -19,9 +19,9 @@ table.display.table.table-striped.table-bordered#index_table
         td = row.name
         td = row.organization.name
         td = row.show_legality
-        td = row.host_ip
+        td = row.host
         td = row.port
-        td = row.show_protocol
+        td = row.protocol
         td
           = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
             i.glyphicon.glyphicon-info-sign aria-hidden="true"

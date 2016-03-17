@@ -3,8 +3,8 @@
   <% new_row << %(
     <a href = '/jobs/#{row.job_id}' class = 'btn btn-link btn-xs'> #{row.job_name}</a>
     ) %>
-  <% new_row << row.host_ip %>
-  <% new_row << row.number %>
+  <% new_row << row.host %>
+  <% new_row << row.port %>
   <% new_row << row.protocol %>
   <% if row.state_id == 'open' %>
     <% color = 'text-danger' %>

@@ -3,8 +3,8 @@ h3
     = t('navigations.dashboard')
 ul.nav.nav-tabs role="tablist"
   li role="presentation" class="active"
-    a href="#main_info" aria-controls="main_info" role="tab" data-toggle="tab"
-      = t('navigations.main_info')
+    a href="#detected_services" aria-controls="detected_services" role="tab" data-toggle="tab"
+      = t('navigations.detected_services')
   li role="presentation"
     a href="#new_services" aria-controls="new_services" role="tab" data-toggle="tab"
       = t('navigations.new_services')
@@ -13,9 +13,9 @@ ul.nav.nav-tabs role="tablist"
       = t('navigations.addresses')
 
 .tab-content
-  div role="tabpanel" class="tab-pane active" id="main_info"
-    = render 'main_info'
+  div role="tabpanel" class="tab-pane active" id="detected_services"
+    = render 'detected_services'
   div role="tabpanel" class="tab-pane" id="new_services"
-    = render 'dashboard/new_services
+    = render 'dashboard/new_services'
   div role="tabpanel" class="tab-pane" id="addresses"
     = render 'dashboard/addresses'

@@ -1,25 +1,21 @@
 class Service < ActiveRecord::Base
 
-  PROTOCOLS = { 6 => 'TCP', 17 => 'UDP'}
+  PROTOCOLS = ['tcp', 'udp']
 
   belongs_to :organization
 
   validates :name, length: {minimum: 3, maximum: 255}
-  validates :name, uniqueness: {scope: [:port, :host_ip, :protocol]}
+  validates :name, uniqueness: {scope: [:port, :host, :protocol]}
 
-  validates :port, uniqueness: {scope: [:host_ip, :protocol]}
+  validates :port, uniqueness: {scope: [:host, :protocol]}
   validates :port, numericality: {only_integer: true}
   validates :port, inclusion: {in: 0..65535}
 
-  validates :host_ip, uniqueness: {scope: [:port, :protocol]}
-  validates :host_ip, length: {minimum: 7, maximum: 15}
+  validates :host, uniqueness: {scope: [:port, :protocol]}
+  validates :host, length: {minimum: 7, maximum: 15}
 
-  validates :protocol, uniqueness: {scope: [:port, :host_ip]}
-  validates :protocol, inclusion: {in: PROTOCOLS.keys}
-
-  def show_protocol
-    PROTOCOLS[self.protocol.to_i]
-  end
+  validates :protocol, uniqueness: {scope: [:port, :host]}
+  validates :protocol, inclusion: {in: PROTOCOLS}
 
   def self.protocols
     PROTOCOLS
@@ -27,18 +23,14 @@ class Service < ActiveRecord::Base
 
   def show_legality
     if self.legality?
-      'Да'
+      I18n.t('messages.message_yes')
     else
-      'Нет'
+      I18n.t('messages.message_no')
     end
   end
 
-  def self.show_protocol_number(protocol_name)
-    PROTOCOLS.key(protocol_name.to_s.upcase)
-  end
-
-  def self.legality_key(state, host_ip, port, protocol)
-    service = Service.where(host_ip: host_ip, port: port, protocol: Service.show_protocol_number(protocol)).first
+  def self.legality_key(state, host, port, protocol)
+    service = Service.where(host: host, port: port, protocol: protocol).first
     if state == :closed
       legality = 3 # no means
     else

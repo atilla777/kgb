@@ -23,7 +23,7 @@ class ScanJob < ActiveJob::Base
       # опции сканирования
       nmap.syn_scan = true
       nmap.service_scan = true
-      nmap.os_fingerprint = true
+      #nmap.os_fingerprint = true
       nmap.xml = result_path
       nmap.verbose = true
       nmap.ports = job.ports
@@ -45,9 +45,9 @@ class ScanJob < ActiveJob::Base
                  job_id: job.id,
                  organization_id: job.organization_id,
                  #host_id: host.ip,
-                 host_ip: host.ip,
+                 host: host.ip,
                  #port_id:,
-                 number: port.number,
+                 port: port.number,
                  protocol: port.protocol,
                  state: port.state,
                  legality: legality,

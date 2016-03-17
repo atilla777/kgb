@@ -12,8 +12,8 @@ table.display.table.table-striped.table-bordered#index_table
         td
           - row.detected_services.each do |service|
             ul.list-inline
-              li.bg-info = service.host_ip
-              li.bg-success = service.number
+              li.bg-info = service.host
+              li.bg-success = service.port
               li.bg-warning = service.protocol
               li.bg-danger = service.state
               li  = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do

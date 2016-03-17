@@ -29,6 +29,8 @@ ru:
     exist: Назначенные
     allowed: Доступные
   messages:
+    message_yes: Да
+    message_no: Нет
     not_allowed: Нет прав доступа.
   types:
     legal: Легален
@@ -49,6 +51,9 @@ ru:
     global_roles: Назначение глобальных ролей
     organization_roles: Назначение ролей организации
     dashboard: Панель управления
+    detected_services: Активные сервисы
+    new_services: Новые сервисы
+    addresses: Адреса серверов
   actions:
     view: Показать
     edit: Редактировать
@@ -115,8 +120,8 @@ ru:
       scanned_port:
         job_id:  Работа
         start_time: Время сканирования
-        host_ip: Хост
-        number: Порт
+        host: Хост
+        port: Порт
         protocol: Протокол
         state: Состояние
         service: Сервис
@@ -124,7 +129,7 @@ ru:
       service:
         name: Название
         organization_id: Организация
-        host_ip: Адрес хоста
+        host: Адрес хоста
         port: Порт
         protocol: Протокол
         legality: Легальность
