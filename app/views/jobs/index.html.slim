@@ -4,6 +4,7 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
+      th = t('activerecord.attributes.job.organization_id')
       th = t('activerecord.attributes.job.name')
       th = t('activerecord.attributes.job.options')
       th = t('activerecord.attributes.job.ports')
@@ -14,6 +15,7 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @jobs.each do |row|
       tr
+        td = link_to row.organization.name, row
         td = link_to row.name, row, class: 'btn btn-link btn-xs'
         td = row.options
         td = row.ports
