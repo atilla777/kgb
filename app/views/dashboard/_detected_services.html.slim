@@ -1,42 +1,47 @@
-table.display.table.table-striped.table-bordered#index_table
-  thead
-    tr
-      th = t('activerecord.attributes.service.organization_id')
-      th = t('activerecord.attributes.service.host')
-      th = t('activerecord.attributes.service.port')
-      th = t('activerecord.attributes.service.protocol')
-      th = t('activerecord.attributes.service.state')
-      th = t('activerecord.attributes.service.legality')
-      th
+#ajax_detected_services
+  table.display.table.table-striped.table-bordered#index_table
+    thead
+      tr
+        th = t('activerecord.attributes.service.organization_id')
+        th = t('activerecord.attributes.service.host')
+        th = t('activerecord.attributes.service.port')
+        th = t('activerecord.attributes.service.protocol')
+        th = t('activerecord.attributes.service.state')
+        th = t('activerecord.attributes.service.legality')
+        th
 
-  tbody
-    - @organizations.each do |organization|
-      - organization.detected_services.each do |service|
-        tr
-          td.bg-info
-            = link_to organization.name, organization, class: 'btn btn-link btn-xs'
-          td.bg-info
-            = service.host
-          td.bg-info
-            = service.port
-          td.bg-info
-            = service.protocol
-          - if service.state == 'open'
-            td.bg-danger
-              = service.show_state
-          - else
-            td.bg-warning
-              = service.show_state
-          - legality = Service.legality_key(service.state, service.host, service.port, service.protocol)
-          - if legality == 1
-            td.bg-success
-              = t('types.legal')
-          - elsif legality == 0
-            td.bg-danger
-              = t('types.illegal')
-          - else
-            td.bg-danger
-              = t('types.unknown')
-          td
-            = link_to organization, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-                  i.glyphicon.glyphicon-ok aria-hidden="true"
+    tbody
+      - @organizations.each do |organization|
+        - organization.detected_services.each do |service|
+          tr
+            td.bg-info
+              = link_to organization.name, organization, class: 'btn btn-link btn-xs'
+            td.bg-info
+              = service.host
+            td.bg-info
+              = service.port
+            td.bg-info
+              = service.protocol
+            - if service.state == 'open'
+              td.bg-danger
+                = service.show_state
+            - else
+              td.bg-warning
+                = service.show_state
+            - organization_service = Service.where(host: service.host, port: service.port, protocol: service.protocol).first
+            - if organization_service.present?
+              - if organization_service.legality == 1
+                td.bg-success
+                  = t('types.legal')
+              - else
+                td.bg-danger
+                  = t('types.illegal')
+                  = link_to legalise_service_path(id: organization_service.id), remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.add')  do
+                    span.text-success
+                      i.glyphicon.glyphicon-ok aria-hidden="true"
+            - else
+              td.bg-danger
+                = t('types.unknown')
+            td
+              = link_to organization, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+                    i.glyphicon.glyphicon-ok aria-hidden="true"
