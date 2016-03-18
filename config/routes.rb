@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :services
+   resources :services do
+    member do
+      get 'legalise'
+    end
+  end
   resources :jobs do
     get 'scan'
   end
