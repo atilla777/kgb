@@ -1,21 +1,33 @@
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.organization.name')
+      th = t('activerecord.attributes.service.organization_id')
+      th = t('activerecord.attributes.service.host')
+      th = t('activerecord.attributes.service.port')
+      th = t('activerecord.attributes.service.protocol')
+      th = t('activerecord.attributes.service.state')
       th
 
   tbody
-    - @organizations.each do |row|
-      tr
-        td
-          = link_to row.name, row, class: 'btn btn-link btn-xs'
-        td
-          - row.detected_services.each do |service|
-            - unless Service.where(host: service.host, port: service.port, protocol: 'tcp').exists?
-              ul.list-inline
-                li.bg-info = service.host
-                li.bg-success = service.port
-                li.bg-warning = service.protocol
-                li.bg-danger = service.state
-                li  = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-                    i.glyphicon.glyphicon-ok aria-hidden="true"
+    - @organizations.each do |organization|
+      - organization.detected_services.each do |service|
+        - unless Service.where(host: service.host, port: service.port, protocol: service.protocol).exists?
+            tr
+              td.bg-info
+                = link_to organization.name, organization, class: 'btn btn-link btn-xs'
+              td.bg-info
+                = service.host
+              td.bg-info
+                = service.port
+              td.bg-info
+                = service.protocol
+              - if service.state == 'open'
+                td.bg-danger
+                  = service.show_state
+              - else
+                td.bg-warning
+                  = service.show_state
+                    = service.state
+              td
+                = link_to organization, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+                      i.glyphicon.glyphicon-ok aria-hidden="true"
