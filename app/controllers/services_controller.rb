@@ -1,6 +1,6 @@
 class ServicesController < ApplicationController
-  before_action :set_service, only: [:show, :edit, :update, :destroy]
-  before_action :set_organizations, only: [:new, :create, :edit, :update]
+  before_action :set_service, only: [:show, :edit, :update, :destroy, :legalise]
+  before_action :set_organizations, only: [:new, :create, :edit, :update, :legalise]
 
   # GET /services
   # GET /services.json
@@ -39,12 +39,19 @@ class ServicesController < ApplicationController
     end
   end
 
+  def legalise
+    @service.update_attribute :legality, 1
+    respond_to do |format|
+      format.js {render 'detected_services_renew'}
+    end
+  end
+
   # PATCH/PUT /services/1
   # PATCH/PUT /services/1.json
   def update
     respond_to do |format|
       if @service.update(service_params)
-      flash[:success] = t('flashes.update', model: Service.model_name.human)
+        flash[:success] = t('flashes.update', model: Service.model_name.human)
         format.html { redirect_to @service}
         format.json { render :show, status: :ok, location: @service }
       else
@@ -72,7 +79,7 @@ class ServicesController < ApplicationController
     end
 
     def set_organizations
-      @organizations = Organization.all.order(:name)
+      @organizations = policy_scope(Organization).order(:name)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
