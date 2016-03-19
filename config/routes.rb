@@ -2,6 +2,7 @@ Rails.application.routes.draw do
    resources :services do
     member do
       get 'legalise'
+      get 'unlegalise'
     end
   end
   resources :jobs do

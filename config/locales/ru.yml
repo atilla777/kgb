@@ -64,6 +64,8 @@ ru:
     create: Сохранить
     add: Добавить
     scan_now: Сканировать сейчас
+    legalise: Легализовать
+    unlegalise: Делегализовать
   flashes:
     create: Запись %{model} успешно создана.
     update: Запись %{model} успешно отредактирована.
@@ -133,6 +135,7 @@ ru:
         port: Порт
         protocol: Протокол
         legality: Легальность
+        state: Состояние
         description: Описание
       schedule:
         job_id: Работа

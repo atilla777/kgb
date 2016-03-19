@@ -1,6 +1,6 @@
 class ServicesController < ApplicationController
-  before_action :set_service, only: [:show, :edit, :update, :destroy, :legalise]
-  before_action :set_organizations, only: [:new, :create, :edit, :update, :legalise]
+  before_action :set_service, only: [:show, :edit, :update, :destroy, :legalise, :unlegalise]
+  before_action :set_organizations, only: [:new, :create, :edit, :update, :legalise, :unlegalise]
 
   # GET /services
   # GET /services.json
@@ -41,9 +41,12 @@ class ServicesController < ApplicationController
 
   def legalise
     @service.update_attribute :legality, 1
-    respond_to do |format|
-      format.js {render 'detected_services_renew'}
-    end
+    render 'detected_services_renew'
+  end
+
+  def unlegalise
+    @service.update_attribute :legality, 0
+    render 'detected_services_renew'
   end
 
   # PATCH/PUT /services/1

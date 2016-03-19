@@ -12,31 +12,34 @@
 
     tbody
       - @organizations.each do |organization|
-        - organization.detected_services.each do |service|
+        - organization.detected_services.each do |detected_service|
           tr
             td.bg-info
               = link_to organization.name, organization, class: 'btn btn-link btn-xs'
             td.bg-info
-              = service.host
+              = detected_service.host
             td.bg-info
-              = service.port
+              = detected_service.port
             td.bg-info
-              = service.protocol
-            - if service.state == 'open'
+              = detected_service.protocol
+            - if detected_service.state == 'open'
               td.bg-danger
-                = service.show_state
+                = detected_service.show_state
             - else
               td.bg-warning
-                = service.show_state
-            - organization_service = Service.where(host: service.host, port: service.port, protocol: service.protocol).first
+                = detected_service.show_state
+            - organization_service = Service.where(host: detected_service.host, port: detected_service.port, protocol: detected_service.protocol).first
             - if organization_service.present?
               - if organization_service.legality == 1
                 td.bg-success
                   = t('types.legal')
+                  = link_to unlegalise_service_path(id: organization_service.id), data: {confirm: t('actions.confirm')}, remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.unlegalise')  do
+                    span.text-danger
+                      i.glyphicon.glyphicon-remove aria-hidden="true"
               - else
                 td.bg-danger
                   = t('types.illegal')
-                  = link_to legalise_service_path(id: organization_service.id), remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.add')  do
+                  = link_to legalise_service_path(id: organization_service.id), data: {confirm: t('actions.confirm')}, remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.legalise')  do
                     span.text-success
                       i.glyphicon.glyphicon-ok aria-hidden="true"
             - else

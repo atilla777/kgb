@@ -19,7 +19,7 @@ class Organization < ActiveRecord::Base
   end
 
   def detected_services
-    ScannedPort.where(host: self.ip_addresses).group(:port, :protocol)
+    ScannedPort.where(host: self.ip_addresses).where(state: ['filtered', 'open']).group(:port, :protocol)
   end
 
 end
