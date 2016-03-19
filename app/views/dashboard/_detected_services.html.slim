@@ -8,7 +8,6 @@
         th = t('activerecord.attributes.service.protocol')
         th = t('activerecord.attributes.service.state')
         th = t('activerecord.attributes.service.legality')
-        th
 
     tbody
       - @organizations.each do |organization|
@@ -45,6 +44,6 @@
             - else
               td.bg-danger
                 = t('types.unknown')
-            td
-              = link_to organization, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-                    i.glyphicon.glyphicon-ok aria-hidden="true"
+                = link_to new_service_path(service: {organization_id: organization.id, host: detected_service.host, port: detected_service.port, protocol: detected_service.protocol}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+                  span.text-info
+                    i.glyphicon.glyphicon-plus aria-hidden="true"

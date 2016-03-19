@@ -3,7 +3,6 @@ table.display.table.table-striped.table-bordered.table#index_table  width="100%"
     tr
       th = t('activerecord.attributes.organization.name')
       th = t('activerecord.attributes.service.host')
-      th
 
   tbody
     - @organizations.each do |row|
@@ -13,6 +12,3 @@ table.display.table.table-striped.table-bordered.table#index_table  width="100%"
             = link_to row.name, row, class: 'btn btn-link btn-xs'
           td.bg-info
             = ip
-          td
-            = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-                  i.glyphicon.glyphicon-ok aria-hidden="true"
