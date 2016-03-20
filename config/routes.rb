@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :option_sets
    resources :services do
     member do
       get 'legalise'

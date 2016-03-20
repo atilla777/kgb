@@ -24,6 +24,12 @@ table.table.table-striped.table-hover
     tr
       td.text-right.text-info
         strong
+          = Job.human_attribute_name :option_set_id
+      td
+        = @job.option_set.name
+    tr
+      td.text-right.text-info
+        strong
           = Job.human_attribute_name :ports
       td
         = @job.ports

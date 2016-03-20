@@ -1,0 +1,46 @@
+= form_for @option_set, html: {class: 'form-horizontal'} do |f|
+  - if @option_set.errors.any?
+    .col-sm-offset-1.col-sm-11
+      #error_explanation
+        h2 = t('errors.template.header', count: @option_set.errors.count, model: OptionSet.model_name.human)
+        ul
+          - @option_set.errors.full_messages.each do |message|
+            li = message
+
+  .form-group
+    = f.label :name, class: 'col-sm-2 control-label required'
+    .col-sm-10
+        = f.text_field :name, class: 'form-control', placeholder: 'название'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :syn_scan
+           | syn scan (-sS)
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :skip_discovery
+           | skip ping discovery (-PN)
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :udp_scan
+           | UDP Scan (-SU)
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :os_fingerprint
+           | OS detection (-O)
+  .form-group
+    = f.label :description, class: 'col-sm-2 control-label'
+    .col-sm-10
+      = f.text_area :description, rows: 6, class: 'form-control', placeholder: 'дополнительная информация'
+  .actions.form-group
+    .col-sm-offset-2.col-sm-10
+      => link_to option_sets_path do
+        span.btn.btn-info = OptionSet.model_name.human count: 2
+      = f.submit t('actions.create'), class: 'btn btn-success'

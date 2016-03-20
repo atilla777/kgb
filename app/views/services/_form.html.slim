@@ -19,13 +19,13 @@
     .col-sm-10
       = f.text_field :host, class: 'form-control', placeholder: 'IP адрес хоста'
   .form-group
-    = f.label :port, class: 'col-sm-2 control-label required'
+    = f.label :port, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.text_field :port, class: 'form-control', placeholder: 'номер порта (от 0 до 65535)'
   .form-group
-    = f.label :protocol, class: 'col-sm-2 control-label required'
+    = f.label :protocol, class: 'col-sm-2 control-label'
     .col-sm-10
-      = f.select :protocol, Service.protocols, class: 'form-control'
+      = f.select :protocol, Service.protocols, class: 'form-control', include_blank: true
   .form-group
     = f.label :description, class: 'col-sm-2 control-label'
     .col-sm-10

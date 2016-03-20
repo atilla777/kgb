@@ -1,0 +1,25 @@
+h1 Listing option_sets
+
+table
+  thead
+    tr
+      th Name
+      th Description
+      th Options
+      th
+      th
+      th
+
+  tbody
+    - @option_sets.each do |option_set|
+      tr
+        td = option_set.name
+        td = option_set.description
+        td = option_set.options
+        td = link_to 'Show', option_set
+        td = link_to 'Edit', edit_option_set_path(option_set)
+        td = link_to 'Destroy', option_set, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Option set', new_option_set_path

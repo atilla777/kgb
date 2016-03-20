@@ -18,28 +18,25 @@ class ScanJob < ActiveJob::Base
     result_path = "#{result_folder}/#{result_file}"
 
     # сканирование
-    Nmap::Program.sudo_scan do |nmap|
+    #
+    scan_options = job.option_set.options.select {|key, value| value == '1'}
+    scan_options.update(scan_options) {|key, value| value = true if value == '1'}
+    scan_options[:xml] = result_path
+    scan_options[:targets] = job.hosts
+    scan_options[:ports] = job.ports.split(', ').map(&:to_i)
+    scan_options[:verbose] = true
 
-      # опции сканирования
-      nmap.syn_scan = true
-      nmap.service_scan = true
-      #nmap.os_fingerprint = true
-      nmap.xml = result_path
-      nmap.verbose = true
-      nmap.ports = job.ports
-      nmap.targets = job.hosts
-
-    end
+    #byebug
+    Nmap::Program.sudo_scan(scan_options)
 
     # сохранить result_file_name в таблицу выполненных сканирований
-
     # обработка результатов сканирования (парсинг xml файла)
     Nmap::XML.new(result_path) do |xml|
       xml.each_host do |host|
         #puts "[#{host.ip}]"
         host.each_port do |port|
           #puts "  #{port.number}/#{port.protocol}\t#{port.state}\t#{port.service}"
-          # сохранение результата в базе§
+          # сохранение результата в базе
           legality = Service.legality_key(port.state, host.ip, port.number, port.protocol)
           scanned_port = ScannedPort.new(job_time: job_time,
                  job_id: job.id,

@@ -3,7 +3,10 @@ class ScannedPort < ActiveRecord::Base
   include Datatableable
 
   LEGALITIES = {0 => I18n.t('types.h_illegal'), 1 => I18n.t('types.h_legal'), 2 => I18n.t('types.h_unknown'), 3 => I18n.t('types.not_needed')}
-  STATES = {'open' => I18n.t('types.open'), 'closed' => I18n.t('types.closed'), 'filtered' => I18n.t('types.filtered')}
+  STATES = {'open' => I18n.t('types.open'),
+            'closed' => I18n.t('types.closed'),
+            'open|filtered' => I18n.t('types.open_filtered'),
+            'filtered' => I18n.t('types.filtered')}
 
   belongs_to :organization
   belongs_to :job

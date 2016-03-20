@@ -1,6 +1,7 @@
 class JobsController < ApplicationController
   before_action :set_job, only: [:show, :edit, :update, :destroy]
   before_action :set_organizations, only: [:new, :create, :edit, :update]
+  before_action :set_option_sets, only: [:new, :create, :edit, :update]
 
   def scan
     ScanJob.perform_later(params[:job_id])
@@ -83,8 +84,12 @@ class JobsController < ApplicationController
       @organizations = Organization.all.order(:name)
     end
 
+    def set_option_sets
+      @option_sets = OptionSet.all.order(:name)
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:name, :description, :ports, :hosts, :options, :organization_id)
+      params.require(:job).permit(:name, :description, :ports, :hosts, :options, :organization_id, :option_set_id)
     end
 end

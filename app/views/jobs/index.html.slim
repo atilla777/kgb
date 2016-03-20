@@ -7,6 +7,7 @@ table.display.table.table-striped.table-bordered#index_table
       th = t('activerecord.attributes.job.organization_id')
       th = t('activerecord.attributes.job.name')
       th = t('activerecord.attributes.job.options')
+      th = t('activerecord.attributes.job.option_set_id')
       th = t('activerecord.attributes.job.ports')
       th = t('activerecord.attributes.job.hosts')
       th
@@ -18,6 +19,7 @@ table.display.table.table-striped.table-bordered#index_table
         td = link_to row.organization.name, row
         td = link_to row.name, row, class: 'btn btn-link btn-xs'
         td = row.options
+        td = row.option_set.name
         td = row.ports
         td = row.hosts
         td

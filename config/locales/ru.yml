@@ -44,6 +44,7 @@ ru:
     open: Открыт
     closed: Закрыт
     filtered: Фильтруется
+    open_filtered: Открыт|фильтруется
   navigations:
     main_info: Основная информация
     week_days: Дни недели
@@ -96,7 +97,14 @@ ru:
       schedule:
         one: Запланированный день выполнения
         other: Запланированные дни выполнения
+      option_set:
+        one: Опция сканирования
+        other: Опции сканирования
     attributes:
+      option_set:
+        name: Название
+        description: Описание
+        options: Опции
       organization:
         name: Название
         description: Описание
@@ -115,6 +123,7 @@ ru:
       job:
         name: Название
         options: Опции сканирования
+        option_set_id: Набор опций сканирования
         ports: Порты
         hosts: IP адреса
         organization_id: Организация

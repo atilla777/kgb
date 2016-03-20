@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @option_set.name
+p
+  strong Description:
+  = @option_set.description
+p
+  strong Options:
+  = @option_set.options
+
+= link_to 'Edit', edit_option_set_path(@option_set)
+'|
+= link_to 'Back', option_sets_path

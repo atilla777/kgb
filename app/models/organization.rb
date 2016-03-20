@@ -4,11 +4,11 @@ class Organization < ActiveRecord::Base
 
   validates :name, length: {minimum: 3, maximum: 255}
   validates :name, uniqueness: true
+  has_many :jobs, dependent: :destroy
+  has_many :users, dependent: :destroy
+  has_many :scanned_ports, dependent: :destroy
+  has_many :services, dependent: :destroy
 
-  has_many :jobs
-  has_many :users
-  has_many :scanned_ports
-  has_many :services
 
   def self.beholder_role_name
     :beholder
@@ -19,7 +19,7 @@ class Organization < ActiveRecord::Base
   end
 
   def detected_services
-    ScannedPort.where(host: self.ip_addresses).where(state: ['filtered', 'open']).group(:port, :protocol)
+    ScannedPort.where(host: self.ip_addresses).where(state: ['filtered', 'open', 'open|filtered']).group(:port, :protocol)
   end
 
 end
