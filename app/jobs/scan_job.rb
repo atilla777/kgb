@@ -56,6 +56,7 @@ class ScanJob < ActiveJob::Base
         end
       end
     end
+    File.delete(result_path)
 
   end
 
