@@ -1,15 +1,33 @@
-p#notice = notice
+.col-sm-offset-1.col-sm-11
+  table.table.table-striped.table-hover
+    caption.text-primary
+      h3 = OptionSet.model_name.human
+    thead
+      th.col-md-1
+      th.col-md-7
+    tbody
+      tr
+        td.text-right.text-info
+          strong
+            = OptionSet.human_attribute_name :name
+        td
+          = @option_set.name
+      tr
+        td.text-right.text-info
+          strong
+            = OptionSet.human_attribute_name :options
+        td
+          = @option_set.show_options
+      tr
+        td.text-right.text-info
+          strong
+            = OptionSet.human_attribute_name :description
+        td
+          = @option_set.description
 
-p
-  strong Name:
-  = @option_set.name
-p
-  strong Description:
-  = @option_set.description
-p
-  strong Options:
-  = @option_set.options
-
-= link_to 'Edit', edit_option_set_path(@option_set)
-'|
-= link_to 'Back', option_sets_path
+  => link_to option_sets_path do
+    span.btn.btn-info
+      = OptionSet.model_name.human count: 2
+  = link_to edit_option_set_path(@option_set) do
+    span.btn.btn-warning
+      = t('actions.edit')
