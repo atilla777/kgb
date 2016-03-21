@@ -9,7 +9,14 @@ class Schedule < ActiveRecord::Base
   validates :month_day, uniqueness: {scope: [:job_id, :week_day]}
 
   belongs_to :job
-
+  
+  def show_week_day
+    if self.week_day.present?
+      I18n.t('date.day_names')[self.week_day]
+    else
+      ''
+    end
+  end
 =begin
   def show_week_day
     if self.week_day.present?
