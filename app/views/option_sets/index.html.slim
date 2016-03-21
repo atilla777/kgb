@@ -1,25 +1,28 @@
-h1 Listing option_sets
+h3
+  span.text-primary = OptionSet.model_name.human count: 2
 
-table
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th Name
-      th Description
-      th Options
-      th
-      th
+      th = t('activerecord.attributes.option_set.name')
+      th = t('activerecord.attributes.option_set.options')
       th
 
   tbody
-    - @option_sets.each do |option_set|
+    - @option_sets.each do |row|
       tr
-        td = option_set.name
-        td = option_set.description
-        td = option_set.options
-        td = link_to 'Show', option_set
-        td = link_to 'Edit', edit_option_set_path(option_set)
-        td = link_to 'Destroy', option_set, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = row.name
+        td = row.show_options
+        td
+          = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+            i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          = link_to edit_option_set_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
+            i.glyphicon.glyphicon-edit aria-hidden="true"
+          = link_to row, data: {confirm: t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+            i.glyphicon.glyphicon-trash aria-hidden="true"
 
 br
 
-= link_to 'New Option set', new_option_set_path
+= link_to new_option_set_path do
+  span.btn.btn-success = t('helpers.submit.create', model: OptionSet.model_name.human)
+    i.glyphicon.glyphicon-info-sign aria-hidden="true"
