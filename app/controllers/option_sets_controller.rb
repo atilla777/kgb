@@ -1,5 +1,5 @@
 class OptionSetsController < ApplicationController
-  before_action :set_option_set, only: [:show, :edit, :update, :destroy]
+   before_action :set_option_set, only: [:show, :edit, :update, :destroy]
 
   # GET /option_sets
   # GET /option_sets.json
@@ -27,7 +27,8 @@ class OptionSetsController < ApplicationController
     @option_set = OptionSet.new(option_set_params)
     respond_to do |format|
       if @option_set.save
-        format.html { redirect_to @option_set, notice: 'Option set was successfully created.' }
+        flash[:success] = t('flashes.create', model: OptionSet.model_name.human)
+        format.html { redirect_to @option_set}
         format.json { render :show, status: :created, location: @option_set }
       else
         format.html { render :new }
@@ -41,7 +42,8 @@ class OptionSetsController < ApplicationController
   def update
     respond_to do |format|
       if @option_set.update(option_set_params)
-        format.html { redirect_to @option_set, notice: 'Option set was successfully updated.' }
+        flash[:success] = t('flashes.update', model: OptionSet.model_name.human)
+        format.html { redirect_to @option_set}
         format.json { render :show, status: :ok, location: @option_set }
       else
         format.html { render :edit }
@@ -55,7 +57,8 @@ class OptionSetsController < ApplicationController
   def destroy
     @option_set.destroy
     respond_to do |format|
-      format.html { redirect_to option_sets_url, notice: 'Option set was successfully destroyed.' }
+      flash[:success] = t('flashes.destroy', model: OptionSet.model_name.human)
+      format.html { redirect_to option_sets_url}
       format.json { head :no_content }
     end
   end
