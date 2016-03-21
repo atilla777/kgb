@@ -1,25 +1,16 @@
-h1 Listing schedules
+h3
+  span.text-primary = Schedule.model_name.human count: 2
 
-table
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th Job
-      th Week day
-      th Month day
-      th
-      th
-      th
+      th = t('activerecord.attributes.job.name')
+      th = t('activerecord.attributes.schedule.week_day')
+      th = t('activerecord.attributes.schedule.month_day')
 
   tbody
     - @schedules.each do |schedule|
       tr
-        td = schedule.job
-        td = schedule.week_day
+        td = schedule.job.name
+        td = schedule.show_week_day
         td = schedule.month_day
-        td = link_to 'Show', schedule
-        td = link_to 'Edit', edit_schedule_path(schedule)
-        td = link_to 'Destroy', schedule, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Schedule', new_schedule_path
