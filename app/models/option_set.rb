@@ -1,11 +1,12 @@
 class OptionSet < ActiveRecord::Base
-  
+
    NMAP_OPTIONS = {syn_scan: "sS",
                   skip_discovery: "PN",
                   udp_scan: "sU",
+                  service_scan: "sV",
                   os_fingerprint: "O"}
 
-  attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint
+   attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint, :service_scan
 
   before_save :set_options
 
@@ -16,7 +17,7 @@ class OptionSet < ActiveRecord::Base
 
   validates :name, length: {minimum: 3, maximum: 255}
 
- def show_options
+  def show_options
     result = self.options.select {|key, value| value == '1' }
     result = result.map {|key, value| "#{key.to_s} (-#{NMAP_OPTIONS[key]})"}
     result = result.join(', ')
@@ -51,12 +52,20 @@ class OptionSet < ActiveRecord::Base
     self.options[:os_fingerprint] = value
   end
 
+  def service_scan
+    self.options[:service_scan]
+  end
+  def service_scan=(value)
+    self.options[:service_scan] = value
+  end
+
   private
 
   def set_options
     self.options = {syn_scan: self.syn_scan,
         skip_discovery: self.skip_discovery,
         udp_scan: self.udp_scan,
+        service_scan: self.service_scan,
         os_fingerprint: self.os_fingerprint
       }
   end

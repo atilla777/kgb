@@ -31,4 +31,12 @@ class ScannedPort < ActiveRecord::Base
     LEGALITIES
   end
 
+  def show_product
+    result = []
+    result << self.product if self.product
+    result << self.product_version if self.product_version
+    result << self.product_extrainfo if self.product_extrainfo
+    result.join(', ')
+  end
+
 end

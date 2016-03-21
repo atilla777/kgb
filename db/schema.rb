@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160320072032) do
+ActiveRecord::Schema.define(version: 20160321175749) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -80,10 +80,13 @@ ActiveRecord::Schema.define(version: 20160320072032) do
     t.string   "protocol"
     t.string   "state"
     t.string   "service"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "job_id"
     t.integer  "legality"
+    t.string   "product"
+    t.string   "product_version"
+    t.string   "product_extrainfo"
   end
 
   add_index "scanned_ports", ["host"], name: "index_scanned_ports_on_host"
@@ -91,6 +94,9 @@ ActiveRecord::Schema.define(version: 20160320072032) do
   add_index "scanned_ports", ["legality"], name: "index_scanned_ports_on_legality"
   add_index "scanned_ports", ["organization_id"], name: "index_scanned_ports_on_organization_id"
   add_index "scanned_ports", ["port"], name: "index_scanned_ports_on_port"
+  add_index "scanned_ports", ["product"], name: "index_scanned_ports_on_product"
+  add_index "scanned_ports", ["product_extrainfo"], name: "index_scanned_ports_on_product_extrainfo"
+  add_index "scanned_ports", ["product_version"], name: "index_scanned_ports_on_product_version"
   add_index "scanned_ports", ["protocol"], name: "index_scanned_ports_on_protocol"
   add_index "scanned_ports", ["service"], name: "index_scanned_ports_on_service"
   add_index "scanned_ports", ["state"], name: "index_scanned_ports_on_state"

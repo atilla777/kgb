@@ -137,6 +137,9 @@ ru:
         state: Состояние
         service: Сервис
         legality: Легальность на момент сканирования
+        product: ПО
+        product_version: Версия ПО
+        product_extrainfo: Дополнительная информация о ПО
       service:
         name: Название
         organization_id: Организация
