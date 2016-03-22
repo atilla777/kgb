@@ -30,7 +30,7 @@ table.display.table.table-striped.table-bordered#index_table  width="100%"
               - else
                 td.bg-warning
                   = service.show_state
-                  = link_to new_service_path(service: {organization_id: organization.id, host: service.host, port: service.port, protocol: service.protocol}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+                  = link_to new_service_path(service: {organization_id: organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
                     span.text-info
                       i.glyphicon.glyphicon-plus aria-hidden="true"
               td
