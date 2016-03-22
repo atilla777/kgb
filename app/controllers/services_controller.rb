@@ -16,7 +16,11 @@ class ServicesController < ApplicationController
   # GET /services/new
   def new
     if params[:service].present?
-      @service = Service.new(organization_id: params[:service][:organization_id], host: params[:service][:host], port: params[:service][:port], protocol: params[:service][:protocol])
+      @service = Service.new(organization_id: params[:service][:organization_id],
+                             host: params[:service][:host],
+                             port: params[:service][:port],
+                             protocol: params[:service][:protocol],
+                             name: params[:service][:service])
     else
       @service = Service.new
     end
