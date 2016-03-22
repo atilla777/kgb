@@ -32,21 +32,21 @@
             - if organization_service.present?
               - if organization_service.legality == 1
                 td.bg-success
-                  = t('types.legal')
+                  = link_to t('types.legal'), organization_service, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: organization_service.name
                   = link_to unlegalise_service_path(id: organization_service.id), data: {confirm: t('actions.confirm')}, remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.unlegalise')  do
                     span.text-danger
                       i.glyphicon.glyphicon-remove aria-hidden="true"
               - else
                 td.bg-danger
-                  = t('types.illegal')
+                  = link_to t('types.illegal'), organization_service, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: organization_service.name
                   = link_to legalise_service_path(id: organization_service.id), data: {confirm: t('actions.confirm')}, remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.legalise')  do
                     span.text-success
                       i.glyphicon.glyphicon-ok aria-hidden="true"
             - else
               td.bg-danger
                 = t('types.unknown')
-                = link_to new_service_path(service: {organization_id: organization.id, host: detected_service.host, port: detected_service.port, protocol: detected_service.protocol}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+                = link_to new_service_path(service: {organization_id: organization.id, host: detected_service.host, port: detected_service.port, protocol: detected_service.protocol, service: "#{detected_service.service} #{organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
                   span.text-info
                     i.glyphicon.glyphicon-plus aria-hidden="true"
-              td
-                = detected_service.show_product
+            td
+              = detected_service.show_product
