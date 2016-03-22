@@ -25,8 +25,8 @@ class ScanJob < ActiveJob::Base
     scan_options[:targets] = job.hosts
     scan_options[:ports] = job.ports.split(', ')
     scan_options[:ports] = scan_options[:ports].map do |port|
-      if port.include?('..')
-        Range.new(port.split("..").map(&:to_i))
+      if port.include?(-')
+        Range.new(port.split("-").map(&:to_i))
       else
         port.to_i
       end
