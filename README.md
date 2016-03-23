@@ -36,7 +36,7 @@ sudo apt-get install nodejs
 ```
 * создаем базу данных sqlite
 ```
-rails db:migrate
+rake db:migrate
 rake db:seed
 ```
 либо одной командой
