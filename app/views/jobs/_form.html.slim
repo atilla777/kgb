@@ -1,3 +1,13 @@
+javascript:
+
+  $('input#job_t_ports').on("click", function(){
+        alert('asd');
+    var $this = $(this);
+      if ($this.is(':checked')) {
+        $('input#job_ports').prop('disabled', a);
+      }
+  });
+
 = form_for @job, html: {class: 'form-horizontal'} do |f|
   - if @job.errors.any?
     .col-sm-offset-1.col-sm-11
@@ -22,6 +32,12 @@
     = f.label :option_set_id, class: 'col-sm-2 control-label required'
     .col-sm-10
       = f.collection_select :option_set_id, @option_sets, :id, :name, class: 'form-control', placeholder: 'орция1; опция2'
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+            = f.check_box :t_ports
+            | -tP
   .form-group
     = f.label :ports, class: 'col-sm-2 control-label required'
     .col-sm-10

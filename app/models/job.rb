@@ -1,5 +1,7 @@
 class Job < ActiveRecord::Base
 
+  attr_accessor :t_ports
+
   belongs_to :organization
   has_many :schedules, dependent: :destroy
   #has_many :scanned_ports, dependent: :destroy
