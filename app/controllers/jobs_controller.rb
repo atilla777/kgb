@@ -24,7 +24,14 @@ class JobsController < ApplicationController
 
   # GET /jobs/new
   def new
-    @job = Job.new
+    if params[:job].present?
+        organization = Organization.find(params[:job][:organization_id])
+        @job = Job.new(name: organization.name,
+                       organization_id: organization.id,
+                       hosts: params[:job][:host])
+    else
+      @job = Job.new
+    end
   end
 
   # GET /jobs/1/edit
