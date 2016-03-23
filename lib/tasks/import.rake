@@ -11,7 +11,7 @@ namespace :import do
         end
         unless row[0].blank?
           Service.find_or_create_by!(host: row[0], organization_id: organization.id) do |service|
-            service.name = organization.name
+            service.name = "#{I18n.t('activerecord.attributes.service.host')} #{organization.name}"
             puts "Import host - #{row[0]} - OK!"
           end
         end
