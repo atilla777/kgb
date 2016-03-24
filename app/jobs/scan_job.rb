@@ -19,16 +19,18 @@ class ScanJob < ActiveJob::Base
 
     # сканирование
     #
-    scan_options = job.option_set.options.select {|key, value| value == '1'}
+    scan_options = job.option_set.options.select {|key, value| value != '0'}
     scan_options.update(scan_options) {|key, value| value = true if value == '1'}
     scan_options[:xml] = result_path
     scan_options[:targets] = job.hosts
-    scan_options[:ports] = job.ports.split(', ')
-    scan_options[:ports] = scan_options[:ports].map do |port|
-      if port.include?('-')
-        Range.new(*port.split("-").map(&:to_i))
-      else
-        port.to_i
+    if job.ports.present?
+      scan_options[:ports] = job.ports.split(', ')
+      scan_options[:ports] = scan_options[:ports].map do |port|
+        if port.include?('-')
+          Range.new(*port.split("-").map(&:to_i))
+        else
+          port.to_i
+        end
       end
     end
     scan_options[:verbose] = true

@@ -33,15 +33,11 @@ javascript:
     .col-sm-10
       = f.collection_select :option_set_id, @option_sets, :id, :name, class: 'form-control', placeholder: 'орция1; опция2'
   .form-group
-    .col-sm-offset-2.col-sm-10
-      .checkbox
-         label
-            = f.check_box :t_ports
-            | -tP
-  .form-group
-    = f.label :ports, class: 'col-sm-2 control-label required'
+    = f.label :ports, class: 'col-sm-2 control-label'
     .col-sm-10
-      = f.text_field :ports, class: 'form-control', placeholder: 'порт1; порт2'
+      .input-group
+        span.input-group-addon -p
+        = f.text_field :ports, class: 'form-control', placeholder: 'порт1; порт2'
   .form-group
     = f.label :hosts, class: 'col-sm-2 control-label required'
     .col-sm-10

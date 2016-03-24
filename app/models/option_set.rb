@@ -4,9 +4,10 @@ class OptionSet < ActiveRecord::Base
                   skip_discovery: "PN",
                   udp_scan: "sU",
                   service_scan: "sV",
-                  os_fingerprint: "O"}
+                  os_fingerprint: "O",
+                  top_ports: "--top-ports"}
 
-   attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint, :service_scan
+   attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint, :service_scan, :top_ports
 
   before_save :set_options
 
@@ -16,10 +17,17 @@ class OptionSet < ActiveRecord::Base
   has_many :jobs, dependent: :destroy
 
   validates :name, length: {minimum: 3, maximum: 255}
+  validates :top_ports, inclusion: {in: 1..1000}, allow_blank: true
 
   def show_options
-    result = self.options.select {|key, value| value == '1' }
-    result = result.map {|key, value| "#{key.to_s} (-#{NMAP_OPTIONS[key]})"}
+    result = self.options.select {|key, value| value != '0' }
+    result = result.map do |key, value|
+      if key == :top_ports and value.present?
+        "--top-ports #{value}"
+      else
+        "-#{NMAP_OPTIONS[key]} (#{key.to_s})"
+      end
+    end
     result = result.join(', ')
     result
   end
@@ -59,6 +67,13 @@ class OptionSet < ActiveRecord::Base
     self.options[:service_scan] = value
   end
 
+  def top_ports
+    self.options[:top_ports]
+  end
+  def top_ports=(value)
+    self.options[:top_ports] = value.to_i
+  end
+
   private
 
   def set_options
@@ -66,7 +81,8 @@ class OptionSet < ActiveRecord::Base
         skip_discovery: self.skip_discovery,
         udp_scan: self.udp_scan,
         service_scan: self.service_scan,
-        os_fingerprint: self.os_fingerprint
+        os_fingerprint: self.os_fingerprint,
+        top_ports: self.top_ports
       }
   end
 

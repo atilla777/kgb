@@ -1,7 +1,5 @@
 class Job < ActiveRecord::Base
 
-  attr_accessor :t_ports
-
   belongs_to :organization
   has_many :schedules, dependent: :destroy
   #has_many :scanned_ports, dependent: :destroy
@@ -10,7 +8,7 @@ class Job < ActiveRecord::Base
   validates :name, length: {minimum: 3, maximum: 255}
   validates :name, uniqueness: {scope: :organization_id}
   validates :options, length: {minimum: 3, maximum: 255}, allow_blank: true
-  validates :ports, presence: true
+  #validates :ports, presence: true
   validates :hosts, presence: true
   validates :organization_id, numericality: {only_integer: true}
   validates :option_set_id, numericality: {only_integer: true}

@@ -78,6 +78,7 @@ class OptionSetsController < ApplicationController
                                            :skip_discovery,
                                            :udp_scan,
                                            :service_scan,
-                                           :os_fingerprint)
+                                           :os_fingerprint,
+                                           :top_ports)
     end
 end
