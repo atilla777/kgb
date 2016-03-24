@@ -71,7 +71,11 @@ class OptionSet < ActiveRecord::Base
     self.options[:top_ports]
   end
   def top_ports=(value)
-    self.options[:top_ports] = value.to_i
+    unless value.blank?
+      self.options[:top_ports] = value.to_i
+    else
+      self.options[:top_ports] = nil
+    end
   end
 
   private

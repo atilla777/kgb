@@ -37,7 +37,7 @@ javascript:
     .col-sm-10
       .input-group
         span.input-group-addon -p
-        = f.text_field :ports, class: 'form-control', placeholder: 'порт1; порт2'
+        = f.text_area :ports, class: 'form-control', cols: '2', placeholder: 'порт1; порт2'
   .form-group
     = f.label :hosts, class: 'col-sm-2 control-label required'
     .col-sm-10
