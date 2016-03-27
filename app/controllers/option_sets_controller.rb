@@ -4,27 +4,32 @@ class OptionSetsController < ApplicationController
   # GET /option_sets
   # GET /option_sets.json
   def index
+    authorize OptionSet
     @option_sets = OptionSet.all
   end
 
   # GET /option_sets/1
   # GET /option_sets/1.json
   def show
+    authorize @option_set
   end
 
   # GET /option_sets/new
   def new
+    authorize OptionSet
     @option_set = OptionSet.new
   end
 
   # GET /option_sets/1/edit
   def edit
+    authorize @option_set
   end
 
   # POST /option_sets
   # POST /option_sets.json
   def create
     @option_set = OptionSet.new(option_set_params)
+    authorize @option_set
     respond_to do |format|
       if @option_set.save
         flash[:success] = t('flashes.create', model: OptionSet.model_name.human)
@@ -40,6 +45,7 @@ class OptionSetsController < ApplicationController
   # PATCH/PUT /option_sets/1
   # PATCH/PUT /option_sets/1.json
   def update
+    authorize @option_set
     respond_to do |format|
       if @option_set.update(option_set_params)
         flash[:success] = t('flashes.update', model: OptionSet.model_name.human)
@@ -55,6 +61,7 @@ class OptionSetsController < ApplicationController
   # DELETE /option_sets/1
   # DELETE /option_sets/1.json
   def destroy
+    authorize @option_set
     @option_set.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: OptionSet.model_name.human)

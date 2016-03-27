@@ -60,4 +60,5 @@ gem 'pundit'
 gem 'rolify'
 group :development do
   gem 'meta_request'
-end 
+end
+gem 'puma'

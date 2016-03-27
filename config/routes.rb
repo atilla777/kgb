@@ -7,7 +7,9 @@ Rails.application.routes.draw do
     end
   end
   resources :jobs do
-    get 'scan'
+    member do
+      get 'scan'
+    end
   end
   resources :schedules
   root 'organizations#index'

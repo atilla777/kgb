@@ -1,10 +1,11 @@
 class JobsController < ApplicationController
-  before_action :set_job, only: [:show, :edit, :update, :destroy]
+  before_action :set_job, only: [:scan, :show, :edit, :update, :destroy]
   before_action :set_organizations, only: [:new, :create, :edit, :update]
   before_action :set_option_sets, only: [:new, :create, :edit, :update]
 
   def scan
-    ScanJob.perform_later(params[:job_id])
+    authorize @job
+    ScanJob.perform_later(params[:id])
     redirect_to scanned_ports_path
   end
 
@@ -19,11 +20,13 @@ class JobsController < ApplicationController
   # GET /jobs/1
   # GET /jobs/1.json
   def show
+    authorize @job
     @schedules = @job.schedules
   end
 
   # GET /jobs/new
   def new
+    authorize Job
     if params[:job].present?
         organization = Organization.find(params[:job][:organization_id])
         @job = Job.new(name: organization.name,
@@ -36,12 +39,14 @@ class JobsController < ApplicationController
 
   # GET /jobs/1/edit
   def edit
+    authorize @job
   end
 
   # POST /jobs
   # POST /jobs.json
   def create
     @job = Job.new(job_params)
+    authorize @job
 
     respond_to do |format|
       if @job.save
@@ -58,6 +63,7 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1
   # PATCH/PUT /jobs/1.json
   def update
+    authorize @job
     respond_to do |format|
       if @job.update(job_params)
         flash[:success] = t('flashes.update', model: Job.model_name.human)
@@ -73,6 +79,7 @@ class JobsController < ApplicationController
   # DELETE /jobs/1
   # DELETE /jobs/1.json
   def destroy
+    authorize @job
     @job.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Job.model_name.human)
@@ -88,7 +95,7 @@ class JobsController < ApplicationController
     end
 
     def set_organizations
-      @organizations = Organization.all.order(:name)
+      @organizations = policy_scope(Organization).order(:name)
     end
 
     def set_option_sets

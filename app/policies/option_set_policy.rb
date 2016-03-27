@@ -1,12 +1,8 @@
-class OrganizationPolicy < ApplicationPolicy
+class OptionSetPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      if @user.has_any_role? :admin, :editor, :viewer
-        scope.all
-      else
-        scope.with_role(Organization.beholder_role_name, @user)
-      end
+      scope
     end
   end
 
@@ -19,9 +15,7 @@ class OrganizationPolicy < ApplicationPolicy
   end
 
   def show?
-    if @user.has_any_role? :admin, :editor
-      true
-    elsif @user.has_role? Organization.beholder_role_name, scope.where(id: record.id).first
+    if @user.has_any_role? :admin, :editor, :viewer, :organization_editor, :organization_viewer
       true
     else
       false
@@ -67,6 +61,5 @@ class OrganizationPolicy < ApplicationPolicy
       false
     end
   end
-
 
 end

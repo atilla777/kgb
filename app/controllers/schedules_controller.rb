@@ -5,7 +5,8 @@ class SchedulesController < ApplicationController
   # GET /schedules
   # GET /schedules.json
   def index
-    @schedules = Schedule.all
+    authorize Schedule
+    @schedules = policy_scope Schedule
   end
 
   # GET /schedules/1
@@ -30,6 +31,7 @@ class SchedulesController < ApplicationController
     params[:schedule][:week_day] = params[:week_day]
     params[:schedule][:month_day] = params[:month_day]
     @schedule = Schedule.new(schedule_params)
+    authorize @schedule
 
     respond_to do |format|
       if @schedule.save
@@ -61,6 +63,7 @@ class SchedulesController < ApplicationController
   # DELETE /schedules/1
   # DELETE /schedules/1.json
   def destroy
+    authorize @schedule
     @schedule.destroy
     respond_to do |format|
       format.html { redirect_to schedules_url, notice: 'Schedule was successfully destroyed.' }

@@ -4,27 +4,32 @@ class OrganizationsController < ApplicationController
   # GET /organizations
   # GET /organizations.json
   def index
-    @organizations = Organization.all
+    authorize Organization
+    @organizations = policy_scope(Organization)
   end
 
   # GET /organizations/1
   # GET /organizations/1.json
   def show
+    authorize @organization
   end
 
   # GET /organizations/new
   def new
+    authorize Organization
     @organization = Organization.new
   end
 
   # GET /organizations/1/edit
   def edit
+    authorize @organization
   end
 
   # POST /organizations
   # POST /organizations.json
   def create
     @organization = Organization.new(organization_params)
+    authorize @organization
 
     respond_to do |format|
       if @organization.save
@@ -41,6 +46,7 @@ class OrganizationsController < ApplicationController
   # PATCH/PUT /organizations/1
   # PATCH/PUT /organizations/1.json
   def update
+    authorize @organization
     respond_to do |format|
       if @organization.update(organization_params)
         flash[:success] = t('flashes.update', model: Organization.model_name.human)
@@ -56,6 +62,7 @@ class OrganizationsController < ApplicationController
   # DELETE /organizations/1
   # DELETE /organizations/1.json
   def destroy
+    authorize @organization
     @organization.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Organization.model_name.human)

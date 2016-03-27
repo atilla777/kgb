@@ -1,19 +1,28 @@
-class ScannedPortPolicy < ApplicationPolicy
+class SchedulePolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
       if @user.has_any_role? :admin, :editor, :viewer
-        ScannedPort.all
+        Schedule.all
       else
-        organizations_ids = OrganizationPolicy::Scope.
-          new(@user, Organization).resolve.pluck(:id)
-        ScannedPort.where("organization_id IN (#{organizations_ids.join(', ')})")
+        jobs_ids = JobPolicy::Scope.new(@user, Job).resolve.pluck(:id)
+        Schedule.where("job_id IN (#{jobs_ids.join(', ')})")
       end
     end
   end
 
   def index?
     if @user.has_any_role? :admin, :editor, :viewer, :organization_editor, :organization_viewer
+      true
+    else
+      false
+    end
+  end
+
+  def create?
+    if @user.has_any_role? :admin, :editor
+      true
+    elsif JobPolicy::Scope.new(@user, Job).resolve.where(id: record.job_id).exists?
       true
     else
       false

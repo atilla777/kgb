@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     authorize User
-    @users = User.all
+    @users = policy_scope User
   end
 
   # GET /users/1
@@ -30,8 +30,8 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    authorize User
     @user = User.new(user_params)
+    authorize @user
     if @user.active == false
     end
 
@@ -66,7 +66,7 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    authorize User
+    authorize @user
     @user.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: User.model_name.human)
@@ -82,7 +82,7 @@ class UsersController < ApplicationController
     end
 
     def set_organizations
-      @organizations = Organization.all.order(:name)
+      @organizations = policy_scope(Organization).order(:name)
     end
 
     def set_user_roles

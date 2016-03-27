@@ -1,13 +1,13 @@
 class OptionSet < ActiveRecord::Base
 
-   NMAP_OPTIONS = {syn_scan: "sS",
+  NMAP_OPTIONS = {syn_scan: "sS",
                   skip_discovery: "PN",
                   udp_scan: "sU",
                   service_scan: "sV",
                   os_fingerprint: "O",
                   top_ports: "--top-ports"}
 
-   attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint, :service_scan, :top_ports
+  attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint, :service_scan, :top_ports
 
   before_save :set_options
 

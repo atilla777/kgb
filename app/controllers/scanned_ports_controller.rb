@@ -61,21 +61,25 @@ map_by_sql:  "CASE
   # GET /scanned_ports/1
   # GET /scanned_ports/1.json
   def show
+    authorize @scanned_port
   end
 
   # GET /scanned_ports/new
   def new
+    authorize ScannedPort
     @scanned_port = ScannedPort.new
   end
 
   # GET /scanned_ports/1/edit
   def edit
+    authorize @scanned_port
   end
 
   # POST /scanned_ports
   # POST /scanned_ports.json
   def create
     @scanned_port = ScannedPort.new(scanned_port_params)
+    authorize @scanned_port
 
     respond_to do |format|
       if @scanned_port.save
@@ -91,6 +95,7 @@ map_by_sql:  "CASE
   # PATCH/PUT /scanned_ports/1
   # PATCH/PUT /scanned_ports/1.json
   def update
+    authorize @scanned_port
     respond_to do |format|
       if @scanned_port.update(scanned_port_params)
         format.html { redirect_to @scanned_port, notice: 'Scanned port was successfully updated.' }
@@ -105,6 +110,7 @@ map_by_sql:  "CASE
   # DELETE /scanned_ports/1
   # DELETE /scanned_ports/1.json
   def destroy
+    authorize @scanned_port
     @scanned_port.destroy
     respond_to do |format|
       format.html { redirect_to scanned_ports_url, notice: 'Scanned port was successfully destroyed.' }

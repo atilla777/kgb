@@ -5,16 +5,19 @@ class ServicesController < ApplicationController
   # GET /services
   # GET /services.json
   def index
-    @services = Service.all
+    authorize Service
+    @services = policy_scope Service
   end
 
   # GET /services/1
   # GET /services/1.json
   def show
+    authorize @service
   end
 
   # GET /services/new
   def new
+    authorize Service
     if params[:service].present?
       @service = Service.new(organization_id: params[:service][:organization_id],
                              host: params[:service][:host],
@@ -28,12 +31,14 @@ class ServicesController < ApplicationController
 
   # GET /services/1/edit
   def edit
+    authorize @service
   end
 
   # POST /services
   # POST /services.json
   def create
     @service = Service.new(service_params)
+    authorize @service
 
     respond_to do |format|
       if @service.save
@@ -48,11 +53,13 @@ class ServicesController < ApplicationController
   end
 
   def legalise
+    authorize @service
     @service.update_attribute :legality, 1
     render 'detected_services_renew'
   end
 
   def unlegalise
+    authorize @service
     @service.update_attribute :legality, 0
     render 'detected_services_renew'
   end
@@ -60,6 +67,7 @@ class ServicesController < ApplicationController
   # PATCH/PUT /services/1
   # PATCH/PUT /services/1.json
   def update
+    authorize @service
     respond_to do |format|
       if @service.update(service_params)
         flash[:success] = t('flashes.update', model: Service.model_name.human)
@@ -75,6 +83,7 @@ class ServicesController < ApplicationController
   # DELETE /services/1
   # DELETE /services/1.json
   def destroy
+    authorize @service
     @service.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Service.model_name.human)
