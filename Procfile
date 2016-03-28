@@ -1,2 +1,2 @@
-web: bundle exec rails s
+web: bundle exec puma
 worker: bundle exec rake jobs:work
