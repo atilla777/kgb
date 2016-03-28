@@ -51,6 +51,8 @@ class UserPolicy < ApplicationPolicy
   def edit?
     if @user.has_any_role? :admin, :editor
       true
+    elsif @user == User.find(record.id)
+      true
     #elsif scope.where(id: record.id).exists?
     #  true
     else
@@ -60,6 +62,8 @@ class UserPolicy < ApplicationPolicy
 
   def update?
     if @user.has_any_role? :admin, :editor
+      true
+    elsif @user == User.find(record.id)
       true
     #elsif scope.where(id: record.id).exists?
     #  true
