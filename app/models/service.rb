@@ -12,7 +12,7 @@ class Service < ActiveRecord::Base
   validates :port, inclusion: {in: 0..65535}, allow_blank: true
 
   validates :host, uniqueness: {scope: [:port, :protocol]}
-  validates :host, length: {minimum: 7, maximum: 15}
+  validates :host, length: {minimum: 7, maximum: 30}
 
   validates :protocol, uniqueness: {scope: [:port, :host]}, allow_blank: true
   validates :protocol, inclusion: {in: PROTOCOLS}, allow_blank: true
