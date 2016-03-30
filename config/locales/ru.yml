@@ -131,6 +131,7 @@ ru:
       scanned_port:
         job_id:  Работа
         start_time: Время сканирования
+        job_time: Время сканирования
         host: Хост
         port: Порт
         protocol: Протокол

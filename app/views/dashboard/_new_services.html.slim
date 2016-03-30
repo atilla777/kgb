@@ -2,6 +2,7 @@ table.display.table.table-striped.table-bordered#index_table  width="100%"
   thead
     tr
       th = t('activerecord.attributes.service.organization_id')
+      th = t('activerecord.attributes.scanned_port.job_time')
       th = t('activerecord.attributes.service.host')
       th = t('activerecord.attributes.service.port')
       th = t('activerecord.attributes.service.protocol')
@@ -15,6 +16,8 @@ table.display.table.table-striped.table-bordered#index_table  width="100%"
             tr
               td.bg-info
                 = link_to organization.name, organization, class: 'btn btn-link btn-xs'
+              td.bg-info
+                = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
               td.bg-info
                 = service.host
               td.bg-info
