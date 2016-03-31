@@ -2,7 +2,7 @@ class Job < ActiveRecord::Base
 
   belongs_to :organization
   has_many :schedules, dependent: :destroy
-  #has_many :scanned_ports, dependent: :destroy
+  has_many :scanned_ports, dependent: :destroy
   belongs_to :option_set
 
   validates :name, length: {minimum: 3, maximum: 255}

@@ -18,14 +18,22 @@ class Organization < ActiveRecord::Base
     self.services.select(:host).distinct.pluck(:host)
   end
 
-  #def detected_services2
+  #def detected_services
   #  ScannedPort.where(host: self.ip_addresses).where(state: ['filtered', 'open', 'open|filtered']).group(:port, :protocol, :host)
   #end
 
-  def detected_services
+  #def detected_services
+  # ScannedPort.where(host: self.ip_addresses)
+  #            .where(state: ['filtered', 'open', 'open|filtered'])
+  #            .joins("INNER JOIN (SELECT scanned_ports.host, scanned_ports.port, scanned_ports.protocol, MAX(scanned_ports.job_time) AS 'max_date' FROM scanned_ports GROUP BY scanned_ports.host, scanned_ports.port, scanned_ports.protocol)a ON a.max_date = scanned_ports.job_time").group(:port, :protocol, :host)
+  #end
+
+  def detected_services(user)
+   jobs_ids = JobPolicy::Scope.new(user, Job).resolve.pluck(:id)
    ScannedPort.where(host: self.ip_addresses)
+              .where(job_id: jobs_ids)
               .where(state: ['filtered', 'open', 'open|filtered'])
-              .joins("INNER JOIN (SELECT scanned_ports.host, scanned_ports.port, scanned_ports.protocol, MAX(scanned_ports.job_time) AS 'max_date' FROM scanned_ports GROUP BY scanned_ports.host, scanned_ports.port, scanned_ports.protocol)a ON a.max_date = scanned_ports.job_time").group(:port, :protocol, :host)
+              .joins("INNER JOIN (SELECT scanned_ports.job_id, MAX(scanned_ports.job_time) AS 'max_time' FROM scanned_ports GROUP BY scanned_ports.job_id)a ON a.job_id = scanned_ports.job_id AND a.max_time = scanned_ports.job_time").group(:port, :protocol, :host)
   end
 
 end
