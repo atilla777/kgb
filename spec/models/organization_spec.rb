@@ -9,8 +9,8 @@ RSpec.describe Organization, type: :model do
       FactoryGirl.create(:service)
     end
 
-    let(:organization) {organization = Organization.where(name: 'Deneb inc.').first}
-    let(:user) {current_user = User.where(name: 'Aleksey').first}
+    let(:organization) {Organization.where(name: 'Deneb inc.').first}
+    let(:user) {User.where(name: 'Aleksey').first}
 
     context 'when job owned by organization has runned ine time, scan detect open ports' do
       before(:context) do
@@ -39,6 +39,39 @@ RSpec.describe Organization, type: :model do
       it 'show in dashboard only 3 actual open ports' do
         detected_services = organization.detected_services(user).all
         expect(detected_services.length).to eq(3)
+      end
+      it 'include port 11 with open|filtered state finded on last scan job' do
+        detected_services = organization.detected_services(user).all
+        scanned_port = ScannedPort.where(host: '192.168.1.1',
+                                    protocol: 'tcp',
+                                    port: 11,
+                                    state: 'open|filtered',
+                                    job_id: Job.where(name: 'Check Deneb').first,
+                                    organization_id: Organization.where(name: 'Deneb inc.').first,
+                                    job_time: '2016-04-04 12:12:12'.to_time).first # 12 - 3 MSK
+        expect(detected_services).to include(scanned_port)
+      end
+      it 'include port 21 with open state finded on last scan job' do
+        detected_services = organization.detected_services(user).all
+        scanned_port = ScannedPort.where(host: '192.168.1.1',
+                                    protocol: 'tcp',
+                                    port: 21,
+                                    state: 'open',
+                                    job_id: Job.where(name: 'Check Deneb').first,
+                                    organization_id: Organization.where(name: 'Deneb inc.').first,
+                                    job_time: '2016-04-04 12:12:12'.to_time).first # 12 - 3 MSK
+        expect(detected_services).to include(scanned_port)
+      end
+      it 'include port 443 with open state finded on last scan job' do
+        detected_services = organization.detected_services(user).all
+        scanned_port = ScannedPort.where(host: '192.168.1.1',
+                                    protocol: 'tcp',
+                                    port: 443,
+                                    state: 'open',
+                                    job_id: Job.where(name: 'Check Deneb').first,
+                                    organization_id: Organization.where(name: 'Deneb inc.').first,
+                                    job_time: '2016-04-04 12:12:12'.to_time).first # 12 - 3 MSK
+        expect(detected_services).to include(scanned_port)
       end
     end
 
