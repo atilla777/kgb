@@ -12,7 +12,7 @@ RSpec.describe Organization, type: :model do
     let(:organization) {Organization.where(name: 'Deneb inc.').first}
     let(:user) {User.where(name: 'Aleksey').first}
 
-    context 'when job owned by organization has runned ine time, scan detect open ports' do
+    context 'when job (owned by organization) has runned one time, scan detect open ports' do
       before(:context) do
         FactoryGirl.create(:scanned_port, port: 11, state: 'open|filtered')
         FactoryGirl.create(:scanned_port, port: 14, state: 'filtered')
@@ -29,7 +29,7 @@ RSpec.describe Organization, type: :model do
       end
     end
 
-    context 'when job owned by organization has complited several times, ports change thier states' do
+    context 'when job (owned by organization) has complited several times, ports change thier states' do
       before(:context) do
         FactoryGirl.create(:scanned_port, last_job: true, port: 11, state: 'open|filtered')
         FactoryGirl.create(:scanned_port, last_job: true, port: 21, state: 'open')
