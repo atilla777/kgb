@@ -2,8 +2,9 @@
   table.ajax_changed.display.table.table-striped.table-bordered#index_table
     thead
       tr
+        th.default_sort data-sort='desc'
+          = t('activerecord.attributes.scanned_port.job_time')
         th = t('activerecord.attributes.service.organization_id')
-        th = t('activerecord.attributes.scanned_port.job_time')
         th = t('activerecord.attributes.jobs.name')
         th = t('activerecord.attributes.service.host')
         th = t('activerecord.attributes.service.port')
@@ -17,9 +18,9 @@
         - organization.detected_services(@current_user).each do |detected_service|
           tr
             td.bg-info
-              = link_to organization.name, organization, class: 'btn btn-link btn-xs'
+              = detected_service.job_time.strftime("%Y.%m.%d-%H.%M.%S")
             td.bg-info
-              = detected_service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
+              = link_to organization.name, organization, class: 'btn btn-link btn-xs'
             td.bg-info
               = detected_service.job.name
             td.bg-info

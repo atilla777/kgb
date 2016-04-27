@@ -57,9 +57,9 @@ class ScanJob < ActiveJob::Base
                  protocol: port.protocol,
                  state: port.state,
                  legality: legality,
-                 product: port.service.product,
-                 product_version: port.service.version,
-                 product_extrainfo: port.service.extra_info,
+                 product: port&.service&.product,
+                 product_version: port&.service&.version,
+                 product_extrainfo: port&.service&.extra_info,
                  service: port.service)
           scanned_port.save
         end
