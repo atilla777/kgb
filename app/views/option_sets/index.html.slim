@@ -11,7 +11,7 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @option_sets.each do |row|
       tr
-        td = row.name
+        td = link_to row.name, row, class: 'btn btn-link btn-xs'
         td = row.show_options
         td
           = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do

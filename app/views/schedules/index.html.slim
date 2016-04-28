@@ -11,6 +11,6 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @schedules.each do |schedule|
       tr
-        td = schedule.job.name
+        td = link_to schedule.job.name, schedule.job, class: 'btn btn-link btn-xs'
         td = schedule.show_week_day
         td = schedule.month_day

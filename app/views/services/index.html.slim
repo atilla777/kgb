@@ -16,8 +16,8 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @services.each do |row|
       tr
-        td = row.organization.name
-        td = row.name
+        td = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
+        td = link_to row.name, row, class: 'btn btn-link btn-xs'
         td = row.show_legality
         td = row.host
         td = row.port

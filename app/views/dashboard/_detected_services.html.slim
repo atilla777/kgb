@@ -5,7 +5,7 @@
         th.default_sort data-sort='desc'
           = t('activerecord.attributes.scanned_port.job_time')
         th = t('activerecord.attributes.service.organization_id')
-        th = t('activerecord.attributes.jobs.name')
+        th = Job.model_name.human
         th = t('activerecord.attributes.service.host')
         th = t('activerecord.attributes.service.port')
         th = t('activerecord.attributes.service.protocol')
@@ -22,7 +22,7 @@
             td.bg-info
               = link_to organization.name, organization, class: 'btn btn-link btn-xs'
             td.bg-info
-              = detected_service.job.name
+              = link_to detected_service.job.name, detected_service.job, class: 'btn btn-link btn-xs'
             td.bg-info
               = detected_service.host
             td.bg-info

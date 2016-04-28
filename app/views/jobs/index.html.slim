@@ -16,10 +16,10 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @jobs.each do |row|
       tr
-        td = link_to row.organization.name, row
+        td = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
         td = link_to row.name, row, class: 'btn btn-link btn-xs'
         td = row.options
-        td = row.option_set.name
+        td = link_to row.option_set.name, row.option_set, class: 'btn btn-link btn-xs'
         td = row.ports
         td = row.hosts
         td
