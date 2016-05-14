@@ -43,6 +43,38 @@ class User < ActiveRecord::Base
     active ? I18n.t('messages.message_yes') : I18n.t('messages.message_no')
   end
 
+  # services allowed for user role
+  def services
+    ServicePolicy::Scope.new(self, Service).resolve
+  end
+
+  # allowed for user role hosts registered as services
+  def services_hosts
+    services.group(:host).pluck(:host)
+  end
+
+  # allowed fo user role jobs
+  def jobs
+    JobPolicy::Scope.new(self, Job).resolve
+  end
+
+  # active ports scan results scoped by jobs allowed for user role and registered as service hosts
+  def jobs_active_services
+    ScannedPort.where(host: services_hosts)
+               .where(job_id: jobs.pluck(:id))
+               .where(state: ['filtered', 'open', 'open|filtered'])
+               .joins(%q(
+                       INNER JOIN (SELECT scanned_ports.job_id,
+                       MAX(scanned_ports.job_time)
+                       AS 'max_time' FROM scanned_ports
+                       GROUP BY scanned_ports.job_id)a
+                       ON a.job_id = scanned_ports.job_id
+                       AND a.max_time = scanned_ports.job_time
+                      )
+                     )
+               .group(:port, :protocol, :host)
+  end
+
   private
 
   def set_organizations

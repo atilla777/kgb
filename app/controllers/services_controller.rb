@@ -100,6 +100,7 @@ class ServicesController < ApplicationController
 
     def set_organizations
       @organizations = policy_scope(Organization).order(:name)
+      @user_active_services = current_user.jobs_active_services
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

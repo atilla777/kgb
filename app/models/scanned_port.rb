@@ -5,6 +5,7 @@ class ScannedPort < ActiveRecord::Base
                 1 => I18n.t('types.h_legal'),
                 2 => I18n.t('types.h_unknown'),
                 3 => I18n.t('types.not_needed')}.freeze
+
   STATES = {'open' => I18n.t('types.open'),
             'closed' => I18n.t('types.closed'),
             'open|filtered' => I18n.t('types.open_filtered'),
