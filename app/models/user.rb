@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
   def jobs_active_services
     ScannedPort.where(host: services_hosts)
                .where(job_id: jobs.pluck(:id))
-               .where(state: ['filtered', 'open', 'open|filtered'])
+               .where(state: 'open')
                .joins(%q(
                        INNER JOIN (SELECT scanned_ports.job_id,
                        MAX(scanned_ports.job_time)
