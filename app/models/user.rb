@@ -72,7 +72,7 @@ class User < ActiveRecord::Base
                        AND a.max_time = scanned_ports.job_time
                       )
                      )
-               .group(:port, :protocol, :host)
+               .group(:port, :protocol, :host).includes(:job).includes(:organization)
   end
 
   private
