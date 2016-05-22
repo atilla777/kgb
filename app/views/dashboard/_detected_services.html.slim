@@ -38,16 +38,16 @@
           - if organization_service.present?
             - if organization_service.legality == 1
               td.bg-success
-                = link_to t('types.legal'), organization_service, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: organization_service.name
                 = link_to unlegalise_service_path(id: organization_service.id), data: {confirm: t('actions.confirm')}, remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.unlegalise')  do
                   span.text-danger
                     i.glyphicon.glyphicon-remove aria-hidden="true"
+                = link_to t('types.legal'), organization_service, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: organization_service.name
             - else
               td.bg-danger
-                = link_to t('types.illegal'), organization_service, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: organization_service.name
                 = link_to legalise_service_path(id: organization_service.id), data: {confirm: t('actions.confirm')}, remote: true, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.legalise')  do
                   span.text-success
                     i.glyphicon.glyphicon-ok aria-hidden="true"
+                = link_to t('types.illegal'), organization_service, class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: organization_service.name
           - else
             td.bg-danger
               = t('types.unknown')

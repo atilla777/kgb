@@ -28,7 +28,9 @@ Rails.application.routes.draw do
 
   resource :users_roles
 
-  get '/dashboard', to: 'dashboard#index', as: :dashboard
+  get '/detected_services', to: 'dashboard#detected_services', as: :detected_services
+  get '/new_services', to: 'dashboard#new_services', as: :new_services
+  get '/hosts', to: 'dashboard#hosts', as: :hosts
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

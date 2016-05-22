@@ -18,7 +18,11 @@ html
         .collapse.navbar-collapse
           ul.nav.navbar-nav
             li
-              = link_to 'Панель управления', dashboard_path
+              = link_to 'Активные сервисы',  detected_services_path
+            li
+              = link_to 'Новые сервисы',  new_services_path
+            li
+              = link_to 'Хосты',  hosts_path
             li
               = link_to 'Результаты сканирования', scanned_ports_path
 
