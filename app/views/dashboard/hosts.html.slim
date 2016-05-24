@@ -4,17 +4,17 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.organization.name')
+      th = t('activerecord.attributes.service.organization_id')
       th = t('activerecord.attributes.service.host')
 
   tbody
     - @organizations.each do |organization|
       - organization.ip_addresses.each do |ip|
         tr
-          td.bg-info
+          td
             = link_to organization.name, organization, class: 'btn btn-link btn-xs'
-          td.bg-info
-            = ip
+          td
             = link_to new_job_path(job: {organization_id: organization.id, host: ip}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
               span.text-success
-                i.glyphicon.glyphicon-plus aria-hidden="true"
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+            = ip

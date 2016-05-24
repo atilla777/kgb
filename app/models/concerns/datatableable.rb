@@ -1,5 +1,4 @@
 ﻿module Datatableable
-
   extend ActiveSupport::Concern
 
   #included do
@@ -41,9 +40,9 @@
       fields.each do |f|
         unless f.fetch(:invisible, false)
           result[:dt_fields] << f # список полей отображаемых в столбцах TadaTable (могут участвовать в сортировке)
-          result[:joins_string] << dt_joins_string(f)
-        where_conditions << dt_where_string(params, f) # часть WHERE sql запроса
+          where_conditions << dt_where_string(params, f) # часть WHERE sql запроса
         end
+        result[:joins_string] << dt_joins_string(f)
         result[:select_string] << dt_select_string(f)
         if f[:filter]
           result[:filter_string] << f.fetch(:filter)
@@ -52,6 +51,7 @@
       where_conditions = where_conditions.join(' OR ')
       result[:select_string] = result[:select_string].join(', ')
       result[:joins_string] = result[:joins_string].join(' ')
+      result[:filter_string] = result[:filter_string].join(' AND ')
       result[:where_string] = [where_conditions, {search: "%#{params.fetch(:sSearch, '').downcase}%"}]
       result
     end
@@ -93,6 +93,8 @@
     def dt_joins_string(field)
         if field[:joins]
           result = "LEFT JOIN #{field[:joins]} ON #{field[:on]}" # часть LEFT INNER JOIN sql запроса
+        elsif field[:sql_joins]
+          result = "#{field[:sql_joins]}"
         end
         result
     end
@@ -133,5 +135,4 @@
     end
 
   end
-
 end

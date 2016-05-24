@@ -10,6 +10,8 @@ class ScannedPortsController < ApplicationController
     fields = [{field: 'scanned_ports.job_time', as: 'job_time'},
               {field: 'scanned_ports.id', as: 'id', invisible: true},
               {field: 'scanned_ports.job_id', as: 'job_id', invisible: true, filter: "jobs.id IN (#{allowed_jobs_ids.join(',')})"},
+              {field: 'organizations.id', as: 'organization_id', invisible: true,},
+              {field: 'organizations.name', as: 'organization_name', joins: 'organizations', on: 'organizations.id = scanned_ports.organization_id'},
               {field: 'jobs.name', as: 'job_name', joins: 'jobs', on: 'jobs.id = scanned_ports.job_id'},
               {field: 'scanned_ports.host', as: 'host'},
               {field: 'scanned_ports.port', as: 'port'},
@@ -38,9 +40,10 @@ map_by_sql:  "CASE
               = 1 THEN 1
               ELSE 3 END"
               },
-               {field: 'scanned_ports.legality', as: 'history_legality', map_to: ScannedPort.legalities},
-               {field: 'scanned_ports.legality', as: 'history_legality_id', invisible: true},
-              {field: 'scanned_ports.service', as: 'service'}]
+              {field: 'scanned_ports.legality', as: 'history_legality', map_to: ScannedPort.legalities},
+              {field: 'scanned_ports.legality', as: 'history_legality_id', invisible: true},
+              {field: 'scanned_ports.service', as: 'service'},
+              {field: "scanned_ports.product || ' ' || (CASE WHEN scanned_ports.product_version IS NULL THEN '' ELSE scanned_ports.product_version END) || ' ' || (CASE WHEN scanned_ports.product_extrainfo IS NULL THEN '' ELSE scanned_ports.product_extrainfo END)", as: 'product'}]
               #{field: 'users.name', as: 'registrator', joins: 'users', on: 'incidents.user_id = users.id'}
               #{field: 'organizations.name', as: 'organization_name', joins: 'organizations', on: 'incidents.organization_id = organizations.id'},
               #{field: 'organizations.id', as: 'organization_id', invisible: true},

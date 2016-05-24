@@ -4,42 +4,45 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.service.organization_id')
       th = t('activerecord.attributes.scanned_port.job_time')
-      th = t('activerecord.attributes.job.name')
-      th = t('activerecord.attributes.service.host')
+      th = t('activerecord.attributes.service.organization_id')
+      th = t('activerecord.attributes.scanned_port.job_id')
+      th = t('activerecord.attributes.scanned_port.host')
       th = t('activerecord.attributes.service.port')
       th = t('activerecord.attributes.service.protocol')
       th = t('activerecord.attributes.service.state')
+      th = t('activerecord.attributes.scanned_port.service')
       th = t('activerecord.attributes.scanned_port.product')
 
   tbody
     - @user_active_services.each do |service|
       - unless Service.where(host: service.host, port: service.port, protocol: service.protocol).exists?
           tr
-            td.bg-info
-              = link_to service.organization.name, service.organization, class: 'btn btn-link btn-xs'
-            td.bg-info
+            td
               = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
-            td.bg-info
-              = service.job.name
-            td.bg-info
+            td
+              = link_to service.organization.name.truncate(15), service.organization, class: 'btn btn-link btn-xs'
+            td
+              = link_to service.job.name.truncate(15), service.job, class: 'btn btn-link btn-xs'
+            td
               = service.host
-            td.bg-info
+            td
               = service.port
-            td.bg-info
+            td
               = service.protocol
             - if service.state == 'open'
-              td.bg-danger
-                = service.show_state
+              td
                 = link_to new_service_path(service: {organization_id: service.organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{service.organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
                   span.text-info
-                    i.glyphicon.glyphicon-plus aria-hidden="true"
+                    i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+                = service.show_state
             - else
-              td.bg-warning
-                = service.show_state
+              td
                 = link_to new_service_path(service: {organization_id: service.organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{service.organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
                   span.text-info
-                    i.glyphicon.glyphicon-plus aria-hidden="true"
+                    i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+                = service.show_state
+            td
+              = service.service
             td
               = service.show_product

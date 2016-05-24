@@ -1,3 +1,14 @@
 h3
   span.text-primary = t('navigations.detected_services')
-= render partial: 'detected_services'
+
+= dt_big_table(dt_fields: [t('activerecord.attributes.scanned_port.job_time'),\
+                          t('activerecord.attributes.service.organization_id'),\
+                          t('activerecord.attributes.scanned_port.job_id'),\
+                          t('activerecord.attributes.scanned_port.host'),\
+                          t('activerecord.attributes.scanned_port.port'),\
+                          t('activerecord.attributes.scanned_port.protocol'),\
+                          t('activerecord.attributes.scanned_port.state'),\
+                          t('activerecord.attributes.service.legality'),\
+                          t('activerecord.attributes.scanned_port.service'),\
+                          t('activerecord.attributes.scanned_port.product')],
+               dt_method: '/dashboard/datatable', sort: [0, :desc])

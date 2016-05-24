@@ -33,18 +33,18 @@ ru:
     message_no: Нет
     not_allowed: Нет прав доступа.
   types:
-    legal: Легален
-    illegal: Нелегален
-    unknown: Неизвестно
-    h_unknown: Не было известно
-    h_legal: Был легален
-    h_illegal: Не был легален
-    no_sense: Не важно
-    not_needed: Не было важно
-    open: Открыт
-    closed: Закрыт
-    filtered: Фильтруется
-    open_filtered: Открыт|фильтруется
+    legal: негален
+    illegal: нелегален
+    unknown: неизвестно
+    h_unknown: не было известно
+    h_legal: был легален
+    h_illegal: не был легален
+    no_sense: не важно
+    not_needed: не было важно
+    open: открыт
+    closed: закрыт
+    filtered: фильтруется
+    open_filtered: открыт|фильтруется
   navigations:
     main_info: Основная информация
     week_days: Дни недели
