@@ -75,6 +75,29 @@ class User < ActiveRecord::Base
                .group(:port, :protocol, :host).includes(:job).includes(:organization)
   end
 
+  # доступные для роли пользователя (через доступные пользователю работы),
+  # имеющиеся в последних результатах сканирования хосты (с открытыми портами) и связанные с ними (через сервисы)
+  # организации (если таковые есть)
+  def hosts
+    ScannedPort.select("scanned_ports.host, organizations.id AS 'organization_id', organizations.name AS 'organization_name'")
+             .where(job_id: jobs.pluck(:id))
+             .where(state: 'open')
+             .joins(%q(
+                     INNER JOIN (SELECT scanned_ports.job_id,
+                     MAX(scanned_ports.job_time)
+                     AS 'max_time' FROM scanned_ports
+                     GROUP BY scanned_ports.job_id)a
+                     ON a.job_id = scanned_ports.job_id
+                     AND a.max_time = scanned_ports.job_time
+                    )
+                   )
+             .joins("LEFT JOIN services ON services.host = scanned_ports.host")
+             .joins("LEFT JOIN organizations ON services.organization_id = organizations.id")
+             .group(:host, :organization)#.includes(:organization)
+             #.joins("LEFT JOIN services ON services.host = scanned_ports.host")
+             #.joins("LEFT JOIN organizations ON services.organization_id = organizations.id")
+  end
+
   private
 
   def set_organizations

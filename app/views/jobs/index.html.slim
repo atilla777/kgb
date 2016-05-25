@@ -11,21 +11,19 @@ table.display.table.table-striped.table-bordered#index_table
       th = t('activerecord.attributes.job.ports')
       th = t('activerecord.attributes.job.hosts')
       th
-      th
 
   tbody
     - @jobs.each do |row|
       tr
-        td.col-md-1 = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
-        td.col-md-3 = link_to row.name, row, class: 'btn btn-link btn-xs'
+        td.col-md-1 = link_to row.organization.name.truncate(22), row.organization, class: 'btn btn-link btn-xs'
+        td.col-md-3 = link_to row.name.truncate(30), row, class: 'btn btn-link btn-xs'
         td.col-md-2 = row.options
-        td.col-md-1 = link_to row.option_set.name, row.option_set, class: 'btn btn-link btn-xs'
+        td.col-md-1 = link_to row.option_set.name.truncate(22), row.option_set, class: 'btn btn-link btn-xs'
         td.col-md-1 = row.ports
         td.col-md-2 = row.hosts
-        td.col-md-1
+        td.col-md-2
           = link_to scan_job_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.scan_now') do
             i.glyphicon.glyphicon-search aria-hidden="true"
-        td.col-md-1
           = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
             i.glyphicon.glyphicon-info-sign aria-hidden="true"
           = link_to edit_job_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do

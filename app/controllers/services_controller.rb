@@ -55,13 +55,13 @@ class ServicesController < ApplicationController
   def legalise
     authorize @service
     @service.update_attribute :legality, 1
-    render 'detected_services_renew'
+    render 'dashboard/detected_services_renew'
   end
 
   def unlegalise
     authorize @service
     @service.update_attribute :legality, 0
-    render 'detected_services_renew'
+    render 'dashboard/detected_services_renew'
   end
 
   # PATCH/PUT /services/1

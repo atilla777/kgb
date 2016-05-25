@@ -16,7 +16,7 @@
   <% if row.service_legality_id == 0 %>
     <% new_row << %Q(
       <a data-confirm='Вы уверены?'
-      class='btn btn-link'
+      class='btn btn-link btn-xs'
       data-toggle='tooltip'
       data-placement='top'
       title='#{t('actions.legalise')}'
@@ -27,7 +27,7 @@
     ) %>
   <% elsif row.service_legality_id == 2 %>
     <% new_row << %Q(
-      <a  class='btn btn-link'
+      <a  class='btn btn-link btn-xs'
       data-toggle='tooltip'
       data-placement='top'
       title='#{t('helpers.submit.create', model: Service.model_name.human)}'
@@ -38,7 +38,7 @@
   <% else %>
     <% new_row << %Q(
       <a data-confirm='#{t('actions.confirm')}'
-      class='btn btn-link'
+      class='btn btn-link btn-xs'
       data-toggle='tooltip'
       data-placement='top'
       title='#{t('actions.unlegalise')}'

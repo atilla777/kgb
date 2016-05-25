@@ -8,13 +8,27 @@ table.display.table.table-striped.table-bordered#index_table
       th = t('activerecord.attributes.service.host')
 
   tbody
-    - @organizations.each do |organization|
-      - organization.ip_addresses.each do |ip|
-        tr
+    - @hosts.each do |row|
+      tr
+        - if row.organization_id.blank?
           td
-            = link_to organization.name, organization, class: 'btn btn-link btn-xs'
-          td
-            = link_to new_job_path(job: {organization_id: organization.id, host: ip}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
+            = link_to new_service_path(service: {host: row.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
               span.text-success
                 i.glyphicon.glyphicon-plus-sign aria-hidden="true"
-            = ip
+              =< t('types.unregistered')
+          td
+            = link_to new_job_path(job: {host: row.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
+              span.text-success
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+            = row.host
+        - else
+          td
+            = link_to "/organizations/#{row.organization_id}", class: 'btn btn-link btn-xs' do
+              span.text-info
+                i.glyphicon.glyphicon-info-sign aria-hidden="true"
+              =< row.organization_name
+          td
+            = link_to new_job_path(job: {organization_id: row.organization_id, host: row.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
+              span.text-success
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+            = row.host

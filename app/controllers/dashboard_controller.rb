@@ -71,7 +71,8 @@ map_by_sql:  "CASE
 
   def hosts
     authorize :dashboard
-    @organizations = policy_scope(Organization)
+    #@organizations = policy_scope(Organization)
+    @hosts = current_user.hosts
   end
 
 end
