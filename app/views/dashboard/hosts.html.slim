@@ -6,6 +6,7 @@ table.display.table.table-striped.table-bordered#index_table
     tr
       th = t('activerecord.attributes.service.organization_id')
       th = t('activerecord.attributes.service.host')
+      th = Service.model_name.human
 
   tbody
     - @hosts.each do |row|
@@ -21,6 +22,8 @@ table.display.table.table-striped.table-bordered#index_table
               span.text-success
                 i.glyphicon.glyphicon-plus-sign aria-hidden="true"
             = row.host
+          td
+            = row.host_name
         - else
           td
             = link_to "/organizations/#{row.organization_id}", class: 'btn btn-link btn-xs' do
@@ -32,3 +35,5 @@ table.display.table.table-striped.table-bordered#index_table
               span.text-success
                 i.glyphicon.glyphicon-plus-sign aria-hidden="true"
             = row.host
+          td
+            = link_to row.host_name, "/services/#{row.server_id}", class: 'btn btn-link btn-xs'

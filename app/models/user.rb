@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
   # имеющиеся в последних результатах сканирования хосты (с открытыми портами) и связанные с ними (через сервисы)
   # организации (если таковые есть)
   def hosts
-    ScannedPort.select("scanned_ports.host, organizations.id AS 'organization_id', organizations.name AS 'organization_name'")
+    ScannedPort.select("servers.name AS 'host_name', servers.id AS 'server_id', scanned_ports.host, organizations.id AS 'organization_id', organizations.name AS 'organization_name'")
              .where(job_id: jobs.pluck(:id))
              .where(state: 'open')
              .joins(%q(
@@ -92,6 +92,7 @@ class User < ActiveRecord::Base
                     )
                    )
              .joins("LEFT JOIN services ON services.host = scanned_ports.host")
+             .joins("LEFT JOIN services AS servers ON (servers.host = scanned_ports.host AND servers.port IS NULL)")
              .joins("LEFT JOIN organizations ON services.organization_id = organizations.id")
              .group(:host, :organization)#.includes(:organization)
              #.joins("LEFT JOIN services ON services.host = scanned_ports.host")

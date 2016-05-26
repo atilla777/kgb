@@ -22,7 +22,7 @@ html
             li
               = link_to 'Новые сервисы',  new_services_path
             li
-              = link_to 'Активные хосты',  hosts_path
+              = link_to 'Хосты',  hosts_path
             li
               = link_to 'Результаты сканирования', scanned_ports_path
 
@@ -43,7 +43,6 @@ html
                   = link_to 'Хосты/Сервисы', services_path
                 li
                   = link_to 'Рассписание', schedules_path
-
 
           ul.nav.navbar-nav.navbar-right
             - if current_user
