@@ -23,7 +23,13 @@ class OptionSet < ActiveRecord::Base
   validates :top_ports, inclusion: {in: 1..1000}, allow_blank: true
 
   def show_options
-    result = options.select { |_key, value| value != '0' }
+    result = options.select do |key, value|
+      if key == :top_ports
+        value
+      else
+        value != '0'
+      end
+    end
     result = result.map do |key, value|
       if key == :top_ports && value.present?
         "--top-ports #{value}"
