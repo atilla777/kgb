@@ -12,7 +12,7 @@
                   class = 'btn btn-link btn-xs'> #{row.organization_name.truncate(15)}</a>"
                 %>
   <% new_row << row.host %>
-  <% new_row << row.port %>
+  <% new_row << row.port_name %>
   <% new_row << row.protocol %>
   <% if row.state_id == 'open' %>
     <% color = 'text-danger' %>
