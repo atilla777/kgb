@@ -2,6 +2,14 @@ h3
   span.text-primary
     = Service.model_name.human count: 2
 
+= dt_big_table(dt_fields: [t('activerecord.attributes.service.organization_id'),\
+                           t('activerecord.attributes.service.name'),\
+                           t('activerecord.attributes.service.legality'),\
+                           t('activerecord.attributes.service.host'),\
+                           t('activerecord.attributes.service.port'),\
+                           t('activerecord.attributes.service.protocol')],
+               dt_method: '/services/datatable', sort: [0, :desc])
+
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr

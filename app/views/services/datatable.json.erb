@@ -1,0 +1,9 @@
+﻿<%= dt_response(@datatable) do |new_row, row| %>
+  <% new_row << "<a href = '/organizations/#{row.organization_id}' class = 'btn btn-link btn-xs'> #{row.organization_name.truncate(15)}</a>" %>
+  <% new_row << row.service_name %>
+  <% new_row << row.service_legality %>
+  <% new_row << row.service_host %>
+  <% new_row << row.service_port %>
+  <% new_row << row.service_protocol %>
+  <% new_row << '' %>
+<% end %>

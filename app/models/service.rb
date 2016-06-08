@@ -1,6 +1,9 @@
 class Service < ActiveRecord::Base
+  include Datatableable
 
   PROTOCOLS = ['tcp', 'udp']
+
+  LEGALITIES = {1 => I18n.t('messages.message_yes'), 0 => I18n.t('messages.message_no')}
 
   belongs_to :organization
 
@@ -16,6 +19,10 @@ class Service < ActiveRecord::Base
 
   validates :protocol, uniqueness: {scope: [:port, :host]}, allow_blank: true
   validates :protocol, inclusion: {in: PROTOCOLS}, allow_blank: true
+
+  def self.legalities
+    LEGALITIES
+  end
 
   def self.protocols
     PROTOCOLS

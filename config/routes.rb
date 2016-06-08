@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :option_sets
-   resources :services do
+  resources :services do
+    collection do
+      get 'datatable' # pagination
+    end
     member do
       get 'legalise'
       get 'unlegalise'
