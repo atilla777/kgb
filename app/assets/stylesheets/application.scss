@@ -19,3 +19,25 @@ label.required:after {
     content: " *";
     color: red;
 }
+#index_table {
+              table-layout: fixed;
+}
+td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+tr:hover td {opacity: 0.1}
+tr:hover td:hover {opacity: 1}
+td:hover {
+    overflow: visible;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+}
+td:hover >{
+    overflow: visible;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+}
