@@ -21,13 +21,13 @@ table.display.table.table-striped.table-bordered#index_table
             td
               = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
             td
-              = link_to service.organization.name.truncate(15), service.organization, class: 'btn btn-link btn-xs'
+              = link_to service.organization.name, service.organization, class: 'btn btn-link btn-xs'
             td
-              = link_to service.job.name.truncate(15), service.job, class: 'btn btn-link btn-xs'
+              = link_to service.job.name, service.job, class: 'btn btn-link btn-xs'
             td
               = service.host
             td
-              = service.port
+              = "#{service.port} #{t('activerecord.attributes.service.port')}"
             td
               = service.protocol
             td

@@ -6,7 +6,7 @@ class ServicesController < ApplicationController
   # GET /services.json
   def index
     authorize Service
-    @services = policy_scope Service
+    @services = policy_scope(Service).includes(:organization)
   end
 
   def datatable

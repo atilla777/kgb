@@ -36,6 +36,14 @@ class Service < ActiveRecord::Base
     end
   end
 
+  def show_host
+    if port.present?
+      ''
+    else
+        I18n.t('activerecord.attributes.scanned_port.host')
+    end
+  end
+
   def self.legality_key(state, host, port, protocol)
     service = Service.where(host: host, port: port, protocol: protocol).first
     if state == :closed

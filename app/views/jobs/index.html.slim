@@ -15,10 +15,10 @@ table.display.table.table-striped.table-bordered#index_table
   tbody
     - @jobs.each do |row|
       tr
-        td.col-md-1 = link_to row.organization.name.truncate(22), row.organization, class: 'btn btn-link btn-xs'
-        td.col-md-3 = link_to row.name.truncate(30), row, class: 'btn btn-link btn-xs'
+        td.col-md-1 = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
+        td.col-md-3 = link_to row.name, row, class: 'btn btn-link btn-xs'
         td.col-md-2 = row.options
-        td.col-md-1 = link_to row.option_set.name.truncate(22), row.option_set, class: 'btn btn-link btn-xs'
+        td.col-md-1 = link_to row.option_set.name, row.option_set, class: 'btn btn-link btn-xs'
         td.col-md-1 = row.ports
         td.col-md-2 = row.hosts
         td.col-md-2

@@ -15,7 +15,7 @@ class JobsController < ApplicationController
   def index
     authorize Job
     #
-   @jobs = policy_scope(Job)
+   @jobs = policy_scope(Job).includes(:organization).includes(:option_set)
   end
 
   # GET /jobs/1

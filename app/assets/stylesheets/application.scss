@@ -19,9 +19,8 @@ label.required:after {
     content: " *";
     color: red;
 }
-#index_table {
-              table-layout: fixed;
-}
+#index_table{table-layout: fixed;}
+#dt_big_table{table-layout: fixed;}
 td {
     white-space: nowrap;
     overflow: hidden;

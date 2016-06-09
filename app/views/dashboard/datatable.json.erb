@@ -1,7 +1,7 @@
 ﻿<%= dt_response(@datatable) do |new_row, row| %>
   <% new_row << row.job_time.strftime("%d.%m.%Y-%H.%M.%S") %>
-  <% new_row << "<a href = '/organizations/#{row.organization_id}' class = 'btn btn-link btn-xs'> #{row.organization_name.truncate(15)}</a>" %>
-  <% new_row << "<a href = '/jobs/#{row.job_id}' class = 'btn btn-link btn-xs'> #{row.job_name.truncate(15)}</a>" %>
+  <% new_row << "<a href = '/organizations/#{row.organization_id}' class = 'btn btn-link btn-xs'> #{row.organization_name}</a>" %>
+  <% new_row << "<a href = '/jobs/#{row.job_id}' class = 'btn btn-link btn-xs'> #{row.job_name}</a>" %>
   <% new_row << row.sp_host %>
   <% new_row << row.sp_port %>
   <% new_row << row.sp_protocol %>
