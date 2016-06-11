@@ -22,6 +22,11 @@ class ServicesController < ApplicationController
                filter: "services.id IN (#{allowed_services_ids.join(',')})"},
               {field: 'services.id', as: 'service_id', invisible: true},
               {field: 'services.name', as: 'service_name'},
+              {field: 'services.port', as: 'service_type',
+                map_by_sql: %Q| CASE
+                                WHEN services.port IS NULL THEN '#{I18n.t('activerecord.attributes.scanned_port.host')}'
+                                ELSE '' END
+                              |},
               {field: 'services.legality', as: 'service_legality', map_to: Service.legalities},
               {field: 'services.host', as: 'service_host'},
               {field: 'services.port', as: 'service_port',

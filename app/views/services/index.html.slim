@@ -2,35 +2,15 @@ h3
   span.text-primary
     = Service.model_name.human count: 2
 
-table.display.table.table-striped.table-bordered#index_table
-  thead
-    tr
-      th = t('activerecord.attributes.service.organization_id')
-      th = t('activerecord.attributes.service.name')
-      th = t('activerecord.attributes.scanned_port.host')
-      th = t('activerecord.attributes.service.legality')
-      th = t('activerecord.attributes.service.host')
-      th = t('activerecord.attributes.service.port')
-      th = t('activerecord.attributes.service.protocol')
-      th
+= dt_big_table(dt_fields: [t('activerecord.attributes.service.organization_id'),\
+                           t('activerecord.attributes.service.name'),\
+                           t('activerecord.attributes.scanned_port.host'),\
+                           t('activerecord.attributes.service.legality'),\
+                           t('activerecord.attributes.service.host'),\
+                           t('activerecord.attributes.service.port'),\
+                           t('activerecord.attributes.service.protocol')],
+               dt_method: '/services/datatable', sort: [0, :desc])
 
-  tbody
-    - @services.each do |row|
-      tr
-        td = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
-        td = link_to row.name, row, class: 'btn btn-link btn-xs'
-        td = row.show_host
-        td = row.show_legality
-        td = row.host
-        td = row.port
-        td = row.protocol
-        td
-          = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
-            i.glyphicon.glyphicon-info-sign aria-hidden="true"
-          = link_to edit_service_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
-            i.glyphicon.glyphicon-edit aria-hidden="true"
-          = link_to row, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
-            i.glyphicon.glyphicon-trash aria-hidden="true"
 
 br
 
