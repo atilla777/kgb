@@ -4,9 +4,9 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.option_set.name')
-      th = t('activerecord.attributes.option_set.options')
-      th
+      th.w45 = t('activerecord.attributes.option_set.name')
+      th.w50 = t('activerecord.attributes.option_set.options')
+      th.w5
 
   tbody
     - @option_sets.each do |row|

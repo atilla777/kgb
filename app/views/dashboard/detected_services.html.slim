@@ -1,14 +1,14 @@
 h3
   span.text-primary = t('navigations.detected_services')
 
-= dt_big_table(dt_fields: [t('activerecord.attributes.scanned_port.job_time'),\
-                          t('activerecord.attributes.service.organization_id'),\
-                          t('activerecord.attributes.scanned_port.job_id'),\
-                          t('activerecord.attributes.scanned_port.host'),\
-                          t('activerecord.attributes.scanned_port.port'),\
-                          t('activerecord.attributes.scanned_port.protocol'),\
-                          t('activerecord.attributes.scanned_port.state'),\
-                          t('activerecord.attributes.service.legality'),\
-                          t('activerecord.attributes.scanned_port.service'),\
-                          t('activerecord.attributes.scanned_port.product')],
-               dt_method: '/dashboard/datatable', sort: [0, :desc])
+= dt_big_table([{name: t('activerecord.attributes.scanned_port.job_time'), sort: :desc, html_class: 'w10'},\
+                {name: t('activerecord.attributes.service.organization_id'), html_class: 'w20'},\
+                {name: t('activerecord.attributes.scanned_port.job_id'), html_class: 'w10'},\
+                {name: t('activerecord.attributes.scanned_port.host'), html_class: 'w10'},\
+                {name: t('activerecord.attributes.scanned_port.port'), html_class: 'w5'},\
+                {name: t('activerecord.attributes.scanned_port.protocol'), html_class: 'w5'},\
+                {name: t('activerecord.attributes.scanned_port.state'), html_class: 'w10'},\
+                {name: t('activerecord.attributes.service.legality'), html_class: 'w15'},\
+                {name: t('activerecord.attributes.scanned_port.service'),html_class: 'w10'},\
+                {name: t('activerecord.attributes.scanned_port.product'), html_class: 'w5'}],
+               '/dashboard/datatable')

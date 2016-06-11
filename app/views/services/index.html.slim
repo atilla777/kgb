@@ -2,15 +2,15 @@ h3
   span.text-primary
     = Service.model_name.human count: 2
 
-= dt_big_table(dt_fields: [t('activerecord.attributes.service.organization_id'),\
-                           t('activerecord.attributes.service.name'),\
-                           t('activerecord.attributes.scanned_port.host'),\
-                           t('activerecord.attributes.service.legality'),\
-                           t('activerecord.attributes.service.host'),\
-                           t('activerecord.attributes.service.port'),\
-                           t('activerecord.attributes.service.protocol')],
-               dt_method: '/services/datatable', sort: [0, :desc])
-
+= dt_big_table([{name: t('activerecord.attributes.service.organization_id'), sort: :desc, html_class: 'w25'},\
+                {name: t('activerecord.attributes.service.name'), html_class: 'w25'},\
+                {name: t('activerecord.attributes.scanned_port.host'), html_class: 'w5'},\
+                {name: t('activerecord.attributes.service.legality'), html_class: 'w10'},\
+                {name: t('activerecord.attributes.service.host'), html_class: 'w15'},\
+                {name: t('activerecord.attributes.service.port'), html_class: 'w5'},\
+                {name: t('activerecord.attributes.service.protocol'), html_class: 'w5'},\
+                {name: '', html_class: 'w10'}],\
+               '/services/datatable')
 
 br
 

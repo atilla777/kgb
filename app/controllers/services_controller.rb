@@ -6,7 +6,7 @@ class ServicesController < ApplicationController
   # GET /services.json
   def index
     authorize Service
-    @services = policy_scope(Service).includes(:organization)
+    #@services = policy_scope(Service).includes(:organization)
   end
 
   def datatable
@@ -30,7 +30,7 @@ class ServicesController < ApplicationController
               {field: 'services.legality', as: 'service_legality', map_to: Service.legalities},
               {field: 'services.host', as: 'service_host'},
               {field: 'services.port', as: 'service_port',
-              map_by_sql: "services.port || ' #{I18n.t('activerecord.attributes.service.port')}'"},
+              map_by_sql: "'<' || services.port || '>'"},
               {field: 'services.protocol', as: 'service_protocol'}]
     @datatable = Service.dt_all(params, fields)
     respond_to do |format|

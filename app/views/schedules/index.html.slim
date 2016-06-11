@@ -5,8 +5,8 @@ table.display.table.table-striped.table-bordered#index_table
   thead
     tr
       th = t('activerecord.attributes.job.name')
-      th = t('activerecord.attributes.schedule.week_day')
-      th = t('activerecord.attributes.schedule.month_day')
+      th.w15 = t('activerecord.attributes.schedule.week_day')
+      th.w15 = t('activerecord.attributes.schedule.month_day')
 
   tbody
     - @schedules.each do |schedule|

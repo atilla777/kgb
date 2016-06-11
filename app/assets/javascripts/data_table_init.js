@@ -6,6 +6,21 @@ var defaultSortDirection = $('#index_table.display thead th.default_sort').attr(
 if (defaultSortDirection == undefined)
 {defaultSortDirection = 'asc';}
 $('#index_table.display').dataTable( {
+"autoWidth": false,
+"columnDefs": [
+        { "targets": 'w5' , "width": '5%'},
+        { "targets": 'w8' , "width": '8%'},
+        { "targets": 'w10' , "width": '10%'},
+        { "targets": 'w12' , "width": '12%'},
+        { "targets": 'w15' , "width": '15%'},
+        { "targets": 'w20' , "width": '20%'},
+        { "targets": 'w25' , "width": '25%'},
+        { "targets": 'w30' , "width": '30%'},
+        { "targets": 'w35' , "width": '35%'},
+        { "targets": 'w40' , "width": '40%'},
+        { "targets": 'w45' , "width": '45%'},
+        { "targets": 'w50' , "width": '50%'}
+    ],
 "pageLength": 10,
 "lengthMenu": [ 10, 20, 50, 100, 200, 500 ],
 "aaSorting": [[ defaultSortField, defaultSortDirection]],
@@ -33,6 +48,18 @@ if (defaultSortDirection == undefined)
 {defaultSortDirection = 'asc';}
 $('#dt_big_table.display').dataTable( {
 "autoWidth": false,
+"columnDefs": [
+        { "targets": 'w5' , "width": '5%'},
+        { "targets": 'w10' , "width": '10%'},
+        { "targets": 'w15' , "width": '15%'},
+        { "targets": 'w20' , "width": '20%'},
+        { "targets": 'w25' , "width": '25%'},
+        { "targets": 'w30' , "width": '30%'},
+        { "targets": 'w35' , "width": '35%'},
+        { "targets": 'w40' , "width": '40%'},
+        { "targets": 'w45' , "width": '45%'},
+        { "targets": 'w50' , "width": '50%'}
+    ],
 "pageLength": 10,
 "lengthMenu": [ 10, 20, 50, 100, 200, 500 ],
 "bProcessing": true,

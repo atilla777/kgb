@@ -4,12 +4,12 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.user.name')
-      th = t('activerecord.attributes.user.phone')
+      th.w20 = t('activerecord.attributes.user.name')
+      th.w20 = t('activerecord.attributes.user.phone')
       th = t('activerecord.attributes.user.job')
       th = t('activerecord.attributes.user.organization')
       th = t('activerecord.attributes.user.department')
-      th
+      th.w5
 
   tbody
     - @users.each do |user|

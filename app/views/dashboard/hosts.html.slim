@@ -5,8 +5,8 @@ table.display.table.table-striped.table-bordered#index_table
   thead
     tr
       th = t('activerecord.attributes.service.organization_id')
-      th = t('activerecord.attributes.service.host')
-      th = Service.model_name.human
+      th.w15 = t('activerecord.attributes.service.host')
+      th.w45 = Service.model_name.human
 
   tbody
     - @hosts.each do |row|
