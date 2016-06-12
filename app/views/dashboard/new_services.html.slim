@@ -16,27 +16,26 @@ table.display.table.table-striped.table-bordered#index_table
 
   tbody
     - @user_active_services.each do |service|
-      - unless Service.where(host: service.host, port: service.port, protocol: service.protocol).exists?
-          tr
-            td
-              = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
-            td
-              = link_to service.organization.name, service.organization, class: 'btn btn-link btn-xs'
-            td
-              = link_to service.job.name, service.job, class: 'btn btn-link btn-xs'
-            td
-              = service.host
-            td
-              = "#{service.port} #{t('activerecord.attributes.service.port')}"
-            td
-              = service.protocol
-            td
-              = link_to new_service_path(service: {organization_id: service.organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{service.organization.name}"}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
-                span.text-info
-                  i.glyphicon.glyphicon-plus-sign aria-hidden="true"
-              span.text-danger
-                = service.show_state
-            td
-              = service.service
-            td
-              = service.show_product
+        tr
+          td
+            = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
+          td
+            = link_to service.organization.name, service.organization, class: 'btn btn-link btn-xs'
+          td
+            = link_to service.job.name, service.job, class: 'btn btn-link btn-xs'
+          td
+            = service.host
+          td
+            = "#{service.port} #{t('activerecord.attributes.service.port')}"
+          td
+            = service.protocol
+          td
+            = link_to new_service_path(service: {organization_id: service.organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{service.organization.name}"}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+              span.text-info
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+            span.text-danger
+              = service.show_state
+          td
+            = service.service
+          td
+            = service.show_product

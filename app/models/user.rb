@@ -63,16 +63,24 @@ class User < ActiveRecord::Base
     ScannedPort.where(host: services_hosts)
                .where(job_id: jobs.pluck(:id))
                .where(state: 'open')
-               .joins(%q(
+               .where(%q| NOT EXISTS (
+                            SELECT null FROM services
+                            WHERE services.port = scanned_ports.port AND
+                                  services.host = scanned_ports.host AND
+                                  services.protocol = scanned_ports.protocol
+                            )
+                      |)
+               .joins(%q|
                        INNER JOIN (SELECT scanned_ports.job_id,
                        MAX(scanned_ports.job_time)
                        AS 'max_time' FROM scanned_ports
                        GROUP BY scanned_ports.job_id)a
                        ON a.job_id = scanned_ports.job_id
                        AND a.max_time = scanned_ports.job_time
-                      )
-                     )
-               .group(:port, :protocol, :host).includes(:job).includes(:organization)
+                      |)
+               .includes(:job)
+               .includes(:organization)
+               #.group(:port, :protocol, :host)
   end
 
   # доступные для роли пользователя (через доступные пользователю работы),
