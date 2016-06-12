@@ -44,7 +44,7 @@ module ApplicationHelper
         data_sort = " data-sort='#{sort.to_s}'"
       end
       if html_class.present?
-        html_class = "class=#{html_class.join(' ')}"
+        html_class = "class='#{html_class.join(' ')}'"
       else
         html_class = ''
       end

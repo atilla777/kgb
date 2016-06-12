@@ -41,7 +41,10 @@ html
                 = link_to 'Хосты/Сервисы', services_path
               li
                 = link_to 'Рассписание', schedules_path
-
+          - if current_user
+            - if current_user.has_role? :admin
+              li
+                = link_to 'Обслуживание', service_tasks_path
         ul.nav.navbar-nav.navbar-right
           - if current_user
             li
