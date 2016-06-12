@@ -8,56 +8,54 @@ html
   body
 
     nav.navbar.navbar-inverse
-      /.container-fluid
-      .container
-        .navbar-header
-          a.navbar-brand
-            | KGB
-          a.navbar-brand
-            img src='/ghost.png' width='35' height='31'
-        .collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li
-              = link_to 'Активные сервисы',  detected_services_path
-            li
-              = link_to 'Новые сервисы',  new_services_path
-            li
-              = link_to 'Хосты',  hosts_path
-            li
-              = link_to 'Результаты сканирования', scanned_ports_path
+      .navbar-header
+        a.navbar-brand
+          | KGB
+        a.navbar-brand
+          img src='/ghost.png' width='35' height='31'
+      .collapse.navbar-collapse
+        ul.nav.navbar-nav
+          li
+            = link_to 'Активные сервисы',  detected_services_path
+          li
+            = link_to 'Новые сервисы',  new_services_path
+          li
+            = link_to 'Хосты',  hosts_path
+          li
+            = link_to 'Результаты сканирования', scanned_ports_path
 
-            li role="presentation" class="dropdown"
-              a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                | Справочники
-                span class='caret'
-              ul class="dropdown-menu"
-                li
-                  = link_to 'Организации', organizations_path
-                li
-                  = link_to 'Пользователи', users_path
-                li
-                  = link_to 'Опции сканирования', option_sets_path
-                li
-                  = link_to 'Работы', jobs_path
-                li
-                  = link_to 'Хосты/Сервисы', services_path
-                li
-                  = link_to 'Рассписание', schedules_path
+          li role="presentation" class="dropdown"
+            a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+              | Справочники
+              span class='caret'
+            ul class="dropdown-menu"
+              li
+                = link_to 'Организации', organizations_path
+              li
+                = link_to 'Пользователи', users_path
+              li
+                = link_to 'Опции сканирования', option_sets_path
+              li
+                = link_to 'Работы', jobs_path
+              li
+                = link_to 'Хосты/Сервисы', services_path
+              li
+                = link_to 'Рассписание', schedules_path
 
-          ul.nav.navbar-nav.navbar-right
-            - if current_user
-              li
-                span.navbar-text
-                  | Вы вошли как: #{current_user.email}
-              li
-                = link_to 'Выйти', sign_out_path, method: :delete, class: 'navbar-link'
-            - else
-              li
-                = link_to 'Войти', sign_in_path, class: 'navbar-link navbar-right'
+        ul.nav.navbar-nav.navbar-right
+          - if current_user
+            li
+              span.navbar-text
+                | Вы вошли как: #{current_user.email}
+            li
+              = link_to 'Выйти', sign_out_path, method: :delete, class: 'navbar-link'
+          - else
+            li
+              = link_to 'Войти', sign_in_path, class: 'navbar-link navbar-right'
 
     .container-fluid
       .row
-        .col-sm-offset-1.col-sm-10
+        .col-lg-offset-1.col-sm-10
           - flash.each do |key, value|
             = content_tag :div, value, class:  "alert alert-#{key}"
       .row
