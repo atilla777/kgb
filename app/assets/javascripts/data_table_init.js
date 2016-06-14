@@ -8,6 +8,8 @@ if (defaultSortDirection == undefined)
 $('#index_table.display').dataTable( {
 "autoWidth": false,
 "columnDefs": [
+        { "targets": 'hiden' , 'visible': false, 'searchable': false},
+        { "targets": 'order_by_hiden' , 'orderData': [0]},
         { "targets": 'w5' , "width": '5%'},
         { "targets": 'w8' , "width": '8%'},
         { "targets": 'w10' , "width": '10%'},
