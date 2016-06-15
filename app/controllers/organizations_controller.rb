@@ -1,5 +1,7 @@
 class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
+  before_action :set_services, only: [:show]
+  before_action :set_hosts, only: [:show]
 
   # GET /organizations
   # GET /organizations.json
@@ -75,6 +77,43 @@ class OrganizationsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_organization
       @organization = Organization.find(params[:id])
+    end
+
+    def set_services
+      @active_services = ScannedPort.where(state: 'open')
+                        .select('scanned_ports.*, s.id AS s_id, s.legality AS s_legality')
+                        .joins(%q(
+                                 INNER JOIN (SELECT scanned_ports.job_id,
+                                 MAX(scanned_ports.job_time)
+                                 AS 'max_time' FROM scanned_ports
+                                 GROUP BY scanned_ports.job_id)a
+                                 ON a.job_id = scanned_ports.job_id
+                                 AND a.max_time = scanned_ports.job_time
+                                )
+                             )
+                        .joins(%Q(
+                               INNER JOIN services
+                               ON services.host = scanned_ports.host
+                               AND services.organization_id = #{@organization.id}
+                                )
+                              )
+                        .joins(%Q(
+                               LEFT OUTER JOIN services AS s
+                               ON s.host = scanned_ports.host 
+                               AND s.port = scanned_ports.port
+                               AND s.protocol = scanned_ports.protocol
+                               AND s.organization_id = #{@organization.id}
+                               )
+                              )
+                        .distinct
+                        .order(port: :asc)
+    end
+
+    def set_hosts
+      @hosts = Service.where(organization_id: @organization.id)
+                      .where('services.port IS NULL')
+                      .all
+                      .order(:host)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
