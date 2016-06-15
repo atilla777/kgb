@@ -1,27 +1,29 @@
 .col-sm-offset-1.col-sm-11
-  table.table.table-striped.table-hover
-    caption.text-primary
-      h3 = Organization.model_name.human
-    thead
-      th.col-md-1
-      th.col-md-7
-    tbody
-      tr
-        td.text-right.text-info
-          strong
-            = Organization.human_attribute_name :name
-        td
-          = @organization.name
-      tr
-        td.text-right.text-info
-          strong
-            = Organization.human_attribute_name :description
-        td
-          = simple_format @organization.description
+  h3
+    span.text-primary
+      = "#{Organization.model_name.human} - #{@organization.name}"
 
-  => link_to organizations_path do
-    span.btn.btn-info
-      = Organization.model_name.human count: 2
-  = link_to edit_organization_path(@organization) do
-    span.btn.btn-warning
-      = t('actions.edit')
+  ul.nav.nav-tabs role="tablist"
+    li role="presentation" class="active"
+      a href="#main_info" aria-controls="main_info" role="tab" data-toggle="tab"
+        = t('navigations.main_info')
+
+    li role="presentation"
+      a href="#users" aria-controls="users" role="tab" data-toggle="tab"
+        = User.model_name.human count: 2
+    li role="presentation"
+      a href="#detected_services" aria-controls="users" role="tab" data-toggle="tab"
+        = t('navigations.services')
+    li role="presentation"
+      a href="#hosts" aria-controls="users" role="tab" data-toggle="tab"
+        = t('navigations.hosts')
+
+  .tab-content
+    div role="tabpanel" class="tab-pane active" id="main_info"
+      = render 'main_info'
+    div role="tabpanel" class="tab-pane" id="users"
+      = render 'users/organization_users'
+    div role="tabpanel" class="tab-pane" id="detected_services"
+      = render 'services/organization_detected_services'
+    div role="tabpanel" class="tab-pane" id="hosts"
+      = render 'services/organization_hosts'
