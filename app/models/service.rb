@@ -34,7 +34,7 @@ class Service < ActiveRecord::Base
     elsif legality == 0
       I18n.t('messages.message_no')
     else
-      'unknown'
+      I18n.t('messages.unknown')
     end
   end
 

@@ -32,19 +32,20 @@ ru:
     message_yes: Да
     message_no: Нет
     not_allowed: Нет прав доступа.
+    unknown: неизвестно
   types:
     legal: легален
-    illegal: нелегален
-    unknown: неизвестно
+    illegal: незаконен
+    unknown: нет сведений
     h_unknown: не было известно
-    h_legal: был легален
-    h_illegal: не был легален
-    no_sense: не важно
+    h_legal: был легитимен
+    h_illegal: не был разрешен
+    no_sense: не имеет значения
     not_needed: не было важно
     open: открыт
     closed: закрыт
     filtered: фильтруется
-    open_filtered: открыт|фильтруется
+    open_filtered: работает|защищен
     unregistered: не назначена
   navigations:
     main_info: Основная информация
@@ -56,6 +57,8 @@ ru:
     detected_services: Активные сервисы (зарегистрированные сервисы с открытыми портами)
     new_services: Новые сервисы (незарегистрированные сервисы с открытыми портами)
     addresses: Активные хосты (с открытыми портами)
+    hosts: Хосты
+    services: Сервисы
     backup: Резервное копирование базы приложения
     clean: Удаление старых результатов сканирования
     clean_period: Будут удалены результаты сканирования старше указанного количества месяцев
