@@ -25,6 +25,8 @@ table.display.table.table-striped.table-bordered#index_table
           td
             = link_to service.organization.name, service.organization, class: 'btn btn-link btn-xs'
           td
+            = link_to service.job.name, service.job, class: 'btn btn-link btn-xs'
+          td
             = service.host
           td
             = "<#{service.port}>"
