@@ -1,0 +1,26 @@
+br
+table.display.table.table-striped.table-bordered
+  thead
+    tr
+      th = t('activerecord.attributes.user.name')
+      th = t('activerecord.attributes.user.phone')
+      th = t('activerecord.attributes.user.job')
+      th = t('activerecord.attributes.user.organization')
+      th = t('activerecord.attributes.user.department')
+      th
+
+  tbody
+    - @organization.users.each do |user|
+      tr
+        td = link_to user.name, user, class: 'btn btn-link btn-xs'
+        td = user.phone
+        td = user.job
+        td = link_to user.organization.name, user.organization, class: 'btn btn-link btn-xs'
+        td = user.department
+        td
+          = link_to user, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+            i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          = link_to edit_user_path(user), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
+            i.glyphicon.glyphicon-edit aria-hidden="true"
+          = link_to user, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+            i.glyphicon.glyphicon-trash aria-hidden="true"
