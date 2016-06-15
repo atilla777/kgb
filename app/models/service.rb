@@ -28,6 +28,16 @@ class Service < ActiveRecord::Base
     PROTOCOLS
   end
 
+  def self.show_legality(legality)
+    if legality == 1
+      I18n.t('messages.message_yes')
+    elsif legality == 0
+      I18n.t('messages.message_no')
+    else
+      'unknown'
+    end
+  end
+
   def show_legality
     if self.legality?
       I18n.t('messages.message_yes')
@@ -61,5 +71,4 @@ class Service < ActiveRecord::Base
     end
     legality
   end
-
 end
