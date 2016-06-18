@@ -1,16 +1,19 @@
 class OptionSet < ActiveRecord::Base
+  NMAP_OPTIONS = {syn_scan: 'sS',
+                  skip_discovery: 'PN',
+                  udp_scan: 'sU',
+                  service_scan: 'sV',
+                  os_fingerprint: 'O',
+                  top_ports: '--top-ports'}.freeze
 
-  NMAP_OPTIONS = {syn_scan: "sS",
-                  skip_discovery: "PN",
-                  udp_scan: "sU",
-                  service_scan: "sV",
-                  os_fingerprint: "O",
-                  top_ports: "--top-ports"}
-
-  attr_accessor :syn_scan, :skip_discovery, :udp_scan, :os_fingerprint, :service_scan, :top_ports
+  attr_accessor :syn_scan,
+                :skip_discovery,
+                :udp_scan,
+                :os_fingerprint,
+                :service_scan,
+                :top_ports
 
   before_save :set_options
-
 
   serialize :options, Hash
 
@@ -20,12 +23,12 @@ class OptionSet < ActiveRecord::Base
   validates :top_ports, inclusion: {in: 1..1000}, allow_blank: true
 
   def show_options
-    result = self.options.select {|key, value| value != '0' }
+    result = options.select { |_key, value| value != '0' }
     result = result.map do |key, value|
-      if key == :top_ports and value.present?
+      if key == :top_ports && value.present?
         "--top-ports #{value}"
       else
-        "-#{NMAP_OPTIONS[key]} (#{key.to_s})"
+        "-#{NMAP_OPTIONS[key]} (#{key})"
       end
     end
     result = result.join(', ')
@@ -33,61 +36,62 @@ class OptionSet < ActiveRecord::Base
   end
 
   def syn_scan
-    self.options[:syn_scan]
+    options[:syn_scan]
   end
+
   def syn_scan=(value)
-    self.options[:syn_scan] = value
+    options[:syn_scan] = value
   end
 
   def skip_discovery
-    self.options[:skip_discovery]
+    options[:skip_discovery]
   end
+
   def skip_discovery=(value)
-    self.options[:skip_discovery] = value
+    options[:skip_discovery] = value
   end
 
   def udp_scan
-    self.options[:udp_scan]
+    options[:udp_scan]
   end
+
   def udp_scan=(value)
-    self.options[:udp_scan] = value
+    options[:udp_scan] = value
   end
 
   def os_fingerprint
-    self.options[:os_fingerprint]
+    options[:os_fingerprint]
   end
+
   def os_fingerprint=(value)
-    self.options[:os_fingerprint] = value
+    options[:os_fingerprint] = value
   end
 
   def service_scan
-    self.options[:service_scan]
+    options[:service_scan]
   end
+
   def service_scan=(value)
-    self.options[:service_scan] = value
+    options[:service_scan] = value
   end
 
   def top_ports
-    self.options[:top_ports]
+    options[:top_ports]
   end
+
   def top_ports=(value)
-    unless value.blank?
-      self.options[:top_ports] = value.to_i
-    else
-      self.options[:top_ports] = nil
-    end
+    options[:top_ports] = value.to_i if value.present?
   end
 
   private
 
   def set_options
-    self.options = {syn_scan: self.syn_scan,
-        skip_discovery: self.skip_discovery,
-        udp_scan: self.udp_scan,
-        service_scan: self.service_scan,
-        os_fingerprint: self.os_fingerprint,
-        top_ports: self.top_ports
+    self.options = {syn_scan: syn_scan,
+                    skip_discovery: skip_discovery,
+                    udp_scan: udp_scan,
+                    service_scan: service_scan,
+                    os_fingerprint: os_fingerprint,
+                    top_ports: top_ports
       }
   end
-
 end

@@ -11,33 +11,32 @@ table.display.table.table-striped.table-bordered#index_table  width="100%"
       th = t('activerecord.attributes.scanned_port.product')
 
   tbody
-    - @organizations.each do |organization|
-      - organization.detected_services(@current_user).each do |service|
-        - unless Service.where(host: service.host, port: service.port, protocol: service.protocol).exists?
-            tr
-              td.bg-info
-                = link_to organization.name, organization, class: 'btn btn-link btn-xs'
-              td.bg-info
-                = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
-              td.bg-info
-                = service.job.name
-              td.bg-info
-                = service.host
-              td.bg-info
-                = service.port
-              td.bg-info
-                = service.protocol
-              - if service.state == 'open'
-                td.bg-danger
-                  = service.show_state
-                  = link_to new_service_path(service: {organization_id: organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
-                    span.text-info
-                      i.glyphicon.glyphicon-plus aria-hidden="true"
-              - else
-                td.bg-warning
-                  = service.show_state
-                  = link_to new_service_path(service: {organization_id: organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
-                    span.text-info
-                      i.glyphicon.glyphicon-plus aria-hidden="true"
-              td
-                = service.show_product
+    - @user_active_services.each do |service|
+      - unless Service.where(host: service.host, port: service.port, protocol: service.protocol).exists?
+          tr
+            td.bg-info
+              = link_to service.organization.name, service.organization, class: 'btn btn-link btn-xs'
+            td.bg-info
+              = service.job_time.strftime("%d.%m.%Y-%H.%M.%S")
+            td.bg-info
+              = service.job.name
+            td.bg-info
+              = service.host
+            td.bg-info
+              = service.port
+            td.bg-info
+              = service.protocol
+            - if service.state == 'open'
+              td.bg-danger
+                = service.show_state
+                = link_to new_service_path(service: {organization_id: service.organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{service.organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+                  span.text-info
+                    i.glyphicon.glyphicon-plus aria-hidden="true"
+            - else
+              td.bg-warning
+                = service.show_state
+                = link_to new_service_path(service: {organization_id: service.organization.id, host: service.host, port: service.port, protocol: service.protocol, service: "#{service.service} #{service.organization.name}"}), class: 'btn btn-link', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+                  span.text-info
+                    i.glyphicon.glyphicon-plus aria-hidden="true"
+            td
+              = service.show_product

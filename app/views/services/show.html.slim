@@ -17,7 +17,7 @@
           strong
             = Service.human_attribute_name :organization_id
         td
-          = @service.organization.name
+          = link_to @service.organization.name, @service.organization, class: 'btn btn-link btn-xs'
       tr
         td.text-right.text-info
           strong

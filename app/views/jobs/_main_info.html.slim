@@ -14,7 +14,7 @@ table.table.table-striped.table-hover
         strong
           = Job.human_attribute_name :organization_id
       td
-        = @job.organization.name
+        = link_to @job.organization.name, @job.organization, class: 'btn btn-link btn-xs'
     tr
       td.text-right.text-info
         strong
@@ -26,7 +26,8 @@ table.table.table-striped.table-hover
         strong
           = Job.human_attribute_name :option_set_id
       td
-        = @job.option_set.name
+        = link_to @job.option_set.name, @job.option_set, class: 'btn btn-link btn-xs'
+        = ": #{@job.option_set.show_options}"
     tr
       td.text-right.text-info
         strong

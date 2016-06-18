@@ -17,7 +17,7 @@ table.display.table.table-striped.table-bordered#index_table
         td = link_to user.name, user, class: 'btn btn-link btn-xs'
         td = user.phone
         td = user.job
-        td = user&.organization&.name
+        td = link_to user&.organization&.name, user&.organization, class: 'btn btn-link btn-xs'
         td = user.department
         td
           = link_to user, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do

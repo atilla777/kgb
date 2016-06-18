@@ -13,6 +13,18 @@ table.table.table-striped.table-hover
     tr
       td.text-right.text-info
         strong
+          = User.human_attribute_name :email
+      td
+        = @user.email
+    tr
+      td.text-right.text-info
+        strong
+          = User.human_attribute_name :active
+      td
+        = @user.show_active
+    tr
+      td.text-right.text-info
+        strong
           = User.human_attribute_name :phone
       td
         = @user.phone
@@ -33,7 +45,7 @@ table.table.table-striped.table-hover
         strong
           = User.human_attribute_name :organization
       td
-        = @user&.organization&.name
+        = link_to @user&.organization&.name, @user&.organization, class: 'btn btn-link btn-xs'
     tr
       td.text-right.text-info
         strong
