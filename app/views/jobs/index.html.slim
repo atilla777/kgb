@@ -4,28 +4,26 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.job.organization_id')
-      th = t('activerecord.attributes.job.name')
-      th = t('activerecord.attributes.job.options')
-      th = t('activerecord.attributes.job.option_set_id')
-      th = t('activerecord.attributes.job.ports')
-      th = t('activerecord.attributes.job.hosts')
-      th
-      th
+      th.w20 = t('activerecord.attributes.job.organization_id')
+      th.w15 = t('activerecord.attributes.job.name')
+      th.w8 = t('activerecord.attributes.job.options')
+      th.w20 = t('activerecord.attributes.job.option_set_id')
+      th.w12 = t('activerecord.attributes.job.ports')
+      th.w15 = t('activerecord.attributes.job.hosts')
+      th.w10
 
   tbody
     - @jobs.each do |row|
       tr
-        td = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
-        td = link_to row.name, row, class: 'btn btn-link btn-xs'
-        td = row.options
+        td.w5 = link_to row.organization.name, row.organization, class: 'btn btn-link btn-xs'
+        td.w5 = link_to row.name, row, class: 'btn btn-link btn-xs'
+        td.w25 = row.options
         td = link_to row.option_set.name, row.option_set, class: 'btn btn-link btn-xs'
         td = row.ports
         td = row.hosts
         td
           = link_to scan_job_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.scan_now') do
             i.glyphicon.glyphicon-search aria-hidden="true"
-        td
           = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
             i.glyphicon.glyphicon-info-sign aria-hidden="true"
           = link_to edit_job_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do

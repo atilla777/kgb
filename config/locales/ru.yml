@@ -32,19 +32,21 @@ ru:
     message_yes: Да
     message_no: Нет
     not_allowed: Нет прав доступа.
+    unknown: неизвестно
   types:
-    legal: Легален
-    illegal: Нелегален
-    unknown: Неизвестно
-    h_unknown: Не было известно
-    h_legal: Был легален
-    h_illegal: Не был легален
-    no_sense: Не важно
-    not_needed: Не было важно
-    open: Открыт
-    closed: Закрыт
-    filtered: Фильтруется
-    open_filtered: Открыт|фильтруется
+    legal: легален
+    illegal: незаконен
+    unknown: нет сведений
+    h_unknown: не было известно
+    h_legal: был легитимен
+    h_illegal: не был разрешен
+    no_sense: не имеет значения
+    not_needed: не было важно
+    open: открыт
+    closed: закрыт
+    filtered: фильтруется
+    open_filtered: работает|защищен
+    unregistered: не назначена
   navigations:
     main_info: Основная информация
     week_days: Дни недели
@@ -52,10 +54,16 @@ ru:
     global_roles: Назначение глобальных ролей
     organization_roles: Назначение ролей организации
     dashboard: Панель управления
-    detected_services: Активные сервисы
-    new_services: Новые сервисы
-    addresses: Адреса серверов
+    detected_services: Активные сервисы (зарегистрированные сервисы с открытыми портами)
+    new_services: Новые сервисы (незарегистрированные сервисы с открытыми портами)
+    addresses: Активные хосты (с открытыми портами)
+    hosts: Хосты
+    services: Сервисы
+    backup: Резервное копирование базы приложения
+    clean: Удаление старых результатов сканирования
+    clean_period: Будут удалены результаты сканирования старше указанного количества месяцев
   actions:
+    download_base: Скачать файл базы
     view: Показать
     edit: Редактировать
     delete: Удалить
@@ -68,9 +76,12 @@ ru:
     legalise: Легализовать
     unlegalise: Делегализовать
   flashes:
+    run: Работа поставлена в текущую очередь выполнения. Через некоторое время результаты сканирования можно будет увидеть в разделе Результаты сканирования.
     create: Запись %{model} успешно создана.
     update: Запись %{model} успешно отредактирована.
     destroy: Запись %{model} успешно удалена.
+    cleaned: Записи удалены
+    not_cleaned: Указанных записей не существет
   user_sessions:
     login: Войти в систему
     password: пароль
@@ -92,8 +103,8 @@ ru:
         one: Результат сканирования
         other: Результаты сканирования
       service:
-        one: Сервис
-        other: Сервисы
+        one: Сервис (хост)
+        other: Сервисы (хосты)
       schedule:
         one: Запланированный день выполнения
         other: Запланированные дни выполнения
@@ -138,7 +149,7 @@ ru:
         state: Состояние
         service: Сервис
         legality: Легальность на момент сканирования
-        product: ПО
+        product: ПО сервиса
         product_version: Версия ПО
         product_extrainfo: Дополнительная информация о ПО
       service:

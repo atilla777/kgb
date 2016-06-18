@@ -1,0 +1,69 @@
+﻿<%= dt_response(@datatable) do |new_row, row| %>
+  <% new_row << row.job_time.strftime("%d.%m.%Y-%H.%M.%S") %>
+  <% new_row << "<a href = '/organizations/#{row.organization_id}' class = 'btn btn-link btn-xs'> #{row.organization_name}</a>" %>
+  <% new_row << "<a href = '/jobs/#{row.job_id}' class = 'btn btn-link btn-xs'> #{row.job_name}</a>" %>
+  <% new_row << row.sp_host %>
+  <% new_row << row.sp_port %>
+  <% new_row << row.sp_protocol %>
+  <% if row.state_id == 'open' %>
+    <% color = 'text-danger' %>
+  <% elsif row.state_id == 'filtered' %>
+    <% color = 'text-warning' %>
+  <% else %>
+    <% color = 'text-success' %>
+  <% end %>
+  <% new_row << "<span class = '#{color}'> #{row.port_state} </span>" %>
+  <% if row.service_legality_id == 0 %>
+    <% new_row << %Q(
+      <a data-confirm='#{t('actions.confirm')}'
+        class='btn btn-link btn-xs'
+        data-toggle='tooltip'
+        data-placement='top'
+        title='#{t('actions.legalise')}'
+        data-remote='true'
+        href='/services/#{row.service_id}/legalise'>
+        <span class='text-danger'>
+          <i aria-hidden='true' class='glyphicon glyphicon-remove-sign'></i>
+      </a>
+      <a data-toggle='tooltip'
+        data-placement='top'
+        title='#{row.service_name}'
+        href='/services/#{row.service_id}'>#{row.service_legality}
+      </a>
+    ) %>
+  <% elsif row.service_legality_id == 2 %>
+    <% new_row << %Q(
+      <a  class='btn btn-link btn-xs'
+        data-toggle='tooltip'
+        data-placement='top'
+        title='#{t('helpers.submit.create', model: Service.model_name.human)}'
+        href='/services/new?service%5Bservice=#{row.service}-#{row.organization_name}&service%5Dorganization_id=#{row.organization_id}&service%5Bhost=#{row.sp_host}&service%5Dport=#{row.sp_port}&service%5Bprotocol=#{row.sp_protocol}'>
+        <span class='text-danger'>
+          <i aria-hidden='true' class='glyphicon glyphicon-question-sign'></i>
+        </span>
+      </a>
+      #{row.service_legality}
+    ) %>
+  <% else %>
+    <% new_row << %Q(
+      <a data-confirm='#{t('actions.confirm')}'
+        class='btn btn-link btn-xs'
+        data-toggle='tooltip'
+        data-placement='top'
+        title='#{t('actions.unlegalise')}'
+        data-remote='true'
+        href='/services/#{row.service_id}/unlegalise'>
+        <span class='text-success'>
+          <i aria-hidden='true' class='glyphicon glyphicon-ok-sign'></i>
+        </span>
+      </a>
+      <a data-toggle='tooltip' 
+        data-placement='top'
+        title='#{row.service_name}'
+        href='/services/#{row.service_id}'>#{row.service_legality}
+      </a>
+    ) %>
+  <% end %>
+  <% new_row << row.service %>
+  <% new_row << row.product %>
+<% end %>

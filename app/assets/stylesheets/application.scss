@@ -15,7 +15,48 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
 label.required:after {
     content: " *";
     color: red;
 }
+
+#index_table, #dt_big_table{
+  table-layout: fixed;
+
+  th {
+    font-size: x-small;
+
+    &:hover{
+      font-size: small; // увеличение размера заголовка таблицы при наведении курсора
+    }
+  }
+
+  td {
+      padding-left: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+  }
+
+  tr:hover td {
+    opacity: 0.1;
+
+    &:hover {
+      opacity: 1;
+      overflow: visible;
+      white-space: nowrap;
+      position: relative;
+      z-index: 1;
+
+      >{
+        overflow: visible;
+        white-space: nowrap;
+        position: relative;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+

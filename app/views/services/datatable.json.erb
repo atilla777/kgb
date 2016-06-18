@@ -1,0 +1,40 @@
+﻿<%= dt_response(@datatable) do |new_row, row| %>
+  <% new_row << "<a href='/organizations/#{row.organization_id}' class='btn btn-link btn-xs'> #{row.organization_name}</a>" %>
+  <% new_row << row.service_name %>
+  <% new_row << row.service_type %>
+  <% new_row << row.service_legality %>
+  <% new_row << row.service_host %>
+  <% new_row << row.service_port %>
+  <% new_row << row.service_protocol %>
+  <% new_row << %Q(
+                  <a class='btn btn-default btn-xs'
+                    data-toggle='tooltip'
+                    data-placement='top'
+                    title='#{t('actions.view')}'
+                    href='/services/#{row.service_id}'>
+                    <i aria-hidden='true'
+                      class='glyphicon glyphicon-info-sign'>
+                    </i>
+                  </a>
+                  <a class='btn btn-default btn-xs'
+                    data-toggle='tooltip'
+                    data-placement='top'
+                    title='#{t('actions.edit')}'
+                    href='/services/#{row.service_id}/edit'>
+                    <i aria-hidden='true'
+                      class='glyphicon glyphicon-edit'>
+                    </i>
+                  </a>
+                  <a data-confirm='#{t('actions.confirm')}'
+                    class='btn btn-default btn-xs'
+                    data-toggle='tooltip'
+                    data-placement='top'
+                    title='#{t('actions.delete')}'
+                    rel='nofollow' data-method='delete'
+                    href='/services/#{row.service_id}'>
+                     <i aria-hidden='true'
+                      class='glyphicon glyphicon-trash'>
+                     </i>
+                  </a>
+                  ) %>
+<% end %>

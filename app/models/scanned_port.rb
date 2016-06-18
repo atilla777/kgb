@@ -33,6 +33,10 @@ class ScannedPort < ActiveRecord::Base
   def self.legalities
     LEGALITIES
   end
+  
+   def show_legality
+    LEGALITIES[legality]
+  end
 
   def show_product
     result = []

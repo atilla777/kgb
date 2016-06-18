@@ -43,24 +43,40 @@ class ScanJob < ActiveJob::Base
     Nmap::XML.new(result_path) do |xml|
       xml.each_host do |host|
         #puts "[#{host.ip}]"
-        host.each_port do |port|
-          #puts "  #{port.number}/#{port.protocol}\t#{port.state}\t#{port.service}"
-          # сохранение результата в базе
-          legality = Service.legality_key(port.state, host.ip, port.number, port.protocol)
+        if host.ports.present?
+          host.each_port do |port|
+            #puts "  #{port.number}/#{port.protocol}\t#{port.state}\t#{port.service}"
+            # сохранение результата в базе
+            legality = Service.legality_key(port.state, host.ip, port.number, port.protocol)
+            scanned_port = ScannedPort.new(job_time: job_time,
+                                           job_id: job.id,
+                                           organization_id: job.organization_id,
+                                           #host_id: host.ip,
+                                           host: host.ip,
+                                           #port_id:,
+                                           port: port.number,
+                                           protocol: port.protocol,
+                                           state: port.state,
+                                           legality: legality,
+                                           product: port&.service&.product,
+                                           product_version: port&.service&.version,
+                                           product_extrainfo: port&.service&.extra_info,
+                                           service: port.service)
+            scanned_port.save
+          end
+        else
           scanned_port = ScannedPort.new(job_time: job_time,
-                 job_id: job.id,
-                 organization_id: job.organization_id,
-                 #host_id: host.ip,
-                 host: host.ip,
-                 #port_id:,
-                 port: port.number,
-                 protocol: port.protocol,
-                 state: port.state,
-                 legality: legality,
-                 product: port&.service&.product,
-                 product_version: port&.service&.version,
-                 product_extrainfo: port&.service&.extra_info,
-                 service: port.service)
+                                         job_id: job.id,
+                                         organization_id: job.organization_id,
+                                         host: host.ip,
+                                         port: 0,
+                                         protocol: '',
+                                         state: 'closed',
+                                         legality: 3,
+                                         product: '',
+                                         product_version: '',
+                                         product_extrainfo: '',
+                                         service: '')
           scanned_port.save
         end
       end

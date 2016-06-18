@@ -1,23 +1,21 @@
-h3
-  span.text-primary = User.model_name.human count: 2
-
-table.display.table.table-striped.table-bordered#index_table
+br
+table.display.table.table-striped.table-bordered
   thead
     tr
-      th.w20 = t('activerecord.attributes.user.name')
-      th.w20 = t('activerecord.attributes.user.phone')
+      th = t('activerecord.attributes.user.name')
+      th = t('activerecord.attributes.user.phone')
       th = t('activerecord.attributes.user.job')
       th = t('activerecord.attributes.user.organization')
       th = t('activerecord.attributes.user.department')
-      th.w5
+      th
 
   tbody
-    - @users.each do |user|
+    - @organization.users.each do |user|
       tr
         td = link_to user.name, user, class: 'btn btn-link btn-xs'
         td = user.phone
         td = user.job
-        td = link_to user&.organization&.name, user&.organization, class: 'btn btn-link btn-xs'
+        td = link_to user.organization.name, user.organization, class: 'btn btn-link btn-xs'
         td = user.department
         td
           = link_to user, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
@@ -26,9 +24,3 @@ table.display.table.table-striped.table-bordered#index_table
             i.glyphicon.glyphicon-edit aria-hidden="true"
           = link_to user, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
             i.glyphicon.glyphicon-trash aria-hidden="true"
-
-br
-
-= link_to new_user_path do
-  span.btn.btn-success = t('helpers.submit.create', model: User.model_name.human)
-    i.glyphicon.glyphicon-info-sign aria-hidden="true"

@@ -62,17 +62,49 @@ class User < ActiveRecord::Base
   def jobs_active_services
     ScannedPort.where(host: services_hosts)
                .where(job_id: jobs.pluck(:id))
-               .where(state: ['filtered', 'open', 'open|filtered'])
-               .joins(%q(
+               .where(state: 'open')
+               .where(%q| NOT EXISTS (
+                            SELECT null FROM services
+                            WHERE services.port = scanned_ports.port AND
+                                  services.host = scanned_ports.host AND
+                                  services.protocol = scanned_ports.protocol
+                            )
+                      |)
+               .joins(%q|
                        INNER JOIN (SELECT scanned_ports.job_id,
                        MAX(scanned_ports.job_time)
                        AS 'max_time' FROM scanned_ports
                        GROUP BY scanned_ports.job_id)a
                        ON a.job_id = scanned_ports.job_id
                        AND a.max_time = scanned_ports.job_time
-                      )
-                     )
-               .group(:port, :protocol, :host)
+                      |)
+               .includes(:job)
+               .includes(:organization)
+               #.group(:port, :protocol, :host)
+  end
+
+  # доступные для роли пользователя (через доступные пользователю работы),
+  # имеющиеся в последних результатах сканирования хосты (с открытыми портами) и связанные с ними (через сервисы)
+  # организации (если таковые есть)
+  def hosts
+    ScannedPort.select("servers.name AS 'host_name', servers.id AS 'server_id', scanned_ports.host, organizations.id AS 'organization_id', organizations.name AS 'organization_name'")
+             .where(job_id: jobs.pluck(:id))
+             .where(state: 'open')
+             .joins(%q(
+                     INNER JOIN (SELECT scanned_ports.job_id,
+                     MAX(scanned_ports.job_time)
+                     AS 'max_time' FROM scanned_ports
+                     GROUP BY scanned_ports.job_id)a
+                     ON a.job_id = scanned_ports.job_id
+                     AND a.max_time = scanned_ports.job_time
+                    )
+                   )
+             .joins("LEFT JOIN services ON services.host = scanned_ports.host")
+             .joins("LEFT JOIN services AS servers ON (servers.host = scanned_ports.host AND servers.port IS NULL)")
+             .joins("LEFT JOIN organizations ON services.organization_id = organizations.id")
+             .group(:host, :organization)#.includes(:organization)
+             #.joins("LEFT JOIN services ON services.host = scanned_ports.host")
+             #.joins("LEFT JOIN organizations ON services.organization_id = organizations.id")
   end
 
   private

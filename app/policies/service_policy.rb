@@ -20,6 +20,14 @@ class ServicePolicy < ApplicationPolicy
     end
   end
 
+  def datatable?
+    if @user.has_any_role? :admin, :editor, :viewer, :organization_editor, :organization_viewer
+      true
+    else
+      false
+    end
+  end
+
   def show?
     if @user.has_any_role? :admin, :editor, :viewer
       true

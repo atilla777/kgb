@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     authorize User
-    @users = policy_scope User
+    @users = policy_scope(User).includes(:organization)
   end
 
   # GET /users/1

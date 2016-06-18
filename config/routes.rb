@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :option_sets
-   resources :services do
+  resources :services do
+    collection do
+      get 'datatable' # pagination
+    end
     member do
       get 'legalise'
       get 'unlegalise'
@@ -28,7 +31,14 @@ Rails.application.routes.draw do
 
   resource :users_roles
 
-  get '/dashboard', to: 'dashboard#index', as: :dashboard
+  get '/service_tasks', to: 'service_tasks#index', as: :service_tasks
+  post '/service_tasks/clean_base', to: 'service_tasks#clean_base', as: :clean_base_task
+  post '/service_tasks/sqlite_backup', to: 'service_tasks#sqlite_backup', as: :sqlite_backup_task
+
+  get '/detected_services', to: 'dashboard#detected_services', as: :detected_services
+  get '/dashboard/datatable', to: 'dashboard#datatable'
+  get '/new_services', to: 'dashboard#new_services', as: :new_services
+  get '/hosts', to: 'dashboard#hosts', as: :hosts
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

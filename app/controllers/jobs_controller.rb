@@ -6,7 +6,8 @@ class JobsController < ApplicationController
   def scan
     authorize @job
     ScanJob.perform_later(params[:id])
-    redirect_to scanned_ports_path
+    flash[:success] = t('flashes.run')
+    redirect_to jobs_path
   end
 
   # GET /jobs
@@ -14,7 +15,7 @@ class JobsController < ApplicationController
   def index
     authorize Job
     #
-   @jobs = policy_scope(Job)
+   @jobs = policy_scope(Job).includes(:organization).includes(:option_set)
   end
 
   # GET /jobs/1
@@ -28,10 +29,16 @@ class JobsController < ApplicationController
   def new
     authorize Job
     if params[:job].present?
+      if params[:job][:organization_id].present?
         organization = Organization.find(params[:job][:organization_id])
-        @job = Job.new(name: organization.name,
-                       organization_id: organization.id,
-                       hosts: params[:job][:host])
+        h = {name: organization.name,
+             organization_id: organization.id,
+             hosts: params[:job][:host]}
+      else
+        h = {}
+      end
+      h[:hosts] = params[:job][:host]
+      @job = Job.new(h)
     else
       @job = Job.new
     end

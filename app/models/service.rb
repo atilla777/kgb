@@ -1,6 +1,9 @@
 class Service < ActiveRecord::Base
+  include Datatableable
 
   PROTOCOLS = ['tcp', 'udp']
+
+  LEGALITIES = {1 => I18n.t('messages.message_yes'), 0 => I18n.t('messages.message_no')}
 
   belongs_to :organization
 
@@ -17,8 +20,22 @@ class Service < ActiveRecord::Base
   validates :protocol, uniqueness: {scope: [:port, :host]}, allow_blank: true
   validates :protocol, inclusion: {in: PROTOCOLS}, allow_blank: true
 
+  def self.legalities
+    LEGALITIES
+  end
+
   def self.protocols
     PROTOCOLS
+  end
+
+  def self.show_legality(legality)
+    if legality == 1
+      I18n.t('messages.message_yes')
+    elsif legality == 0
+      I18n.t('messages.message_no')
+    else
+      I18n.t('messages.unknown')
+    end
   end
 
   def show_legality
@@ -26,6 +43,14 @@ class Service < ActiveRecord::Base
       I18n.t('messages.message_yes')
     else
       I18n.t('messages.message_no')
+    end
+  end
+
+  def show_host
+    if port.present?
+      ''
+    else
+        I18n.t('activerecord.attributes.scanned_port.host')
     end
   end
 
@@ -46,5 +71,4 @@ class Service < ActiveRecord::Base
     end
     legality
   end
-
 end

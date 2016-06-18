@@ -6,7 +6,36 @@ class ServicesController < ApplicationController
   # GET /services.json
   def index
     authorize Service
-    @services = policy_scope Service
+    #@services = policy_scope(Service).includes(:organization)
+  end
+
+  def datatable
+    authorize Service
+    allowed_services_ids = policy_scope(Service).pluck(:id)
+    fields = [{field: 'organizations.name',
+               as: 'organization_name',
+               joins: 'organizations',
+               on: 'organizations.id = services.organization_id'},
+              {field: 'organizations.id',
+               as: 'organization_id',
+               invisible: true,
+               filter: "services.id IN (#{allowed_services_ids.join(',')})"},
+              {field: 'services.id', as: 'service_id', invisible: true},
+              {field: 'services.name', as: 'service_name'},
+              {field: 'services.port', as: 'service_type',
+                map_by_sql: %Q| CASE
+                                WHEN services.port IS NULL THEN '#{I18n.t('activerecord.attributes.scanned_port.host')}'
+                                ELSE '' END
+                              |},
+              {field: 'services.legality', as: 'service_legality', map_to: Service.legalities},
+              {field: 'services.host', as: 'service_host'},
+              {field: 'services.port', as: 'service_port',
+              map_by_sql: "'<' || services.port || '>'"},
+              {field: 'services.protocol', as: 'service_protocol'}]
+    @datatable = Service.dt_all(params, fields)
+    respond_to do |format|
+      format.json {render 'datatable'}
+    end
   end
 
   # GET /services/1
@@ -55,13 +84,13 @@ class ServicesController < ApplicationController
   def legalise
     authorize @service
     @service.update_attribute :legality, 1
-    render 'detected_services_renew'
+    render 'dashboard/detected_services_renew'
   end
 
   def unlegalise
     authorize @service
     @service.update_attribute :legality, 0
-    render 'detected_services_renew'
+    render 'dashboard/detected_services_renew'
   end
 
   # PATCH/PUT /services/1

@@ -1,6 +1,5 @@
 h3
-  span.text-primary
-    = ScannedPort.model_name.human count: 2
+  span.text-primary = t('navigations.detected_services')
 
 = dt_big_table([{name: t('activerecord.attributes.scanned_port.job_time'), sort: :desc, html_class: 'w10'},\
                 {name: t('activerecord.attributes.service.organization_id'), html_class: 'w20'},\
@@ -9,8 +8,7 @@ h3
                 {name: t('activerecord.attributes.scanned_port.port'), html_class: 'w5'},\
                 {name: t('activerecord.attributes.scanned_port.protocol'), html_class: 'w5'},\
                 {name: t('activerecord.attributes.scanned_port.state'), html_class: 'w10'},\
-                {name: t('activerecord.attributes.service.legality'), html_class: 'w10'},\
-                {name: t('activerecord.attributes.scanned_port.legality'), html_class: 'w10'},\
-                {name: t('activerecord.attributes.scanned_port.service'), html_class: 'w5'},\
+                {name: t('activerecord.attributes.service.legality'), html_class: 'w15'},\
+                {name: t('activerecord.attributes.scanned_port.service'),html_class: 'w10'},\
                 {name: t('activerecord.attributes.scanned_port.product'), html_class: 'w5'}],
-               '/scanned_ports/datatable')
+               '/dashboard/datatable')

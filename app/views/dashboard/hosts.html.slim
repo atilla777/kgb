@@ -1,0 +1,39 @@
+h3
+  span.text-primary = t('navigations.addresses')
+
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th = t('activerecord.attributes.service.organization_id')
+      th.w15 = t('activerecord.attributes.service.host')
+      th.w45 = Service.model_name.human
+
+  tbody
+    - @hosts.each do |row|
+      tr
+        - if row.organization_id.blank?
+          td
+            = link_to new_service_path(service: {host: row.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+              span.text-success
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+              =< t('types.unregistered')
+          td
+            = link_to new_job_path(job: {host: row.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
+              span.text-success
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+            = row.host
+          td
+            = row.host_name
+        - else
+          td
+            = link_to "/organizations/#{row.organization_id}", class: 'btn btn-link btn-xs' do
+              span.text-info
+                i.glyphicon.glyphicon-info-sign aria-hidden="true"
+              =< row.organization_name
+          td
+            = link_to new_job_path(job: {organization_id: row.organization_id, host: row.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
+              span.text-success
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
+            = row.host
+          td
+            = link_to row.host_name, "/services/#{row.server_id}", class: 'btn btn-link btn-xs'

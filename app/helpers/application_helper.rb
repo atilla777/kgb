@@ -17,32 +17,45 @@ module ApplicationHelper
   end
 
   # paginate (см. метод #datatable в контроллере)
-  # где params это хэш парамтров с двумя ключами:
-  # :dt_mehtod - url ajax метода в контроллере, обслуживающего сортировки и фильтрацию
-  # :dt_fields - массив с заголовками полей таблицы DataTables (количество должно соответствовать количеству видимых полей, возращаемых методом Модель.dt_all)
+  # где первый параметр это массив хэшей с заголовками полей таблицы и их свойствами -
+  #  сортировка (sort: asc или sort: :desc) и класс тега th (class: 'класс')
+  # (количество полей должно соответствовать количеству видимых полей, возращаемых методом Модель.dt_all)
+  # второй параметр - url ajax метода в контроллере, обслуживающего сортировки и фильтрацию
   # :sort - массив вида [номер поля сортироки по умолчанию (от 0), направление сортировки :desc или :asc]
-  def dt_big_table(params) # для использования поместить в index.html.erb <%= dt_big_table(dt_fields: ['Организация', 'Бюджетируемая', 'Куратор', ''], dt_method: '/organizations/datatable')%>
-    result = %(<table id="dt_big_table" class = "display table table-striped table-bordered" data-source="#{params[:dt_method]}">
-                <thead>
-                  <tr>
+  # для использования поместить в index.html.erb
+  #  <%= dt_big_table([{name: 'Организация', html_class: 'w5'}, {name: 'Город', sort: :desc}, {}],
+  #   '/organizations/datatable')
+  #  %>
+  def dt_big_table(headers, data_source)
+    result = %(<table id="dt_big_table"
+               class = "display table table-striped table-bordered"
+               data-source="#{data_source}">
+                 <thead>
+                   <tr>
               )
-    params[:dt_fields].each_with_index do |f, i|
-      if params[:sort].present?
-        if params[:sort][0] == i
-          result += "<th class='default_sort' data-sort='#{params[:sort][1].to_s}'>#{f}</th>"
-        else
-          result += "<th>#{f}</th>"
-        end
-      else
-      result += "<th>#{f}</th>"
+    headers.each_with_index do |f, i|
+      result += "<th "
+      html_class = []
+      html_class << f.fetch(:html_class) if f.fetch(:html_class, '').present?
+      data_sort = ''
+      sort = f.fetch(:sort, '')
+      if sort.present?
+        html_class << 'default_sort'
+        data_sort = " data-sort='#{sort.to_s}'"
       end
+      if html_class.present?
+        html_class = "class='#{html_class.join(' ')}'"
+      else
+        html_class = ''
+      end
+      result += "#{html_class}#{data_sort}>#{f.fetch(:name,'')}</th>"
     end
-       result += %(</tr>
-                  </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                  )
+    result += %(</tr>
+              </thead>
+                <tbody>
+                </tbody>
+              </table>
+              )
     result.html_safe
   end
 
