@@ -14,3 +14,10 @@ table.display.table.table-striped.table-bordered
         td
           = link_to host, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
             i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          = link_to edit_service_path(host), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
+            i.glyphicon.glyphicon-edit aria-hidden="true"
+          = link_to host, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+            i.glyphicon.glyphicon-trash aria-hidden="true"
+
+= link_to new_service_path(service: {organization_id: @organization.id}) do
+    span.btn.btn-success = t('helpers.submit.create', model: Service.model_name.human)
