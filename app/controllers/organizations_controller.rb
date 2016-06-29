@@ -80,6 +80,11 @@ class OrganizationsController < ApplicationController
     end
 
     def set_services
+      @services = @organization.services
+                               .where(%q|
+                                          port IS NOT NULL
+                                          AND protocol IS NOT NULL
+                                        |)
       @active_services = ScannedPort.where(state: 'open')
                         .select('scanned_ports.*, s.id AS s_id, s.legality AS s_legality')
                         .joins(%q(
