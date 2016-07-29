@@ -79,13 +79,16 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find(params[:id])
     end
 
-    def set_services
+     def set_services
       @services = @organization.services
                                .where(%q|
                                           port IS NOT NULL
                                           AND protocol IS NOT NULL
                                         |)
+      organization_hosts = @organization.services.group(:host).pluck(:host)
+      normilized_organization_hosts = Service.normilize_hosts(organization_hosts)
       @active_services = ScannedPort.where(state: 'open')
+                        .where("scanned_ports.host IN (#{normilized_organization_hosts.map{|h| "'#{h}'"}.join(', ')})")
                         .select('scanned_ports.*, s.id AS s_id, s.legality AS s_legality')
                         .joins(%q(
                                  INNER JOIN (SELECT scanned_ports.job_id,
@@ -97,14 +100,8 @@ class OrganizationsController < ApplicationController
                                 )
                              )
                         .joins(%Q(
-                               INNER JOIN services
-                               ON services.host = scanned_ports.host
-                               AND services.organization_id = #{@organization.id}
-                                )
-                              )
-                        .joins(%Q(
                                LEFT OUTER JOIN services AS s
-                               ON s.host = scanned_ports.host 
+                               ON s.host = scanned_ports.host
                                AND s.port = scanned_ports.port
                                AND s.protocol = scanned_ports.protocol
                                AND s.organization_id = #{@organization.id}
