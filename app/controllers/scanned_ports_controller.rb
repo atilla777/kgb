@@ -8,12 +8,18 @@ class ScannedPortsController < ApplicationController
   def datatable
     allowed_jobs_ids = policy_scope(Job).pluck(:id)
     fields = [{field: 'scanned_ports.job_time', as: 'job_time'},
-              {field: 'scanned_ports.id', as: 'id', invisible: true},
-              {field: 'scanned_ports.job_id',
-               as: 'job_id',
-               invisible: true,
-               filter: "jobs.id IN (#{allowed_jobs_ids.join(',')})"},
-              {field: 'organizations.id', as: 'organization_id', invisible: true,},
+              {field: 'scanned_ports.id', as: 'id', invisible: true}]
+    fields << if current_user.has_any_role? :admin, :editor, :viewer
+                {field: 'scanned_ports.job_id',
+                 as: 'job_id',
+                 invisible: true}
+              else
+                {field: 'scanned_ports.job_id',
+                 as: 'job_id',
+                 invisible: true,
+                 filter: "jobs.id IN (#{allowed_jobs_ids.join(',')})"}
+              end
+    fields += [{field: 'organizations.id', as: 'organization_id', invisible: true,},
               {field: 'organizations.name',
                as: 'organization_name',
                joins: 'organizations',
@@ -52,10 +58,6 @@ map_by_sql:  "CASE
               {field: 'scanned_ports.legality', as: 'history_legality_id', invisible: true},
               {field: 'scanned_ports.service', as: 'service'},
               {field: "scanned_ports.product || ' ' || (CASE WHEN scanned_ports.product_version IS NULL THEN '' ELSE scanned_ports.product_version END) || ' ' || (CASE WHEN scanned_ports.product_extrainfo IS NULL THEN '' ELSE scanned_ports.product_extrainfo END)", as: 'product'}]
-              #{field: 'users.name', as: 'registrator', joins: 'users', on: 'incidents.user_id = users.id'}
-              #{field: 'organizations.name', as: 'organization_name', joins: 'organizations', on: 'incidents.organization_id = organizations.id'},
-              #{field: 'organizations.id', as: 'organization_id', invisible: true},
-              #{field: 'incidents.violator', as: 'violator_name', map_by_sql:  "CASE WHEN incidents.violator IS NULL OR incidents.violator = '' THEN (SELECT users.name FROM user_incidents LEFT JOIN users ON users.id = user_incidents.user_id WHERE user_incidents.incident_id = incidents.id AND user_incidents.role = 0 AND lower(users.name) LIKE '%%' LIMIT 1) ELSE incidents.violator END"},
     @datatable = ScannedPort.dt_all(params, fields)
     respond_to do |format|
       format.json {render 'datatable'}
