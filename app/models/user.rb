@@ -48,9 +48,10 @@ class User < ActiveRecord::Base
     ServicePolicy::Scope.new(self, Service).resolve
   end
 
-  # allowed for user role hosts registered as services
+  # allowed for user role hosts registered as services (include hosts as services)
   def services_hosts
-    services.group(:host).pluck(:host)
+    result = services.group(:host).pluck(:host)
+    Service.normilize_hosts(result
   end
 
   # allowed fo user role jobs
