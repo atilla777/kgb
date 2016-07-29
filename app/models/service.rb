@@ -71,4 +71,20 @@ class Service < ActiveRecord::Base
     end
     legality
   end
+  
+  # make array of ip addresses from array of ip adddresses and ip ranges
+  # ['192.168.1.1', '192.168.1.2-192.168.1.3'] -> ['192.168.1.1', '192.168.1.2', '192.168.1.3']
+  def self.normilize_hosts(hosts)
+    normilized_hosts = []
+    ip4_regexp = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
+    hosts.each do |host|
+      if /^(#{ip4_regexp})-(#{ip4_regexp})$/ =~ host
+        range = /^(?<start_ip>#{ip4_regexp})-(?<end_ip>#{ip4_regexp})$/.match(host)
+        normilized_hosts += (IPAddr.new(range[:start_ip])..IPAddr.new(range[:end_ip])).map(&:to_s).to_a
+      elsif /^(#{ip4_regexp})$/ =~ host
+        normilized_hosts << host
+      end
+    end
+    normilized_hosts.uniq
+  end
 end
