@@ -23,9 +23,13 @@ class DashboardController < ApplicationController
                                                                          AND a.max_time = scanned_ports.job_time
                                                                         )},
               {field: 'organizations.id', as: 'organization_id', invisible: true,},
-              {field: 'organizations.name', as: 'organization_name', joins: 'organizations', on: 'organizations.id = scanned_ports.organization_id'},
-              {field: 'scanned_ports.job_id', as: 'job_id', invisible: true, filter: "scanned_ports.job_id IN (#{allowed_jobs_ids.join(',')})"},
-              {field: 'jobs.name', as: 'job_name', joins: 'jobs', on: 'jobs.id = scanned_ports.job_id'},
+              {field: 'organizations.name', as: 'organization_name', joins: 'organizations', on: 'organizations.id = scanned_ports.organization_id'}]
+    fields << if current_user.has_any_role? :admin, :editor, :viewer
+                {field: 'scanned_ports.job_id', as: 'job_id', invisible: true}
+              else
+                {field: 'scanned_ports.job_id', as: 'job_id', invisible: true, filter: "scanned_ports.job_id IN (#{allowed_jobs_ids.join(',')})"}
+              end
+    fields += [{field: 'jobs.name', as: 'job_name', joins: 'jobs', on: 'jobs.id = scanned_ports.job_id'},
               {field: 'scanned_ports.port', as: 'sp_port', map_by_sql: "'<' || scanned_ports.port || '>'"},
               {field: 'scanned_ports.host', as: 'sp_host'},
               {field: 'scanned_ports.protocol', as: 'sp_protocol'},
