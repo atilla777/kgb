@@ -79,7 +79,7 @@ class OrganizationsController < ApplicationController
       @organization = Organization.find(params[:id])
     end
 
-     def set_services
+    def set_services
       @services = @organization.services
                                .where(%q|
                                           port IS NOT NULL
@@ -109,6 +109,7 @@ class OrganizationsController < ApplicationController
                               )
                         .distinct
                         .order(port: :asc)
+                        .includes(:job)
     end
 
     def set_hosts
