@@ -13,6 +13,9 @@
         = User.model_name.human count: 2
     li role="presentation"
       a href="#detected_services" aria-controls="users" role="tab" data-toggle="tab"
+        = t('navigations.detected_ports')
+    li role="presentation"
+      a href="#services" aria-controls="users" role="tab" data-toggle="tab"
         = t('navigations.services')
     li role="presentation"
       a href="#hosts" aria-controls="users" role="tab" data-toggle="tab"
@@ -23,6 +26,8 @@
       = render 'main_info'
     div role="tabpanel" class="tab-pane" id="users"
       = render 'users/organization_users'
+    div role="tabpanel" class="tab-pane" id="services"
+      = render 'services/organization_services'
     div role="tabpanel" class="tab-pane" id="detected_services"
       = render 'services/organization_detected_services'
     div role="tabpanel" class="tab-pane" id="hosts"

@@ -1,6 +1,7 @@
 class ServicesController < ApplicationController
   before_action :set_service, only: [:show, :edit, :update, :destroy, :legalise, :unlegalise]
   before_action :set_organizations, only: [:new, :create, :edit, :update, :legalise, :unlegalise]
+  before_action :set_previous_action, only: [:new, :edit, :destroy]
 
   # GET /services
   # GET /services.json
@@ -9,18 +10,24 @@ class ServicesController < ApplicationController
     #@services = policy_scope(Service).includes(:organization)
   end
 
-  def datatable
+   def datatable
     authorize Service
     allowed_services_ids = policy_scope(Service).pluck(:id)
     fields = [{field: 'organizations.name',
                as: 'organization_name',
                joins: 'organizations',
-               on: 'organizations.id = services.organization_id'},
+               on: 'organizations.id = services.organization_id'}]
+    fields << if current_user.has_any_role? :admin, :editor, :viewer
+              {field: 'organizations.id',
+               as: 'organization_id',
+               invisible: true}
+              else
               {field: 'organizations.id',
                as: 'organization_id',
                invisible: true,
-               filter: "services.id IN (#{allowed_services_ids.join(',')})"},
-              {field: 'services.id', as: 'service_id', invisible: true},
+               filter: "services.id IN (#{allowed_services_ids.join(',')})"}
+              end
+    fields += [{field: 'services.id', as: 'service_id', invisible: true},
               {field: 'services.name', as: 'service_name'},
               {field: 'services.port', as: 'service_type',
                 map_by_sql: %Q| CASE
@@ -72,7 +79,7 @@ class ServicesController < ApplicationController
     respond_to do |format|
       if @service.save
         flash[:success] = t('flashes.create', model: Service.model_name.human)
-        format.html { redirect_to @service}
+        format.html { redirect_to session.delete(:return_to) }
         format.json { render :show, status: :created, location: @service }
       else
         format.html { render :new }
@@ -100,7 +107,7 @@ class ServicesController < ApplicationController
     respond_to do |format|
       if @service.update(service_params)
         flash[:success] = t('flashes.update', model: Service.model_name.human)
-        format.html { redirect_to @service}
+        format.html { redirect_to session.delete(:return_to) }
         format.json { render :show, status: :ok, location: @service }
       else
         format.html { render :edit }
@@ -116,7 +123,7 @@ class ServicesController < ApplicationController
     @service.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Service.model_name.human)
-      format.html { redirect_to services_url}
+      format.html { redirect_to session.delete(:return_to) }
       format.json { head :no_content }
     end
   end
@@ -130,6 +137,10 @@ class ServicesController < ApplicationController
     def set_organizations
       @organizations = policy_scope(Organization).order(:name)
       @user_active_services = current_user.jobs_active_services
+    end
+
+    def set_previous_action
+      session[:return_to] ||= request.referer
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

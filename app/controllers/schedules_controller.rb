@@ -7,6 +7,7 @@ class SchedulesController < ApplicationController
   def index
     authorize Schedule
     @schedules = policy_scope Schedule
+    @schedules = @schedules.includes(:job)
   end
 
   # GET /schedules/1
