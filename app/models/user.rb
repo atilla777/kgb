@@ -48,12 +48,6 @@ class User < ActiveRecord::Base
     ServicePolicy::Scope.new(self, Service).resolve
   end
 
-  # allowed for user role hosts registered as services (include hosts as services)
-  def services_hosts
-    result = services.group(:host).pluck(:host)
-    Service.normilize_hosts(result)
-  end
-
   # allowed fo user role jobs
   def jobs
     JobPolicy::Scope.new(self, Job).resolve
@@ -61,8 +55,7 @@ class User < ActiveRecord::Base
 
   # active ports scan results scoped by jobs allowed for user role and registered as service hosts
   def jobs_active_services
-    ScannedPort.where(host: services_hosts)
-               .where(job_id: jobs.pluck(:id))
+    ScannedPort.where(job_id: jobs.pluck(:id))
                .where(state: 'open')
                .where(%q| NOT EXISTS (
                             SELECT null FROM services
