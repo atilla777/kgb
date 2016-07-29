@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
   # allowed for user role hosts registered as services (include hosts as services)
   def services_hosts
     result = services.group(:host).pluck(:host)
-    Service.normilize_hosts(result
+    Service.normilize_hosts(result)
   end
 
   # allowed fo user role jobs
