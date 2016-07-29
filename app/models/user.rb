@@ -55,9 +55,9 @@ class User < ActiveRecord::Base
 
   # active ports scan results scoped by jobs allowed for user role and registered as service hosts
   def jobs_active_services
-    ScannedPort.where(job_id: jobs.pluck(:id))
-               .where(state: 'open')
-               .where(%q| NOT EXISTS (
+    scope = ScannedPort.where(state: 'open')
+    scope = scope.where(job_id: jobs.pluck(:id)) unless self.has_any_role? :admin, :editor, :viewer
+    scope = scope.where(%q| NOT EXISTS (
                             SELECT null FROM services
                             WHERE services.port = scanned_ports.port AND
                                   services.host = scanned_ports.host AND
@@ -75,15 +75,16 @@ class User < ActiveRecord::Base
                .includes(:job)
                .includes(:organization)
                #.group(:port, :protocol, :host)
+    scope
   end
 
   # доступные для роли пользователя (через доступные пользователю работы),
   # имеющиеся в последних результатах сканирования хосты (с открытыми портами) и связанные с ними (через сервисы)
   # организации (если таковые есть)
   def hosts
-    ScannedPort.select("servers.name AS 'host_name', servers.id AS 'server_id', scanned_ports.host, organizations.id AS 'organization_id', organizations.name AS 'organization_name'")
-             .where(job_id: jobs.pluck(:id))
-             .where(state: 'open')
+    scope = ScannedPort.select("servers.name AS 'host_name', servers.id AS 'server_id', scanned_ports.host, organizations.id AS 'organization_id', organizations.name AS 'organization_name'")
+    scope = scope.where(job_id: jobs.pluck(:id)) unless self.has_any_role? :admin, :editor, :viewer
+    scope = scope.where(state: 'open')
              .joins(%q(
                      INNER JOIN (SELECT scanned_ports.job_id,
                      MAX(scanned_ports.job_time)
@@ -99,6 +100,7 @@ class User < ActiveRecord::Base
              .group(:host, :organization)#.includes(:organization)
              #.joins("LEFT JOIN services ON services.host = scanned_ports.host")
              #.joins("LEFT JOIN organizations ON services.organization_id = organizations.id")
+    scope
   end
 
   private
