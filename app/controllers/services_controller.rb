@@ -10,18 +10,24 @@ class ServicesController < ApplicationController
     #@services = policy_scope(Service).includes(:organization)
   end
 
-  def datatable
+   def datatable
     authorize Service
     allowed_services_ids = policy_scope(Service).pluck(:id)
     fields = [{field: 'organizations.name',
                as: 'organization_name',
                joins: 'organizations',
-               on: 'organizations.id = services.organization_id'},
+               on: 'organizations.id = services.organization_id'}]
+    fields << if current_user.has_any_role? :admin, :editor, :viewer
+              {field: 'organizations.id',
+               as: 'organization_id',
+               invisible: true}
+              else
               {field: 'organizations.id',
                as: 'organization_id',
                invisible: true,
-               filter: "services.id IN (#{allowed_services_ids.join(',')})"},
-              {field: 'services.id', as: 'service_id', invisible: true},
+               filter: "services.id IN (#{allowed_services_ids.join(',')})"}
+              end
+    fields += [{field: 'services.id', as: 'service_id', invisible: true},
               {field: 'services.name', as: 'service_name'},
               {field: 'services.port', as: 'service_type',
                 map_by_sql: %Q| CASE
