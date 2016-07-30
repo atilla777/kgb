@@ -1,6 +1,8 @@
 class Service < ActiveRecord::Base
   include Datatableable
 
+  IP4_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
+
   PROTOCOLS = ['tcp', 'udp']
 
   LEGALITIES = {1 => I18n.t('messages.message_yes'), 0 => I18n.t('messages.message_no')}
@@ -14,11 +16,22 @@ class Service < ActiveRecord::Base
   validates :port, numericality: {only_integer: true}, allow_blank: true
   validates :port, inclusion: {in: 0..65535}, allow_blank: true
 
+  validate :host_is_ip4_or_range
+  #validates :host, length: {minimum: 7, maximum: 30}
   validates :host, uniqueness: {scope: [:port, :protocol]}
-  validates :host, length: {minimum: 7, maximum: 30}
 
   validates :protocol, uniqueness: {scope: [:port, :host]}, allow_blank: true
   validates :protocol, inclusion: {in: PROTOCOLS}, allow_blank: true
+
+  def self.ip4_regexp
+    IP4_REGEXP
+  end
+
+  def host_is_ip4_or_range
+    unless /^#{Service.ip4_regexp}$/ =~ host || /^(#{Service.ip4_regexp})-(#{Service.ip4_regexp})$/ =~ host
+      errors[:host] = I18n.t('errors.messages.must_be_ip4_or_range')
+    end
+  end
 
   def self.legalities
     LEGALITIES
@@ -71,12 +84,13 @@ class Service < ActiveRecord::Base
     end
     legality
   end
-  
-  # make array of ip addresses from array of ip adddresses and ip ranges
-  # ['192.168.1.1', '192.168.1.2-192.168.1.3'] -> ['192.168.1.1', '192.168.1.2', '192.168.1.3']
+
+  # Make array of ip addresses from array of ip adddresses and ip ranges
+  # Example:
+  #   Service.normilized_hosts(['192.168.1.1', '192.168.1.2-192.168.1.3']) ->
+  #   ['192.168.1.1', '192.168.1.2', '192.168.1.3']
   def self.normilize_hosts(hosts)
     normilized_hosts = []
-    ip4_regexp = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
     hosts.each do |host|
       if /^(#{ip4_regexp})-(#{ip4_regexp})$/ =~ host
         range = /^(?<start_ip>#{ip4_regexp})-(?<end_ip>#{ip4_regexp})$/.match(host)
