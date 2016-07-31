@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
   validates :department, length: {maximum: 255}
   validates :organization_id, numericality: {only_integer: true}
   validates :email, uniqueness: {allow_blank: true}
-
+  validates :email, format: /\A.+@.+\..+\z/i
   def self.roles
     ROLES
   end

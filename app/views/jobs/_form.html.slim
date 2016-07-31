@@ -24,10 +24,10 @@ javascript:
     = f.label :organization_id, class: 'col-sm-2 control-label'
     .col-sm-10
       = f.collection_select :organization_id, @organizations, :id, :name, class: 'form-control'
-  .form-group
+  /.form-group
     = f.label :options, class: 'col-sm-2 control-label'
     .col-sm-10
-      = f.text_field :options, class: 'form-control', placeholder: 'орция1; опция2'
+      = f.text_field :options, class: 'form-control', placeholder: 'опции NMAP (-sS -PN -sU -sV)'
   .form-group
     = f.label :option_set_id, class: 'col-sm-2 control-label required'
     .col-sm-10
@@ -37,11 +37,11 @@ javascript:
     .col-sm-10
       .input-group
         span.input-group-addon -p
-        = f.text_area :ports, class: 'form-control', cols: '2', placeholder: 'порт1; порт2'
+        = f.text_area :ports, class: 'form-control', cols: '2', placeholder: 'порт или порты (21, 80, 110-443)'
   .form-group
     = f.label :hosts, class: 'col-sm-2 control-label required'
     .col-sm-10
-      = f.text_field :hosts, class: 'form-control', placeholder: 'IP1; IP2'
+      = f.text_field :hosts, class: 'form-control', placeholder: 'адрес или адреса (192.168.1.1; 10.1.1.1-255; 172.16.1.*; www.ya.ru)'
   .form-group
     = f.label :description, class: 'col-sm-2 control-label'
     .col-sm-10
