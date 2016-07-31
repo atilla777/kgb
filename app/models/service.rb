@@ -17,7 +17,6 @@ class Service < ActiveRecord::Base
   validates :port, inclusion: {in: 0..65535}, allow_blank: true
 
   validate :host_is_ip4_or_range
-  #validates :host, length: {minimum: 7, maximum: 30}
   validates :host, uniqueness: {scope: [:port, :protocol]}
 
   validates :protocol, uniqueness: {scope: [:port, :host]}, allow_blank: true
@@ -27,11 +26,6 @@ class Service < ActiveRecord::Base
     IP4_REGEXP
   end
 
-  def host_is_ip4_or_range
-    unless /^#{Service.ip4_regexp}$/ =~ host || /^(#{Service.ip4_regexp})-(#{Service.ip4_regexp})$/ =~ host
-      errors[:host] = I18n.t('errors.messages.must_be_ip4_or_range')
-    end
-  end
 
   def self.legalities
     LEGALITIES
@@ -92,13 +86,27 @@ class Service < ActiveRecord::Base
   def self.normilize_hosts(hosts)
     normilized_hosts = []
     hosts.each do |host|
-      if /^(#{ip4_regexp})-(#{ip4_regexp})$/ =~ host
-        range = /^(?<start_ip>#{ip4_regexp})-(?<end_ip>#{ip4_regexp})$/.match(host)
+      if /\A(#{ip4_regexp})-(#{ip4_regexp})\z/ =~ host
+        range = /\A(?<start_ip>#{ip4_regexp})-(?<end_ip>#{ip4_regexp})\z/.match(host)
         normilized_hosts += (IPAddr.new(range[:start_ip])..IPAddr.new(range[:end_ip])).map(&:to_s).to_a
-      elsif /^(#{ip4_regexp})$/ =~ host
+      elsif /\A(#{ip4_regexp})\z/ =~ host
         normilized_hosts << host
       end
     end
     normilized_hosts.uniq
+  end
+
+  private
+  def host_is_ip4_or_range
+    range = /\A(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\z/.match(host)
+    unless /\A#{Service.ip4_regexp}\z/ =~ host || range
+      errors[:host] << I18n.t('errors.messages.must_be_ip4_or_range')
+    end
+    # check the second ip in range is greater then the first ip
+    if range
+      unless IPAddr.new(range[:start_ip]).to_i < IPAddr.new(range[:end_ip]).to_i
+        errors[:host] << I18n.t('errors.messages.must_be_ip4_or_range')
+      end
+    end
   end
 end
