@@ -1,5 +1,5 @@
 br
-table.display.table.table-striped.table-bordered
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
       th = t('activerecord.attributes.user.name')
@@ -24,3 +24,7 @@ table.display.table.table-striped.table-bordered
             i.glyphicon.glyphicon-edit aria-hidden="true"
           = link_to user, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
             i.glyphicon.glyphicon-trash aria-hidden="true"
+
+= link_to new_user_path(user: {organization_id: @organization.id}) do
+  span.btn.btn-success = t('helpers.submit.create', model: User.model_name.human)
+    i.glyphicon.glyphicon-info-sign aria-hidden="true"

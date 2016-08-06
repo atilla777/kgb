@@ -2,12 +2,13 @@ class JobsController < ApplicationController
   before_action :set_job, only: [:scan, :show, :edit, :update, :destroy]
   before_action :set_organizations, only: [:new, :create, :edit, :update]
   before_action :set_option_sets, only: [:new, :create, :edit, :update]
+  before_action :set_previous_action, only: [:new, :edit, :destroy, :scan]
 
   def scan
     authorize @job
     ScanJob.perform_later(params[:id])
     flash[:success] = t('flashes.run')
-    redirect_to jobs_path
+    redirect_to session.delete(:return_to)
   end
 
   # GET /jobs
@@ -58,7 +59,7 @@ class JobsController < ApplicationController
     respond_to do |format|
       if @job.save
         flash[:success] = t('flashes.create', model: Job.model_name.human)
-        format.html { redirect_to @job}
+        format.html { redirect_to session.delete(:return_to) }
         format.json { render :show, status: :created, location: @job }
       else
         format.html { render :new }
@@ -74,7 +75,7 @@ class JobsController < ApplicationController
     respond_to do |format|
       if @job.update(job_params)
         flash[:success] = t('flashes.update', model: Job.model_name.human)
-        format.html { redirect_to @job}
+        format.html { redirect_to session.delete(:return_to) }
         format.json { render :show, status: :ok, location: @job }
       else
         format.html { render :edit }
@@ -90,7 +91,7 @@ class JobsController < ApplicationController
     @job.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Job.model_name.human)
-      format.html { redirect_to jobs_url}
+      format.html { redirect_to session.delete(:return_to) }
       format.json { head :no_content }
     end
   end
@@ -112,5 +113,9 @@ class JobsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
       params.require(:job).permit(:name, :description, :ports, :hosts, :options, :organization_id, :option_set_id)
+    end
+
+    def set_previous_action
+      session[:return_to] ||= request.referer
     end
 end

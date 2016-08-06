@@ -1,16 +1,20 @@
 br
-table.display.table.table-striped.table-bordered
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th = t('activerecord.attributes.service.name')
-      th = t('activerecord.attributes.service.host')
+      th.w30 = t('activerecord.attributes.service.name')
+      th.w30 = t('activerecord.attributes.service.host')
       th
 
   tbody
     - @hosts.each do |host|
       tr
         td = host.name
-        td = host.host
+        td
+          = host.host
+          = link_to new_job_path(job: {organization_id: @organization.id, host: host.host}), class: 'btn btn-link btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Job.model_name.human) do
+            span.text-success
+              i.glyphicon.glyphicon-plus-sign aria-hidden="true"
         td
           = link_to host, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
             i.glyphicon.glyphicon-info-sign aria-hidden="true"

@@ -2,6 +2,7 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy]
   before_action :set_services, only: [:show]
   before_action :set_hosts, only: [:show]
+  before_action :set_jobs, only: [:show]
 
   # GET /organizations
   # GET /organizations.json
@@ -117,6 +118,10 @@ class OrganizationsController < ApplicationController
                       .where('services.port IS NULL')
                       .all
                       .order(:host)
+    end
+
+    def set_jobs
+      @jobs = policy_scope(Job).where(organization_id: @organization.id).includes(:option_set)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

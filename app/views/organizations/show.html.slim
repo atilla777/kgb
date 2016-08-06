@@ -20,7 +20,9 @@
     li role="presentation"
       a href="#hosts" aria-controls="users" role="tab" data-toggle="tab"
         = t('navigations.hosts')
-
+    li role="presentation"
+      a href="#jobs" aria-controls="jobs" role="tab" data-toggle="tab"
+        = Job.model_name.human count: 2
   .tab-content
     div role="tabpanel" class="tab-pane active" id="main_info"
       = render 'main_info'
@@ -32,3 +34,5 @@
       = render 'services/organization_detected_services'
     div role="tabpanel" class="tab-pane" id="hosts"
       = render 'services/organization_hosts'
+    div role="tabpanel" class="tab-pane" id="jobs"
+      = render 'jobs/organization_jobs'

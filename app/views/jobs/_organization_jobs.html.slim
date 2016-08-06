@@ -1,0 +1,33 @@
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th.w35 = t('activerecord.attributes.job.name')
+      th.w8 = t('activerecord.attributes.job.options')
+      th.w20 = t('activerecord.attributes.job.option_set_id')
+      th.w12 = t('activerecord.attributes.job.ports')
+      th.w15 = t('activerecord.attributes.job.hosts')
+      th.w10
+
+  tbody
+    - @jobs.each do |row|
+      tr
+        td.w5 = link_to row.name, row, class: 'btn btn-link btn-xs'
+        td.w25 = row.options
+        td = link_to row.option_set.name, row.option_set, class: 'btn btn-link btn-xs'
+        td = row.ports
+        td = row.hosts
+        td
+          = link_to scan_job_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.scan_now') do
+            i.glyphicon.glyphicon-search aria-hidden="true"
+          = link_to row, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+            i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          = link_to edit_job_path(row), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.edit') do
+            i.glyphicon.glyphicon-edit aria-hidden="true"
+          = link_to row, data: {:confirm => t('actions.confirm')}, :method => :delete, class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.delete') do
+            i.glyphicon.glyphicon-trash aria-hidden="true"
+
+br
+
+= link_to new_job_path(job: {organization_id: @organization.id}) do
+  span.btn.btn-success = t('helpers.submit.create', model: Job.model_name.human)
+    i.glyphicon.glyphicon-info-sign aria-hidden="true"

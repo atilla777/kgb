@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :set_organizations, only: [:new, :create, :edit, :update]
+  before_action :set_previous_action, only: [:new, :edit, :destroy]
 
   # GET /users
   # GET /users.json
@@ -19,7 +20,18 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     authorize User
-    @user = User.new
+    if params[:user].present?
+      if params[:user][:organization_id].present?
+        organization = Organization.find(params[:user][:organization_id])
+        h = {name: organization.name,
+             organization_id: organization.id}
+      else
+        h = {}
+      end
+      @user = User.new(h)
+    else
+      @user = User.new
+    end
   end
 
   # GET /users/1/edit
@@ -38,7 +50,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         flash[:success] = t('flashes.create', model: User.model_name.human)
-        format.html { redirect_to @user}
+        format.html { redirect_to session.delete(:return_to) }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -54,7 +66,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_params)
         flash[:success] = t('flashes.update', model: User.model_name.human)
-        format.html { redirect_to @user}
+        format.html { redirect_to session.delete(:return_to) }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -70,7 +82,7 @@ class UsersController < ApplicationController
     @user.destroy
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: User.model_name.human)
-      format.html { redirect_to users_url}
+      format.html { redirect_to session.delete(:return_to) }
       format.json { head :no_content }
     end
   end
@@ -100,5 +112,9 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:name, :phone, :job, :description, :organization_id, :department,
                                   :email, :password, :password_confirmation, :active)
+    end
+
+    def set_previous_action
+      session[:return_to] ||= request.referer
     end
 end
