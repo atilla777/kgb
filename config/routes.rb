@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root 'organizations#index'
   resources :option_sets
   resources :services do
     collection do
@@ -15,14 +16,17 @@ Rails.application.routes.draw do
     end
   end
   resources :schedules
-  root 'organizations#index'
   resources :users
   resources :scanned_ports do
     collection do
       get 'datatable' # pagination
     end
   end
-  resources :organizations
+  resources :organizations do
+    member do
+      get 'report'
+    end
+  end
 
   resources :user_sessions, only: [:create, :destroy]
 

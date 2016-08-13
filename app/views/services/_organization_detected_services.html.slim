@@ -1,6 +1,5 @@
 br
-/table.display.table.table-striped.table-bordered#index_table
-table.display.table.table-striped.table-bordered
+table.display.table.table-striped.table-bordered#index_table
   thead
     tr
       th = t('activerecord.attributes.scanned_port.job_time')
@@ -21,7 +20,7 @@ table.display.table.table-striped.table-bordered
         td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%S")
         td = scanned_port.job.name
         td = scanned_port.host
-        td = scanned_port.port
+        td = "<#{scanned_port.port}>"
         td = scanned_port.protocol
         td = scanned_port.show_state
         td = Service.show_legality(scanned_port.s_legality)

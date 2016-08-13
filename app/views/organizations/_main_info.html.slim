@@ -19,6 +19,8 @@ table.table.table-striped.table-hover
 => link_to organizations_path do
   span.btn.btn-info
     = Organization.model_name.human count: 2
-= link_to edit_organization_path(@organization) do
+=> link_to edit_organization_path(@organization) do
   span.btn.btn-warning
     = t('actions.edit')
+= link_to report_organization_path(@organization) do
+  span.btn.btn-primary Скачать отчет

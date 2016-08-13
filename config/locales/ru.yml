@@ -29,8 +29,8 @@ ru:
     exist: Назначенные
     allowed: Доступные
   messages:
-    message_yes: Да
-    message_no: Нет
+    message_yes: да
+    message_no: нет
     not_allowed: Нет прав доступа.
     unknown: неизвестно
   types:
