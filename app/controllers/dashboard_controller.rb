@@ -30,8 +30,8 @@ class DashboardController < ApplicationController
                 {field: 'scanned_ports.job_id', as: 'job_id', invisible: true, filter: "scanned_ports.job_id IN (#{allowed_jobs_ids.join(',')})"}
               end
     fields += [{field: 'jobs.name', as: 'job_name', joins: 'jobs', on: 'jobs.id = scanned_ports.job_id'},
-              {field: 'scanned_ports.port', as: 'sp_port', map_by_sql: "'<' || scanned_ports.port || '>'"},
               {field: 'scanned_ports.host', as: 'sp_host'},
+              {field: 'scanned_ports.port', as: 'sp_port', map_by_sql: "'<' || scanned_ports.port || '>'"},
               {field: 'scanned_ports.protocol', as: 'sp_protocol'},
               {field: 'scanned_ports.state', as: 'port_state', map_to: ScannedPort.states},
               {field: 'scanned_ports.state', as: 'state_id', invisible: true, filter: "scanned_ports.state = 'open'"},
