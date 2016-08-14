@@ -288,6 +288,7 @@ ru:
     format: "%{attribute} %{message}"
     messages:
       must_be_ip4_or_range: должен быть IP4 адрес или диапазон
+      must_be_port_or_range: должен быть номер порта или диапазон
       accepted: нужно подтвердить
       blank: не может быть пустым
       present: нужно оставить пустым

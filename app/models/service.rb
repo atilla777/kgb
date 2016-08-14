@@ -5,6 +5,8 @@ class Service < ActiveRecord::Base
   IP4_D1_3_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}/
   IP4_D4_REGEXP = /([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
 
+  DNS_NAME_REGEXP = /(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
+
   PROTOCOLS = ['tcp', 'udp']
 
   LEGALITIES = {1 => I18n.t('messages.message_yes'), 0 => I18n.t('messages.message_no')}
@@ -34,6 +36,10 @@ class Service < ActiveRecord::Base
 
   def self.ip4_d1_3_regexp
     IP4_D1_3_REGEXP
+  end
+
+  def self.dns_name_regexp
+    DNS_NAME_REGEXP
   end
 
   def self.legalities
