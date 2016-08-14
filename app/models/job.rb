@@ -24,7 +24,7 @@ class Job < ActiveRecord::Base
   # check port range like '21' or '80-123' or '110; 21-25;'
   def ports_format
     err = false
-    ports.split(';').each do |port_range|
+    ports.split(',').each do |port_range|
       ports_list = port_range.split('-')
       if ports_list.length > 2
           err = true
