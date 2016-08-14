@@ -23,50 +23,73 @@ class Job < ActiveRecord::Base
   private
   # check port range like '21' or '80-123' or '110; 21-25;'
   def ports_format
-    error = false
+    err = false
     ports.split(';').each do |port_range|
       ports_list = port_range.split('-')
       if ports_list.length > 2
-          error = true
+          err = true
       elsif ports_list.length == 2
         if ports_list[0].to_i > ports_list[1].to_i
-          error = true
+          err = true
         end
       end
       ports_list.each do |port|
         unless /^\s*\d*$\s*/ =~ port
-          error = true
+          err = true
         end
         unless (0..65535).cover? port.to_i
-          error = true
+          err = true
         end
       end
     end
-    if error
+    if err
       errors[:ports] << I18n.t('errors.messages.must_be_port_or_range')
     end
   end
 
   def hosts_format
+    err = false
     hosts_list = hosts.split(';')
     hosts_list.each do |host|
-      dns_name =  /^\s*#{Service.dns_name_regexp}\s*$/ =~ host
-      range = /^\s*(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\s*$/ =~ host
-      range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/ =~ host
+      ip = /^\s*#{Service.ip4_regexp}\s*$/.match(host)
+      dns_name =  /^\s*#{Service.dns_name_regexp}\s*$/.match(host)
+      range = /^\s*(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\s*$/.match(host)
+      range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
       range3 = /^\s*(?<start_ip>#{Service.ip4_d1_3_regexp})\*\s*$/ =~ host
-      unless /^\s*#{Service.ip4_regexp}\s*$/ =~ host || range || range2 || range3 || dns_name
-        errors[:hosts] << I18n.t('errors.messages.must_be_ip4_or_range')
+      if ip || range || range2 || range3 || dns_name
+        if range
+          if IPAddr.new(range[:start_ip]).to_i > IPAddr.new(range[:end_ip]).to_i
+            err = true
+          end
+        elsif range2
+          if range2[:start_ip_d4].to_i > range2[:end_ip_d4].to_i
+            err = true
+          end
+        end
+      else
+        err = true
       end
+    end
+    if err
+      errors[:hosts] << I18n.t('errors.messages.must_be_ip4_or_range')
     end
   end
 
-  # make range like 192.168.1-16 from range like 192.168.1-192.168.16
+  # make range like 192.168.1-16 (nmap supported format) from range like 192.168.1-192.168.16
   def range1_to_range2
-    range = /\A(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<end_ip_d4>#{Service.ip4_d4_regexp})\z/.match(self.hosts)
-    if range
-      if range[:start_ip_d1_3] == range[:end_ip_d1_3]
-        self.hosts = "#{range[:start_ip_d1_3]}#{range[:start_ip_d4]}-#{range[:end_ip_d4]}"
+    new_hosts_list = []
+    self.hosts.split(';').each do |host|
+      range = /\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
+      if range
+        new_hosts_list << if range[:start_ip_d1_3] == range[:end_ip_d1_3]
+                            "#{range[:start_ip_d1_3]}#{range[:start_ip_d4]}-#{range[:end_ip_d4]}"
+                          else
+                            host
+                          end
+      else
+        new_hosts_list << host
       end
     end
+    self.hosts = new_hosts_list.join(';')
   end
 end

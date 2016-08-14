@@ -5,7 +5,7 @@ class Service < ActiveRecord::Base
   IP4_D1_3_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}/
   IP4_D4_REGEXP = /([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
 
-  DNS_NAME_REGEXP = /(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/
+  DNS_NAME_REGEXP = /(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])/
 
   PROTOCOLS = ['tcp', 'udp']
 
@@ -117,9 +117,9 @@ class Service < ActiveRecord::Base
   private
 
   def host_is_ip4_or_range
-    range = /\A(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\z/.match(host)
-    range2 = /\A(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\z/.match(host)
-    unless /\A#{Service.ip4_regexp}\z/ =~ host || range || range2
+    range = /\A\s*(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\s*\z/.match(host)
+    range2 = /\A\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*\z/.match(host)
+    unless /\A\s*#{Service.ip4_regexp}\s*\z/ =~ host || range || range2
       errors[:host] << I18n.t('errors.messages.must_be_ip4_or_range')
     end
     # check the second ip in range is greater then the first ip
