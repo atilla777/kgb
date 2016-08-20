@@ -19,5 +19,6 @@
 .DS_Store
 .byebug_history
 *.swp
+*.swo
 server.key
 server.crt

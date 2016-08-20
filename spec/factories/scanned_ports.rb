@@ -11,7 +11,7 @@ FactoryGirl.define do
       job_name 'Check Deneb'
     end
     before(:create) do |scanned_port, evaluator|
-      job = Job.where(name: evaluator.job_name).first || FactoryGirl.create(:job, name: evaluator.job_name)
+      job = Job.where(name: evaluator.job_name).first || FactoryGirl.create(:job, name: evaluator.job_name, organization_id: Organization.where(name: evaluator.organization_name).first.id)
       scanned_port.job_id = job.id
     end
     transient do

@@ -3,6 +3,7 @@ FactoryGirl.define do
     name "Aleksey"
     phone "MyString"
     job "MyString"
+    email 'ivanov@gmail.com'
     description "MyText"
     transient do
       organization_name 'Deneb inc.'
@@ -15,7 +16,7 @@ FactoryGirl.define do
       organization_editor true
     end
     after(:create) do |user, evaluator|
-      user.add_role(:editor)
+      #user.add_role(:editor)
       user.add_role(Organization.beholder_role_name, user.organization) if evaluator.organization_editor
     end
     department "MyString"

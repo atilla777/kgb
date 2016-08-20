@@ -89,8 +89,6 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
-<<<<<<< HEAD
-=======
 
   #++
   # truncation clean before all examples
@@ -98,6 +96,7 @@ RSpec.configure do |config|
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
   end
+
   # ++
   # transaction cleaning after each example
   config.around(:each) do |example|
@@ -112,5 +111,4 @@ RSpec.configure do |config|
   #  end
   #end
 
->>>>>>> c901ff55cdf59555401c8ff8338a211af3b3a929
 end
