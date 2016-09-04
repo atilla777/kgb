@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :set_organizations, only: [:new, :create, :edit, :update]
   before_action :set_previous_action, only: [:new, :edit, :destroy]
+  before_action :reset_previous_action, only: [:index]
 
   # GET /users
   # GET /users.json
@@ -50,7 +51,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         flash[:success] = t('flashes.create', model: User.model_name.human)
-        format.html { redirect_to session.delete(:return_to) }
+        format.html { redirect_to session.delete(:return_to) || users_path }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -66,7 +67,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_params)
         flash[:success] = t('flashes.update', model: User.model_name.human)
-        format.html { redirect_to session.delete(:return_to) }
+        format.html { redirect_to session.delete(:return_to) || users_path}
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -88,33 +89,37 @@ class UsersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_user
+    @user = User.find(params[:id])
+  end
 
-    def set_organizations
-      @organizations = policy_scope(Organization).order(:name)
-    end
+  def set_organizations
+    @organizations = policy_scope(Organization).order(:name)
+  end
 
-    def set_user_roles
-      # глобальные роли
-      @roles = @user.roles
-      user_roles_names = @roles.map{|role| role.name.to_sym}
-      @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
-      # роли организации (к информации каких организаций  имеет доступ пользователь)
-      @assigned_organizations = Organization.with_role(Organization.beholder_role_name, @user)
-      @allowed_organizations = Organization.all
-      @allowed_organizations = @allowed_organizations.select{ |organization| @assigned_organizations.exclude?(organization) }
-    end
+  def set_user_roles
+    # глобальные роли
+    @roles = @user.roles
+    user_roles_names = @roles.map{|role| role.name.to_sym}
+    @allowed_roles = User.roles.keys.select{|role_name| user_roles_names.exclude?(role_name) }
+    # роли организации (к информации каких организаций  имеет доступ пользователь)
+    @assigned_organizations = Organization.with_role(Organization.beholder_role_name, @user)
+    @allowed_organizations = Organization.all
+    @allowed_organizations = @allowed_organizations.select{ |organization| @assigned_organizations.exclude?(organization) }
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_params
-      params.require(:user).permit(:name, :phone, :job, :description, :organization_id, :department,
-                                  :email, :password, :password_confirmation, :active)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(:name, :phone, :job, :description, :organization_id, :department,
+                                :email, :password, :password_confirmation, :active)
+  end
 
-    def set_previous_action
-      session[:return_to] ||= request.referer
-    end
+  def set_previous_action
+      session[:return_to] ||= request.env['HTTP_REFERER']
+  end
+
+  def reset_previous_action
+      session.delete(:return_to)
+  end
 end

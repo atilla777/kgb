@@ -2,6 +2,7 @@ class ServicesController < ApplicationController
   before_action :set_service, only: [:show, :edit, :update, :destroy, :legalise, :unlegalise]
   before_action :set_organizations, only: [:new, :create, :edit, :update, :legalise, :unlegalise]
   before_action :set_previous_action, only: [:new, :edit, :destroy]
+  before_action :reset_previous_action, only: [:index]
 
   # GET /services
   # GET /services.json
@@ -79,7 +80,7 @@ class ServicesController < ApplicationController
     respond_to do |format|
       if @service.save
         flash[:success] = t('flashes.create', model: Service.model_name.human)
-        format.html { redirect_to session.delete(:return_to) }
+        format.html { redirect_to session.delete(:return_to) || services_path }
         format.json { render :show, status: :created, location: @service }
       else
         format.html { render :new }
@@ -107,7 +108,7 @@ class ServicesController < ApplicationController
     respond_to do |format|
       if @service.update(service_params)
         flash[:success] = t('flashes.update', model: Service.model_name.human)
-        format.html { redirect_to session.delete(:return_to) }
+        format.html { redirect_to session.delete(:return_to) || services_path }
         format.json { render :show, status: :ok, location: @service }
       else
         format.html { render :edit }
@@ -129,22 +130,26 @@ class ServicesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_service
-      @service = Service.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_service
+    @service = Service.find(params[:id])
+  end
 
-    def set_organizations
-      @organizations = policy_scope(Organization).order(:name)
-      @user_active_services = current_user.jobs_active_services
-    end
+  def set_organizations
+    @organizations = policy_scope(Organization).order(:name)
+    @user_active_services = current_user.jobs_active_services
+  end
 
-    def set_previous_action
-      session[:return_to] ||= request.referer
-    end
+  def set_previous_action
+      session[:return_to] ||= request.env['HTTP_REFERER']
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def service_params
-      params.require(:service).permit(:name, :organization_id, :legality, :host, :port, :protocol, :description)
-    end
+  def reset_previous_action
+      session.delete(:return_to)
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def service_params
+    params.require(:service).permit(:name, :organization_id, :legality, :host, :port, :protocol, :description)
+  end
 end

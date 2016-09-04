@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-
+  before_action :reset_previous_action
   def index
     authorize :dashboard
   end
@@ -74,8 +74,11 @@ map_by_sql:  "CASE
 
   def hosts
     authorize :dashboard
-    #@organizations = policy_scope(Organization)
     @hosts = current_user.hosts
   end
 
+  private
+  def reset_previous_action
+      session.delete(:return_to)
+  end
 end

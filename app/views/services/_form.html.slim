@@ -38,6 +38,6 @@
            | #{t('activerecord.attributes.service.legality')}
   .actions.form-group
     .col-sm-offset-2.col-sm-10
-      => link_to services_path do
-        span.btn.btn-info = Service.model_name.human count: 2
+      => link_to session[:return_to] do
+        span.btn.btn-info = t('actions.back')
       = f.submit t('actions.create'), class: 'btn btn-success'
