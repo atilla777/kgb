@@ -121,7 +121,7 @@ class OrganizationsController < ApplicationController
                              )
                             )
                       .distinct
-                      .order(port: :asc)
+                      .order(host: :asc)
                       .includes(:job)
   end
 
