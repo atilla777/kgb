@@ -1,6 +1,6 @@
 class OptionSet < ActiveRecord::Base
   NMAP_OPTIONS = {syn_scan: 'sS',
-                  skip_discovery: 'PN',
+                  skip_discovery: 'Pn',
                   udp_scan: 'sU',
                   service_scan: 'sV',
                   os_fingerprint: 'O',

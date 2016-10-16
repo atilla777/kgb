@@ -3,7 +3,14 @@ class ScanJob < ActiveJob::Base
   require 'nmap/program'
   require 'nmap/xml'
 
-  queue_as :default
+  queue_as do #:default
+    arg = self.arguments.second
+    if arg == 'now'
+      :now_scan
+    else
+      :planned_scan
+    end
+  end
 
   def perform(*args)
     job_id = args[0]

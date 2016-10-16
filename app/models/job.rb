@@ -19,6 +19,10 @@ class Job < ActiveRecord::Base
     joins(:schedules)
       .merge(Schedule.where('week_day = :week_day OR month_day = :month_day',
                             week_day: Time.now.wday, month_day: Time.now.day))}
+  def run_today?
+    Schedule.where('job_id = :job_id AND (week_day = :week_day OR month_day = :month_day)',
+                    job_id: self.id, week_day: Time.now.wday, month_day: Time.now.day).first.present?
+  end
 
   private
   # check port range like '21' or '80-123' or '110; 21-25;'

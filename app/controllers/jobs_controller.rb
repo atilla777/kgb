@@ -7,7 +7,7 @@ class JobsController < ApplicationController
 
   def scan
     authorize @job
-    ScanJob.perform_later(params[:id])
+    ScanJob.perform_later(params[:id], 'now')
     flash[:success] = t('flashes.run')
     redirect_to session.delete(:return_to)
   end
@@ -60,6 +60,7 @@ class JobsController < ApplicationController
     respond_to do |format|
       if @job.save
         flash[:success] = t('flashes.create', model: Job.model_name.human)
+        #start_job_if_planned_today @job
         format.html { redirect_to session.delete(:return_to) || jobs_path}
         format.json { render :show, status: :created, location: @job }
       else
@@ -98,6 +99,11 @@ class JobsController < ApplicationController
   end
 
   private
+  def start_job_if_planned_today(job)
+    if job.run_today
+      ScanJob.perform_later(job.id)
+    end
+  end
   # Use callbacks to share common setup or constraints between actions.
   def set_job
     @job = Job.find(params[:id])
