@@ -33,6 +33,7 @@ ru:
     message_no: нет
     not_allowed: Нет прав доступа.
     unknown: неизвестно
+    dj_planner_attention: Внимание! Планировщик задач не запущен!
   types:
     legal: легален
     illegal: незаконен
@@ -48,6 +49,8 @@ ru:
     open_filtered: работает|защищен
     unregistered: не назначена
   navigations:
+    service: Обслуживание
+    backup_and_clean: Резервирование и очистка
     main_info: Основная информация
     week_days: Дни недели
     roles: Роли
@@ -79,6 +82,8 @@ ru:
     dj_handler: Обработчик
     scan_results: Результаты сканирования
   actions:
+    dj_create_planner: Запустить планировщик задач
+    dj_delete_all: Удалить все задачи
     download_base: Скачать файл базы
     view: Показать
     edit: Редактировать

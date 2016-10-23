@@ -1,9 +1,13 @@
-h4 = t('navigations.backup')
+h3
+  span.text-primary
+    = t('navigations.backup')
 = form_tag '/service_tasks/sqlite_backup' do
   = submit_tag t('actions.download_base'), class: 'btn btn-success'
 br
 br
-h4 = t('navigations.clean')
+h3
+  span.text-primary
+    = t('navigations.clean')
 = form_tag '/service_tasks/clean_base' do
   => t('navigations.clean_period')
   = select_tag(:month_count, options_for_select(1..12, 3 ))

@@ -26,6 +26,12 @@
       tr
         td.text-right.text-info
           strong
+            = t('navigations.dj_updated_at')
+        td
+          = @task.updated_at.strftime("%d.%m.%Y:%H.%M")
+      tr
+        td.text-right.text-info
+          strong
             = t('navigations.dj_planned_start_time')
         td
           = @task.run_at.strftime("%d.%m.%Y:%H.%M") if @task.run_at
@@ -58,7 +64,7 @@
           strong
             = t('navigations.dj_attempts')
         td
-          = @task.dj_attempts
+          = @task.attempts
       tr
         td.text-right.text-info
           strong
@@ -67,7 +73,9 @@
         td
           = YAML.load(@task.handler)
 
-  => link_to dj_inde_path do
-    span.btn.btn-info
-      = t('navigations.dj_index')
-  = link_to edit_service_path(@service) do
+= link_to dj_index_path do
+  span.btn.btn-info
+    = t('navigations.dj_index')
+=< link_to dj_delete_path(@task), method: :delete, data: {confirm: t('actions.confirm')} do
+  span.btn.btn-danger
+    = t('actions.delete')

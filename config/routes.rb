@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
-  get 'dj_manager/index', as: :dj_index
-  get 'dj_manager/show'
-
   root 'organizations#index'
+
+  get 'dj_manager/index', as: :dj_index
+  get 'dj_manager/:id' => "dj_manager#show", as: :dj_show
+
+
+  post 'dj_manager/create_planner' => "dj_manager#create_planner", as: :dj_create_planner
+  delete 'dj_manager/:id/destroy' => "dj_manager#destroy", as: :dj_delete
+  delete 'dj_manager/destroy_all', as: :dj_delete_all
+
   resources :option_sets
   resources :services do
     collection do

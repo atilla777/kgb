@@ -13,16 +13,10 @@ class ScanJob < ActiveJob::Base
   end
 
   def perform(*args)
-    job_id = args[0]
-    job = Job.find(job_id)
+    job = args[0]
     # имя работы
     job_time = DateTime.now
-    # путь к папке с результатами сканирования (относительно папки rails приложения)
-    result_folder = "tmp"
-    # имя файла с результатами сканирования
-    result_file = "#{job_id}_#{job_time.strftime("%Y.%m.%d-%H.%M.%S")}_nmap.xml"
-    # полный путь к файлу с результатами сканирования (относительно папки rails приложения)
-    result_path = "#{result_folder}/#{result_file}"
+    result_path = set_result_path(job, job_time)
 
     # сканирование
     #
@@ -89,7 +83,16 @@ class ScanJob < ActiveJob::Base
       end
     end
     File.delete(result_path)
+  end
 
+  private
+  def set_result_path(job, job_time)
+    # путь к папке с результатами сканирования (относительно папки rails приложения)
+    result_folder = "tmp"
+    # имя файла с результатами сканирования
+    result_file = "#{job.id}_#{job_time.strftime("%Y.%m.%d-%H.%M.%S")}_nmap.xml"
+    # полный путь к файлу с результатами сканирования (относительно папки rails приложения)
+    "#{result_folder}/#{result_file}"
   end
 
 end

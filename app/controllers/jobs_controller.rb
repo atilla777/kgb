@@ -7,8 +7,8 @@ class JobsController < ApplicationController
 
   def scan
     authorize @job
-    ScanJob.perform_later(params[:id], 'now')
-    flash[:success] = t('flashes.run')
+    active_job = ScanJob.perform_later(@job, 'now')
+    flash[:success] = "#{t('flashes.run')} ID задачи = #{active_job.provider_job_id}"
     redirect_to session.delete(:return_to)
   end
 

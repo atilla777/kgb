@@ -12,6 +12,7 @@ class Job < ActiveRecord::Base
   validate :hosts_format
   validates :organization_id, numericality: {only_integer: true}
   validates :option_set_id, numericality: {only_integer: true}
+  validates :delayed_job_id, numericality: {only_integer: true}, allow_blank: true
 
   before_save :range1_to_range2
 
@@ -22,6 +23,18 @@ class Job < ActiveRecord::Base
   def run_today?
     Schedule.where('job_id = :job_id AND (week_day = :week_day OR month_day = :month_day)',
                     job_id: self.id, week_day: Time.now.wday, month_day: Time.now.day).first.present?
+  end
+
+  def self.find_by_dj_id(delayed_job_id)
+    delayed_job = Delayed::Job.where(id: delayed_job_id).first
+    if delayed_job.present?
+      job_data = YAML.load(delayed_job.handler).job_data
+      if job_data['job_class'] == 'ScanJob'
+        s = job_data['arguments'][0]['_aj_globalid']
+        job_id = /\d$/.match(s)[0].to_i
+        Job.where(id: job_id).first
+      end
+    end
   end
 
   private

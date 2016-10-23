@@ -41,16 +41,17 @@ html
                 = link_to 'Хосты/Сервисы', services_path
               li
                 = link_to 'Рассписание', schedules_path
-              - if current_user
-                - if current_user.has_role? :admin
-                  li
-                    = link_to t('navigations.dj_index'), dj_index_path
-
           - if current_user
             - if current_user.has_role? :admin
-              li
-                = link_to 'Обслуживание', service_tasks_path
-        ul.nav.navbar-nav.navbar-right
+            li role="presentation" class="dropdown"
+              a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+                = t('navigations.service')
+                span class='caret'
+              ul class="dropdown-menu"
+                li
+                  = link_to t('navigations.backup_and_clean'), service_tasks_path
+                li
+                  = link_to t('navigations.dj_index'), dj_index_path
           - if current_user
             li
               span.navbar-text
