@@ -11,7 +11,7 @@ class DailyPlannerJob < ActiveJob::Base
     if Rails.env.production?
       DailyPlannerJob.set(wait_until: Date.tomorrow.midnight).perform_later # запускать раз в день (рабочий режим)
     else
-      DailyPlannerJob.set(wait: 10.minutes).perform_later # запускать чаще чем раз в сутки (для отладки)
+      DailyPlannerJob.set(wait: 60.minutes).perform_later # запускать чаще чем раз в сутки (для отладки)
     end
   end
 

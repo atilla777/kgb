@@ -1,0 +1,27 @@
+h3
+  span.text-primary = t('navigations.dj_index')
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th.default_sort data-sort = 'desc' ID
+      th = t('navigations.dj_queue')
+      th = t('navigations.dj_planned_start_time')
+      th = t('navigations.dj_locked_at')
+      th = t('navigations.dj_locked_by')
+      th = t('navigations.dj_last_error')
+      th = t('navigations.dj_failed_at')
+      th = t('navigations.dj_attempts')
+      th
+
+  tbody
+    - @tasks.each do |row|
+      tr
+        td = row.id
+        td = row.queue
+        td = row.run_at.strftime("%d.%m.%Y:%H.%M")
+        td = row.locked_at.strftime("%d.%m.%Y:%H.%M") if row.locked_at
+        td = row.locked_by
+        td = row.last_error
+        td = row.failed_at.strftime("%d.%m.%Y:%H.%M") if row.failed_at
+        td = row.attempts
+        td

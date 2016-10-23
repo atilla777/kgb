@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'dj_manager/index', as: :dj_index
+  get 'dj_manager/show'
+
   root 'organizations#index'
   resources :option_sets
   resources :services do

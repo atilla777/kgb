@@ -1,0 +1,73 @@
+.col-sm-offset-1.col-sm-11
+  table.table.table-striped.table-hover
+    caption.text-primary
+      h3 = t('navigations.dj_show')
+    thead
+      th.col-md-1
+      th.col-md-7
+    tbody
+      tr
+        td.text-right.text-info
+          strong ID
+        td
+          = @task.id
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_queue')
+        td
+          = @task.queue
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_created_at')
+        td
+          = @task.created_at.strftime("%d.%m.%Y:%H.%M")
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_planned_start_time')
+        td
+          = @task.run_at.strftime("%d.%m.%Y:%H.%M") if @task.run_at
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_locked_at')
+        td
+          = @task.locked_at.strftime("%d.%m.%Y:%H.%M") if @task.locked_at
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_locked_by')
+        td
+          = @task.locked_by
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_last_error')
+        td
+          = @task.last_error
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_failed_at')
+        td
+          = @task.failed_at.strftime("%d.%m.%Y:%H.%M") if @task.failed_at
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_attempts')
+        td
+          = @task.dj_attempts
+      tr
+        td.text-right.text-info
+          strong
+            = t('navigations.dj_handler')
+
+        td
+          = YAML.load(@task.handler)
+
+  => link_to dj_inde_path do
+    span.btn.btn-info
+      = t('navigations.dj_index')
+  = link_to edit_service_path(@service) do

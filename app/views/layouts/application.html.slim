@@ -16,13 +16,13 @@ html
       .collapse.navbar-collapse
         ul.nav.navbar-nav
           li
-            = link_to 'Активные сервисы',  detected_services_path
+            = link_to t('navigations.detected_services_short'),  detected_services_path
           li
-            = link_to 'Новые сервисы',  new_services_path
+            = link_to t('navigations.new_services_short'),  new_services_path
           li
-            = link_to 'Хосты',  hosts_path
+            = link_to t('navigations.hosts'),  hosts_path
           li
-            = link_to 'Результаты сканирования', scanned_ports_path
+            = link_to t('navigations.scan_results'), scanned_ports_path
 
           li role="presentation" class="dropdown"
             a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
@@ -41,6 +41,11 @@ html
                 = link_to 'Хосты/Сервисы', services_path
               li
                 = link_to 'Рассписание', schedules_path
+              - if current_user
+                - if current_user.has_role? :admin
+                  li
+                    = link_to t('navigations.dj_index'), dj_index_path
+
           - if current_user
             - if current_user.has_role? :admin
               li

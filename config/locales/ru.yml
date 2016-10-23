@@ -55,7 +55,9 @@ ru:
     organization_roles: Назначение ролей организации
     dashboard: Панель управления
     detected_services: Активные сервисы (зарегистрированные сервисы с открытыми портами)
+    detected_services_short: Активные сервисы
     new_services: Новые сервисы (незарегистрированные сервисы с открытыми портами)
+    new_services_short: Новые сервисы
     addresses: Активные хосты (с открытыми портами)
     hosts: Хосты
     services: Сервисы
@@ -63,6 +65,19 @@ ru:
     clean: Удаление старых результатов сканирования
     clean_period: Будут удалены результаты сканирования старше указанного количества месяцев
     detected_ports: Открытые порты
+    dj_index: Запланированные задачи
+    dj_show: Запланированная задача
+    dj_queue: Очередь
+    dj_planned_start_time: Запланированное время
+    dj_created_at: Время создания
+    dj_updated_at: Время изменения
+    dj_locked_at: Время запуска
+    dj_locked_by: Зупущена
+    dj_failed_at: Время ошибки
+    dj_last_error: Последняя ошибка
+    dj_attempts: Попыток
+    dj_handler: Обработчик
+    scan_results: Результаты сканирования
   actions:
     download_base: Скачать файл базы
     view: Показать
