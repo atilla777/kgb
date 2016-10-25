@@ -31,7 +31,7 @@ class Job < ActiveRecord::Base
       job_data = YAML.load(delayed_job.handler).job_data
       if job_data['job_class'] == 'ScanJob'
         s = job_data['arguments'][0]['_aj_globalid']
-        job_id = /\d$/.match(s)[0].to_i
+        job_id = /\d+$/.match(s)[0].to_i
         Job.where(id: job_id).first
       end
     end
