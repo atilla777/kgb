@@ -12,7 +12,6 @@ class Job < ActiveRecord::Base
   validate :hosts_format
   validates :organization_id, numericality: {only_integer: true}
   validates :option_set_id, numericality: {only_integer: true}
-  validates :delayed_job_id, numericality: {only_integer: true}, allow_blank: true
 
   before_save :range1_to_range2
 
