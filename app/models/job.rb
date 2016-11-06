@@ -12,7 +12,6 @@ class Job < ActiveRecord::Base
   validate :hosts_format
   validates :organization_id, numericality: {only_integer: true}
   validates :option_set_id, numericality: {only_integer: true}
-  validates :delayed_job_id, numericality: {only_integer: true}, allow_blank: true
 
   before_save :range1_to_range2
 
@@ -31,7 +30,7 @@ class Job < ActiveRecord::Base
       job_data = YAML.load(delayed_job.handler).job_data
       if job_data['job_class'] == 'ScanJob'
         s = job_data['arguments'][0]['_aj_globalid']
-        job_id = /\d$/.match(s)[0].to_i
+        job_id = /\d+$/.match(s)[0].to_i
         Job.where(id: job_id).first
       end
     end

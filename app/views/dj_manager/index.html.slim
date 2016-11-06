@@ -26,7 +26,7 @@ table.display.table.table-striped.table-bordered#index_table
         td
           - job = Job.find_by_dj_id(row.id)
           - if job.present?
-            = link_to job.name, job
+            = link_to job.name, job, class: 'btn btn-link btn-xs'
         td = row.run_at.strftime("%d.%m.%Y:%H.%M")
         td = row.locked_at.strftime("%d.%m.%Y:%H.%M") if row.locked_at
         td = row.locked_by
@@ -34,8 +34,8 @@ table.display.table.table-striped.table-bordered#index_table
         td = row.failed_at.strftime("%d.%m.%Y:%H.%M") if row.failed_at
         td = row.attempts
         td
-          = link_to t('actions.view'), dj_show_path(row)
-          =< link_to t('actions.delete'), dj_delete_path(row), method: :delete, data: {confirm: t('actions.confirm')}
+          = link_to t('actions.view'), dj_show_path(row), class: 'btn btn-link btn-xs'
+          =< link_to t('actions.delete'), dj_delete_path(row), class: 'btn btn-link btn-xs', method: :delete, data: {confirm: t('actions.confirm')}
 
 = link_to dj_create_planner_path, method: :post do
  span.btn.btn-success
