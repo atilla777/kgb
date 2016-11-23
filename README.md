@@ -16,7 +16,9 @@
 
 ###Установка
 Для работы приложения необходимо обеспечить наличие на компьютере компонентов, перечисленных выше.
-1. Установка сканера nmap (здесь и далее по тексту установка пакетов Linux показана на примере Debian\Ubuntu):
+
+#### 1.
+Установка сканера nmap (здесь и далее по тексту установка пакетов Linux показана на примере Debian\Ubuntu):
 ```
 sudo apt-get install nmap
 ```
@@ -25,13 +27,16 @@ sudo apt-get install nmap
 ````
 kgb  ALL=NOPASSWD: /usr/bin/nmap
 ```
-2. Установить Ruby лучше с помощью менеджера **RVM**.
+
+#### 2.
+Установить Ruby лучше с помощью менеджера **RVM**.
 Инструкцию по установке см. на сайте [rvm.io](http://rvm.io)
 >Если в процессе выполнения инструкций сайта RVM не удается импортировать ключи (и соответственно установить RVM), поправить ситуацию можно следующим образом (решения взято с сайта rvm.io):
 ```
 curl -sSL https://rvm.io/mpapis.asc | gpg --import -curl -sSL https://get.rvm.io | bash -s stable
 ```
-3. После установке RVM устанавливается Ruby (потребуется версия >= 2.3):
+#### 3.
+После установке RVM устанавливается Ruby (потребуется версия >= 2.3):
 ```
 rvm install 2.3.1
 ```
@@ -39,7 +44,8 @@ rvm install 2.3.1
 ```
 rvm use --default 2.3.1
 ```
-4. Теперь можно скачать само приложение KGB (фактически на компьютер будет скопирована папка kgb, в которой находится код программы, для выполнения команды должна быть установлена программа git):
+#### 4.
+Теперь можно скачать само приложение KGB (фактически на компьютер будет скопирована папка kgb, в которой находится код программы, для выполнения команды должна быть установлена программа git):
 ```
 git clone https://github.com/atilla777/kgb.git
 ```
@@ -48,11 +54,13 @@ git clone https://github.com/atilla777/kgb.git
 cd kgb
 bundle install
 ```
-5. Устанавливаем node.js:
+#### 5.
+Устанавливаем node.js:
 ```
 sudo apt-get install nodejs
 ```
-6. Создаём таблицы базы данных SQLite – одной командой:
+#### 6.
+Создаём таблицы базы данных SQLite – одной командой:
 ```
 RAILS_ENV=production rake db:setup
 ```
@@ -61,15 +69,18 @@ RAILS_ENV=production rake db:setup
 RAILS_ENV=production rake db:migrate
 RAILS_ENV=production rake db:seed
 ```
-7. Устанавливаем gem foreman
+#### 7.
+Устанавливаем gem foreman
 ```
 gem install foreman
 ```
-8. Компилируем JavaScript, CSS и файлы изображений:
+#### 8.
+Компилируем JavaScript, CSS и файлы изображений:
 ```
 bundle exec rake assets:precompile
 ```
-9. Генерируется секрет, используемый для подписи cookies:
+#### 9.
+Генерируется секрет, используемый для подписи cookies:
 ```
 bundle exec rake secret
 ```
@@ -82,7 +93,8 @@ config/secrets.yml
 production:
   secret_key_base: секрет
 ```
-10. Создание самоподписанного сертификата для веб сервера (требуется установленная программы openssl):
+#### 10.
+Создание самоподписанного сертификата для веб сервера (требуется установленная программы openssl):
 ```
 openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 1000 -nodes
 ```
