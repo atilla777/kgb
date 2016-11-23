@@ -42,6 +42,24 @@
            = f.check_box :service_scan
            | service scan (-sV)
   .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :aggressive_timing
+           | aggressive timing (-T4)
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :insane_timing
+           | insane timing (-T5)
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      .checkbox
+         label
+           = f.check_box :disable_dns
+           | disable dns (-n)
+  .form-group
     = f.label :top_ports,'--top-ports', class: 'col-sm-2 control-label'
     .col-sm-10
       = f.text_field :top_ports, class: 'form-control', placeholder: 'количество портов (1-1000)'

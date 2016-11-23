@@ -4,14 +4,21 @@ class OptionSet < ActiveRecord::Base
                   udp_scan: 'sU',
                   service_scan: 'sV',
                   os_fingerprint: 'O',
-                  top_ports: '--top-ports'}.freeze
+                  top_ports: '--top-ports',
+                  aggressive_timing: 'T4',
+                  insane_timing: 'T5',
+                  disable_dns: 'n'}.freeze
+
 
   attr_accessor :syn_scan,
                 :skip_discovery,
                 :udp_scan,
                 :os_fingerprint,
                 :service_scan,
-                :top_ports
+                :top_ports,
+                :aggressive_timing,
+                :insane_timing,
+                :disable_dns
 
   before_save :set_options
 
@@ -89,6 +96,30 @@ class OptionSet < ActiveRecord::Base
     options[:top_ports] = value.to_i if value.present?
   end
 
+  def aggressive_timing
+    options[:aggressive_timing]
+  end
+
+  def aggressive_timing=(value)
+    options[:aggressive_timing] = value
+  end
+
+  def insane_timing
+    options[:insane_timing]
+  end
+
+  def insane_timing=(value)
+    options[:insane_timing] = value
+  end
+
+  def disable_dns
+    options[:disable_dns]
+  end
+
+  def disable_dns=(value)
+    options[:disable_dns] = value
+  end
+
   private
 
   def set_options
@@ -97,7 +128,9 @@ class OptionSet < ActiveRecord::Base
                     udp_scan: udp_scan,
                     service_scan: service_scan,
                     os_fingerprint: os_fingerprint,
-                    top_ports: top_ports
-      }
+                    top_ports: top_ports,
+                    aggressive_timing: aggressive_timing,
+                    insane_timing: insane_timing,
+                    disable_dns: disable_dns}
   end
 end
