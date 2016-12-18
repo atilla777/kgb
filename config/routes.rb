@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   end
   resources :organizations do
     member do
-      get 'report'
+      post 'report'
     end
   end
 

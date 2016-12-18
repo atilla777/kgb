@@ -15,6 +15,13 @@ table.table.table-striped.table-hover
           = Organization.human_attribute_name :description
       td
         = simple_format @organization.description
+    tr
+      td.text-right.text-info
+        strong Отчет
+      td
+        = form_tag "/organizations/#{@organization.id}/report"
+          => submit_tag t('actions.download_report'), class: 'btn-link'
+          = date_field_tag :selected_date, @selected_date
 
 => link_to organizations_path do
   span.btn.btn-info
@@ -22,5 +29,3 @@ table.table.table-striped.table-hover
 => link_to edit_organization_path(@organization) do
   span.btn.btn-warning
     = t('actions.edit')
-= link_to report_organization_path(@organization) do
-  span.btn.btn-primary Скачать отчет
