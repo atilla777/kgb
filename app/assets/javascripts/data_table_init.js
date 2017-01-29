@@ -67,6 +67,7 @@ $('#dt_big_table.display').dataTable( {
 "bProcessing": true,
 "bServerSide": true,
 "sAjaxSource": $('#dt_big_table').data('source'),
+"searchDelay": 1200,
 "aaSorting": [[ defaultSortField, defaultSortDirection]],
 "oLanguage": {"sProcessing":   "Подождите...",
 "sLengthMenu":   "Показать _MENU_ записей",
@@ -84,5 +85,6 @@ $('#dt_big_table.display').dataTable( {
 }
 }
 });
+$.fn.dataTable.ext.errMode = 'throw';
 }));
 
