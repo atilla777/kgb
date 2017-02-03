@@ -116,6 +116,7 @@ foreman export systems /etc/init -c web=1 -c planner_worker=1 -c now_scan_worker
 systemctl start web.target
 systemctl stop planner_worker.target
 systemctl restart now_scan_worker.service
+sudo systemctl enable app.target
 ```
 ####Запуск приложения (вариант 2, можно использовать, например, при отладке)
 запускаем веб приложение:
