@@ -109,7 +109,7 @@ foreman start
 * 1 процесса planned_scan_worker – для выполнения запланированных планировщиком работ по сканированию (количество процессов можно изменить, при этом должен быть как минимум 1).
 Задать количество запускаемых процессов ==now_scan_worker== и ==planned_scan_worker==, а также организовать их запуск через стартовые сценарии ОС, можно (и рекомендуется) выполнив следующую команду (для systemd):
 ```
-foreman export systems /etc/init -c web=1 -c planner_worker=1 -c now_scan_worker=4 -c planned_scan_worker=4
+foreman export systems /etc/init -c web=1 -c planner_worker=1 -c now_scan_worker=7 -c planned_scan_worker=5
 ```
 После чего управление запуском приложения сведется к выполнению следующих команд Linux:
 ```
