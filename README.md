@@ -121,6 +121,13 @@ systemctl restart kgb.target
 ```
 sudo systemctl enable kgb.target
 ```
+Если необходимо запустить приложение на привелегированных портах (например, на 443) можно воспользоваться пакетом authbind (в примере приложение запускается из под непривилегированной учетной записи kgb):
+```
+sudo apt-get install authbind
+sudo touch /etc/authbind/byport/443
+sudo chown kgb /etc/authbind/byport/443
+sudo chmod 500 /etc/authbind/byport/443
+```
 ####Запуск приложения (вариант 2, можно использовать, например, при отладке)
 запускаем веб приложение:
 ```
