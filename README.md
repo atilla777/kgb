@@ -113,10 +113,13 @@ foreman export systems /etc/init -c web=1 -c planner_worker=1 -c now_scan_worker
 ```
 После чего управление запуском приложения сведется к выполнению следующих команд Linux:
 ```
-systemctl start web.target
-systemctl stop planner_worker.target
-systemctl restart now_scan_worker.service
-sudo systemctl enable app.target
+systemctl start kgb.target
+systemctl stop kgb.target
+systemctl restart kgb.target
+```
+Для того, что бы приложение запускалось при старте ОС:
+```
+sudo systemctl enable kgb.target
 ```
 ####Запуск приложения (вариант 2, можно использовать, например, при отладке)
 запускаем веб приложение:
