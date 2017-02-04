@@ -35,7 +35,7 @@ curl -sSL https://rvm.io/mpapis.asc | gpg --import -curl -sSL https://get.rvm.io
 ```
 
 #### 3.
-После установке RVM устанавливается Ruby (потребуется версия >= 2.3):
+После установки RVM устанавливается Ruby (потребуется версия >= 2.3):
 ```
 rvm install 2.3.1
 ```
@@ -101,7 +101,11 @@ openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 1000
 ```
 useradd -r kgb
 ```
-  ###Запуск
+Назначение пользователю kgb прав на каталог kgb:
+```
+sudo chown -R kgb kgb 
+```
+###Запуск
 ```
 rvmsudo foreman start -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_worker=5
 ```
