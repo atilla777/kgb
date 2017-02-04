@@ -22,3 +22,4 @@
 *.swo
 server.key
 server.crt
+/public
