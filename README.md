@@ -35,7 +35,7 @@ curl -sSL https://rvm.io/mpapis.asc | gpg --import -curl -sSL https://get.rvm.io
 ```
 
 #### 3.
-После установке RVM устанавливается Ruby (потребуется версия >= 2.3):
+После установки RVM устанавливается Ruby (потребуется версия >= 2.3):
 ```
 rvm install 2.3.1
 ```
@@ -96,9 +96,18 @@ SECRET_KEY=секрет
 ```
 openssl req -x509 -newkey rsa:4096 -keyout server.key -out server.crt -days 1000 -nodes
 ```
+#### 11.
+Добавление пользователя из под которого будет запускаться приложение �при старет ОС (если выполнить foreman export):
+```
+useradd -r kgb
+```
+Назначение пользователю kgb прав на каталог kgb:
+```
+sudo chown -R kgb kgb 
+```
 ###Запуск
 ```
-foreman start
+rvmsudo foreman start -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_worker=5
 ```
 При этом надо учитывать, что режим в котором запустится приложение задан в переменной окружения RAILS_ENV, указанной в файле ==.env== (по умолчанию - запускать приложение в рабочем режиме, т.е. production).
 После выполнения указанной выше команды будут запущены:
@@ -109,7 +118,7 @@ foreman start
 * 1 процесса planned_scan_worker – для выполнения запланированных планировщиком работ по сканированию (количество процессов можно изменить, при этом должен быть как минимум 1).
 Задать количество запускаемых процессов ==now_scan_worker== и ==planned_scan_worker==, а также организовать их запуск через стартовые сценарии ОС, можно (и рекомендуется) выполнив следующую команду (для systemd):
 ```
-foreman export systems /etc/init -c web=1 -c planner_worker=1 -c now_scan_worker=7 -c planned_scan_worker=5
+vmsudo foreman export systemd /etc/systemd/system -a kgb -u kgb -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_worker=5
 ```
 После чего управление запуском приложения сведется к выполнению следующих команд Linux:
 ```
