@@ -22,4 +22,5 @@
 *.swo
 server.key
 server.crt
+.env
 /public
