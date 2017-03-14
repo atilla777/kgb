@@ -109,16 +109,65 @@ sudo chown -R kgb kgb
 ```
 rvmsudo foreman start -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_worker=5
 ```
-При этом надо учитывать, что режим в котором запустится приложение задан в переменной окружения RAILS_ENV, указанной в файле ==.env== (по умолчанию - запускать приложение в рабочем режиме, т.е. production).
+При этом надо учитывать, что режим в котором запустится приложение задан в переменной окружения RAILS_ENV, указанной в файле ==env== (по умолчанию - запускать приложение в рабочем режиме, т.е. production).
 После выполнения указанной выше команды будут запущены:
 * 1 процесс web – для rails приложения (веб сервер);
+
 и следующие фоновые процессы Delayed Job:
 * 1 процесс planner_worker – планировщик для ежедневного планирования работ, которые должны запуститься в этот день.
-* 1 процесса now_scan_worker – для выполнения сканирований по требованию пользователя (количество процессов можно изменить, при этом должен быть как минимум 1);
-* 1 процесса planned_scan_worker – для выполнения запланированных планировщиком работ по сканированию (количество процессов можно изменить, при этом должен быть как минимум 1).
+* 7 процессов now_scan_worker – для выполнения сканирований по требованию пользователя (количество процессов можно изменить, при этом должен быть как минимум 1);
+* 5 процессов planned_scan_worker – для выполнения запланированных планировщиком работ по сканированию (количество процессов можно изменить, при этом должен быть как минимум 1).
 Задать количество запускаемых процессов ==now_scan_worker== и ==planned_scan_worker==, а также организовать их запуск через стартовые сценарии ОС, можно (и рекомендуется) выполнив следующую команду (для systemd):
 ```
 vmsudo foreman export systemd /etc/systemd/system -a kgb -u kgb -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_worker=5
+```
+> Указанная выше команда может отработать некорретно, поэтому необходимо проверить сгенериванные ею файлы и внести в них необходимые корректировки. В частности необходимо будети внести изменения в файлах:
+* kgb-web@.service
+* kgb-planner_worker@.service
+* kgb-now_scan_worker@.service
+* kgb-planned_scan_worker@.service
+Файл ==kgb-web@.service== должен иметь следующий вид:
+```
+[Unit]
+PartOf=kgb-web.target
+
+[Service]
+User=kgb
+WorkingDirectory=/home/kgb/kgb
+Environment="PATH=/home/пользователь/.rvm/gems/ruby-2.3.1/bin:/home/пользователь/.rvm/gems/ruby-2.3.1@global/bin:/home/пользователь/.rvm/rubies/ruby-2.3.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/пользователь/.rvm/bin:/home/пользователь/.rvm/bin:/home/пользователь/.rvm/bin"
+Environment="GEM_HOME=/home/пользователь/.rvm/gems/ruby-2.3.1"
+Environment="GEM_PATH=/home/пользователь/.rvm/gems/ruby-2.3.1:/home/пользователь/.rvm/gems/ruby-2.3.1@global"
+EnvironmentFile=/home/kgb/kgb/.env
+ExecStart=/bin/bash -lc '/usr/bin/authbind --deep bundle exec puma'
+Restart=always
+StandardInput=null
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%n
+KillMode=mixed
+TimeoutStopSec=5
+```
+Остальныедолжны выглядить так (на примере kgb-now_scan_worker@.service):
+```
+[Unit]
+PartOf=kgb-now_scan_worker.target
+
+[Service]
+User=kgb
+WorkingDirectory=/home/kgb/kgb
+Environment="PATH=/home/пользователь/.rvm/gems/ruby-2.3.1/bin:/home/пользователь/.rvm/gems/ruby-2.3.1@global/bin:/home/пользователь/.rvm/rubies/ruby-2.3.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/пользователь/.rvm/bin:/home/пользователь/.rvm/bin:/home/пользователь/.rvm/bin"
+Environment="GEM_HOME=/home/alexy/.rvm/gems/ruby-2.3.1"
+Environment="GEM_PATH=/home/alexy/.rvm/gems/ruby-2.3.1:/home/alexy/.rvm/gems/ruby-2.3.1@global"
+Environment="QUEUE=now_scan"
+EnvironmentFile=/home/kgb/kgb/.env
+ExecStart=/bin/bash -lc 'bundle exec rake jobs:work'
+Restart=alway
+StandardInput=null
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=%n
+KillMode=mixed
+TimeoutStopSec=5
 ```
 После чего управление запуском приложения сведется к выполнению следующих команд Linux:
 ```
@@ -130,13 +179,21 @@ systemctl restart kgb.target
 ```
 sudo systemctl enable kgb.target
 ```
-Если необходимо запустить приложение на привелегированных портах (например, 443) можно воспользоваться пакетом authbind.
-Вначале нужно внести изменения в файл .env и сменить значение переменной окружения SSL_PORT=443, затем необходимо выполнить следующие команды (в примере приложение запускается из под непривилегированной учетной записи kgb):
+Если необходимо запустить приложение на привелегированных портах (например, 443) можно воспользоваться пакетом ==authbind==.
+Для этого вначале нужно внести изменения в находящийся в корневой папке приложения файл .env, сменив в нем значение переменной окружения SSL_POR:
+```
+SSL_PORT=443
+```
+Затем необходимо выполнить следующие команды (в примере приложение запускается из под непривилегированной учетной записи kgb):
 ```
 sudo apt-get install authbind
 sudo touch /etc/authbind/byport/443
 sudo chown kgb /etc/authbind/byport/443
 sudo chmod 500 /etc/authbind/byport/443
+```
+В файле kgb-web@.service должна быть такая строка:
+```
+ExecStart=/bin/bash -lc '/usr/bin/authbind --deep bundle exec puma'
 ```
 #### Запуск приложения (вариант 2, можно использовать, например, при отладке)
 запускаем веб приложение:
