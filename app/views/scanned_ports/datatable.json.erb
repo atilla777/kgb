@@ -1,13 +1,11 @@
-﻿<%= dt_response(@datatable) do |new_row, row| %>
+<%= dt_response(@datatable) do |new_row, row| %>
   <% new_row << row.job_time.strftime("%d.%m.%Y-%H.%M.%S") %>
   <% new_row << "<a href = '/organizations/#{row.organization_id}'
                   data-togle='toltip' data-placement='top'
-                  title = '#{row.organization.name}'
                   class = 'btn btn-link btn-xs'> #{row.organization_name}</a>"
                 %>
   <% new_row << %(<a href = '/jobs/#{row.job_id}' class = 'btn btn-link btn-xs'
-                  data-togle='toltip' data-placement='top'
-                  title = '#{row.job.name}'>
+                  data-togle='toltip' data-placement='top'>
                   #{row.job_name}
                   </a>
                  ) %>
@@ -44,4 +42,4 @@
   <% new_row << "<span class = '#{color}'> #{row.history_legality} </span>" %>
   <% new_row << row.service %>
   <% new_row << row.product %>
-<% end %>
+<% end %
