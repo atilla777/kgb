@@ -121,7 +121,7 @@ rvmsudo foreman start -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_w
 ```
 vmsudo foreman export systemd /etc/systemd/system -a kgb -u kgb -m web=1,planner_worker=1,now_scan_worker=7,planned_scan_worker=5
 ```
-> Указанная выше команда может отработать некорретно, поэтому необходимо проверить сгенериванные ею файлы и внести в них необходимые корректировки. В частности необходимо будети внести изменения в файлах:
+> Указанная выше команда может отработать некорретно, поэтому необходимо проверить сгенерированные ею файлы и внести в них необходимые корректировки. В частности необходимо проверить описание следующих сервисов ==systemd== (папка /etc/systemd):
 * kgb-web@.service
 * kgb-planner_worker@.service
 * kgb-now_scan_worker@.service
