@@ -49,6 +49,8 @@ var defaultSortDirection = $('#dt_big_table.display thead th.default_sort').attr
 if (defaultSortDirection == undefined)
 {defaultSortDirection = 'asc';}
 $('#dt_big_table.display').dataTable( {
+"pagingType": "simple",
+"info" : false,
 "autoWidth": false,
 "columnDefs": [
         { "targets": 'w5' , "width": '5%'},

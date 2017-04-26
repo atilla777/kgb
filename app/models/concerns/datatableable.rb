@@ -23,8 +23,9 @@
       result = {}
       result[:params] = params
       result[:fields] = dt_set_params(params, fields)
-      result[:current_objects] = dt_current_objects(params, result[:fields]) # отфильтрованные и отсортированные записи таблицы
-      result[:count] = dt_total_objects(result[:fields]) # количество таких записей
+      result[:count] = dt_total_objects # количество всех записей
+      result[:filtered_objects] = dt_total_objects #dt_filtered_objects(params, result[:fields]) # отфильтрованные и отсортированные записи таблицы
+      result[:current_objects] = dt_current_objects(params, result[:fields]) # отфильтрованные и отсортированные записи страницы
       result
     end
 
@@ -65,8 +66,14 @@
                 .offset(current_page*params[:iDisplayLength].to_i - params[:iDisplayLength].to_i) # записей на одну страницу
     end
 
-    def dt_total_objects(dt_params) # подсчет количества записей удовлетворяющих условию фильтра
-      dt_relation(dt_params).all.to_a.size
+    def dt_filtered_objects(params, dt_params) # подсчет количества записей удовлетворяющих условию фильтра
+      pagination_order = "#{dt_sorted_field(params[:iSortCol_0], dt_params)} #{params[:sSortDir_0] || 'ASC'}"
+      relation = dt_relation(dt_params)
+      relation.order(pagination_order).all.to_a.size
+    end
+
+    def dt_total_objects # подсчет количества всех записей
+      self.count #dt_relation(dt_params).all.to_a.size
     end
 
     def dt_select_string(field) # формирования части от select до from SQL запроса

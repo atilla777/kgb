@@ -80,7 +80,7 @@ module ApplicationHelper
     end
     result = %({"sEcho": #{datatable[:params][:sEcho] || -1},
                "iTotalRecords": #{datatable[:count]},
-               "iTotalDisplayRecords": #{datatable[:count]},
+               "iTotalDisplayRecords": #{datatable[:filtered_objects]},
                "aaData": [#{new_rows.join(', ')}]}
               )
     result.html_safe

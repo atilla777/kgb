@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160321175749) do
+ActiveRecord::Schema.define(version: 20170426170652) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20160321175749) do
 
   add_index "scanned_ports", ["host"], name: "index_scanned_ports_on_host"
   add_index "scanned_ports", ["job_id"], name: "index_scanned_ports_on_job_id"
+  add_index "scanned_ports", ["job_time"], name: "index_scanned_ports_on_job_time"
   add_index "scanned_ports", ["legality"], name: "index_scanned_ports_on_legality"
   add_index "scanned_ports", ["organization_id"], name: "index_scanned_ports_on_organization_id"
   add_index "scanned_ports", ["port"], name: "index_scanned_ports_on_port"
@@ -100,6 +101,10 @@ ActiveRecord::Schema.define(version: 20160321175749) do
   add_index "scanned_ports", ["protocol"], name: "index_scanned_ports_on_protocol"
   add_index "scanned_ports", ["service"], name: "index_scanned_ports_on_service"
   add_index "scanned_ports", ["state"], name: "index_scanned_ports_on_state"
+  add_index "scanned_ports", [nil], name: "index_scanned_ports_on_show_legality"
+  add_index "scanned_ports", [nil], name: "index_scanned_ports_on_show_port"
+  add_index "scanned_ports", [nil], name: "index_scanned_ports_on_show_product"
+  add_index "scanned_ports", [nil], name: "index_scanned_ports_on_show_state"
 
   create_table "schedules", force: :cascade do |t|
     t.integer  "job_id"
