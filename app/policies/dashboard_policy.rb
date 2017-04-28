@@ -30,6 +30,14 @@ class DashboardPolicy < ApplicationPolicy
     end
   end
 
+  def datatable2?
+    if @user.has_any_role? :admin, :editor, :viewer, :organization_editor, :organization_viewer
+      true
+    else
+      false
+    end
+  end
+
   def new_services?
     if @user.has_any_role? :admin, :editor, :viewer, :organization_editor, :organization_viewer
       true
