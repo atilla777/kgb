@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 
   get '/detected_services', to: 'dashboard#detected_services', as: :detected_services
   get '/dashboard/datatable', to: 'dashboard#datatable'
+  get '/dashboard/datatable2', to: 'dashboard#datatable2'
   get '/new_services', to: 'dashboard#new_services', as: :new_services
   get '/hosts', to: 'dashboard#hosts', as: :hosts
 
