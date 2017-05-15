@@ -96,9 +96,12 @@ class Job < ActiveRecord::Base
     new_hosts_list = []
     self.hosts.split(';').each do |host|
       range = /\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
+      range2 = /\s*(?<start_ip_d1_2>#{Service.ip4_d1_2_regexp})(?<start_ip_d3>#{Service.ip4_d1_regexp})\.(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d1_2>#{Service.ip4_d1_2_regexp})(?<end_ip_d3>#{Service.ip4_d1_regexp})\.(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
       if range
         new_hosts_list << if range[:start_ip_d1_3] == range[:end_ip_d1_3]
                             "#{range[:start_ip_d1_3]}#{range[:start_ip_d4]}-#{range[:end_ip_d4]}"
+                          elsif range2[:start_ip_d1_2] == range2[:end_ip_d1_2]
+                            "#{range2[:start_ip_d1_2]}#{range2[:start_ip_d3]}-#{range2[:end_ip_d3]}.#{range2[:start_ip_d4]}-#{range[:end_ip_d4]}"
                           else
                             host
                           end

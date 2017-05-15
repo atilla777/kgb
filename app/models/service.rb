@@ -2,6 +2,8 @@ class Service < ActiveRecord::Base
   include Datatableable
 
   IP4_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
+  IP4_D1_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))/
+  IP4_D1_2_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}/
   IP4_D1_3_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}/
   IP4_D4_REGEXP = /([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
 
@@ -30,12 +32,20 @@ class Service < ActiveRecord::Base
     IP4_REGEXP
   end
 
-  def self.ip4_d4_regexp
-    IP4_D4_REGEXP
+  def self.ip4_d1_regexp
+    IP4_D1_REGEXP
+  end
+
+  def self.ip4_d1_2_regexp
+    IP4_D1_2_REGEXP
   end
 
   def self.ip4_d1_3_regexp
     IP4_D1_3_REGEXP
+  end
+
+  def self.ip4_d4_regexp
+    IP4_D4_REGEXP
   end
 
   def self.dns_name_regexp
