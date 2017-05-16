@@ -7,7 +7,7 @@ class Service < ActiveRecord::Base
   IP4_D1_2_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}/
   IP4_D1_3_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}/
   IP4_D4_REGEXP = /([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
-  IP4_RANGE1_REGEXP = /\s*(?<start_ip_d1>#{IP4_D_REGEXP})\.
+  IP4_RANGE1_REGEXP = /^\s*(?<start_ip_d1>#{IP4_D_REGEXP})\.
                        (?<start_ip_d2>#{IP4_D_REGEXP})\.
                        (?<start_ip_d3>#{IP4_D_REGEXP})\.
                        (?<start_ip_d4>#{IP4_D_REGEXP})-
