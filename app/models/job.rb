@@ -13,7 +13,7 @@ class Job < ActiveRecord::Base
   validates :organization_id, numericality: {only_integer: true}
   validates :option_set_id, numericality: {only_integer: true}
 
-  before_save :range1_to_range2
+  before_save :convert_hosts
 
   scope :today_jobs, ->{
     joins(:schedules)
@@ -69,18 +69,23 @@ class Job < ActiveRecord::Base
     hosts_list.each do |host|
       ip = /^\s*#{Service.ip4_regexp}\s*$/.match(host)
       dns_name =  /^\s*#{Service.dns_name_regexp}\s*$/.match(host)
-      range = /^\s*(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\s*$/.match(host)
-      range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
+      # range like 10.1.1.1-1.1.1.2
+      range = /^\s*(?<start_ip>#{Service.ip4_regexp})
+              -(?<end_ip>#{Service.ip4_regexp})\s*$/x
+              .match(host)
+      # range like nmap format 10.1.1.1-10
+      range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})
+               (?<start_ip_d4>#{Service.ip4_d4_regexp})-
+               (?<end_ip_d4>#{Service.ip4_d4_regexp})
+               \s*$/x
+               .match(host)
+      # range like 10.1.1.*
       range3 = /^\s*(?<start_ip>#{Service.ip4_d1_3_regexp})\*\s*$/ =~ host
       if ip || range || range2 || range3 || dns_name
         if range
-          if IPAddr.new(range[:start_ip]).to_i > IPAddr.new(range[:end_ip]).to_i
-            err = true
-          end
+          err = IPAddr.new(range[:start_ip]).to_i > IPAddr.new(range[:end_ip]).to_i
         elsif range2
-          if range2[:start_ip_d4].to_i > range2[:end_ip_d4].to_i
-            err = true
-          end
+          err = range2[:start_ip_d4].to_i > range2[:end_ip_d4].to_i
         end
       else
         err = true
@@ -91,24 +96,60 @@ class Job < ActiveRecord::Base
     end
   end
 
-  # make range like 192.168.1-16 (nmap supported format) from range like 192.168.1-192.168.16
-  def range1_to_range2
+  def convert_hosts
     new_hosts_list = []
     self.hosts.split(';').each do |host|
-      range = /\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
-      range2 = /\s*(?<start_ip_d1_2>#{Service.ip4_d1_2_regexp})(?<start_ip_d3>#{Service.ip4_d1_regexp})\.(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d1_2>#{Service.ip4_d1_2_regexp})(?<end_ip_d3>#{Service.ip4_d1_regexp})\.(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*$/.match(host)
+      range = Service.ip4_range1_regexp.match(host)
       if range
-        new_hosts_list << if range[:start_ip_d1_3] == range[:end_ip_d1_3]
-                            "#{range[:start_ip_d1_3]}#{range[:start_ip_d4]}-#{range[:end_ip_d4]}"
-                          elsif range2[:start_ip_d1_2] == range2[:end_ip_d1_2]
-                            "#{range2[:start_ip_d1_2]}#{range2[:start_ip_d3]}-#{range2[:end_ip_d3]}.#{range2[:start_ip_d4]}-#{range[:end_ip_d4]}"
-                          else
-                            host
-                          end
+        new_hosts_list << to_nmap_range(range)
       else
         new_hosts_list << host
       end
     end
     self.hosts = new_hosts_list.join(';')
+  end
+
+  # make range like 192.168.1-16 (nmap supported format) from range like 192.168.1-192.168.16
+  def to_nmap_range(range)
+    case
+    when d1_3_eq?(range)
+      <<-IP.tr(" \n\t", '')
+        #{range[:start_ip_d1]}.
+        #{range[:start_ip_d2]}.
+        #{range[:start_ip_d3]}.
+        #{range[:start_ip_d4]}-#{range[:end_ip_d4]}
+      IP
+    when d1_2_eq?(range)
+      <<-IP.tr(" \n\t", '')
+        #{range[:start_ip_d1]}.
+        #{range[:start_ip_d2]}.
+        #{range[:start_ip_d3]}-#{range[:end_ip_d3]}.
+        #{range[:start_ip_d4]}-#{range[:end_ip_d4]}
+      IP
+    when d1_eq?(range)
+      <<-IP.tr(" \n\t", '')
+        #{range[:start_ip_d1]}.
+        #{range[:start_ip_d2]}-#{range[:end_ip_d2]}.
+        #{range[:start_ip_d3]}-#{range[:end_ip_d3]}.
+        #{range[:start_ip_d4]}-#{range[:end_ip_d4]}
+      IP
+    else
+      host
+    end
+  end
+
+  def d1_3_eq?(range)
+    range[:start_ip_d1] == range[:end_ip_d1] &&
+    range[:start_ip_d2] == range[:end_ip_d2] &&
+    range[:start_ip_d3] == range[:end_ip_d3]
+  end
+
+  def d1_2_eq?(range)
+    range[:start_ip_d1] == range[:end_ip_d1] &&
+    range[:start_ip_d2] == range[:end_ip_d2]
+  end
+
+  def d1_eq?(range)
+    range[:start_ip_d1] == range[:end_ip_d1]
   end
 end
