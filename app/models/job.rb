@@ -1,160 +1,153 @@
-class Service < ActiveRecord::Base
-  include Datatableable
-
-  IP4_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
-  IP4_D_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))/ # valid IP4 part like 192 or 10 or 1
-  IP4_D1_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))/
-  IP4_D1_2_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){2}/
-  IP4_D1_3_REGEXP = /(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}/
-  IP4_D4_REGEXP = /([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/
-  IP4_RANGE1_REGEXP = /^\s*(?<start_ip_d1>#{IP4_D_REGEXP})\.
-                       (?<start_ip_d2>#{IP4_D_REGEXP})\.
-                       (?<start_ip_d3>#{IP4_D_REGEXP})\.
-                       (?<start_ip_d4>#{IP4_D_REGEXP})-
-                       (?<end_ip_d1>#{IP4_D_REGEXP})\.
-                       (?<end_ip_d2>#{IP4_D_REGEXP})\.
-                       (?<end_ip_d3>#{IP4_D_REGEXP})\.
-                       (?<end_ip_d4>#{IP4_D_REGEXP})\s*$
-                      /x
-
-  DNS_NAME_REGEXP = /(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])/
-
-  PROTOCOLS = ['tcp', 'udp']
-
-  LEGALITIES = {1 => I18n.t('messages.message_yes'), 0 => I18n.t('messages.message_no')}
-
+class Job < ActiveRecord::Base
   belongs_to :organization
+  has_many :schedules, dependent: :destroy
+  has_many :scanned_ports, dependent: :destroy
+  belongs_to :option_set
 
   validates :name, length: {minimum: 3, maximum: 255}
-  validates :name, uniqueness: {scope: [:port, :host, :protocol]}, allow_blank: true
+  validates :name, uniqueness: {scope: :organization_id}
+  validates :options, length: {minimum: 3, maximum: 255}, allow_blank: true
+  validate :ports, :ports_format
+  validates :hosts, presence: true
+  validate :hosts_format
+  validates :organization_id, numericality: {only_integer: true}
+  validates :option_set_id, numericality: {only_integer: true}
 
-  validates :port, uniqueness: {scope: [:host, :protocol]}
-  validates :port, numericality: {only_integer: true}, allow_blank: true
-  validates :port, inclusion: {in: 0..65535}, allow_blank: true
+  before_save :convert_hosts
 
-  validate :host_is_ip4_or_range
-  validates :host, uniqueness: {scope: [:port, :protocol]}
-
-  validates :protocol, uniqueness: {scope: [:port, :host]}, allow_blank: true
-  validates :protocol, inclusion: {in: PROTOCOLS}, allow_blank: true
-
-  def self.ip4_regexp
-    IP4_REGEXP
+  scope :today_jobs, ->{
+    joins(:schedules)
+      .merge(Schedule.where('week_day = :week_day OR month_day = :month_day',
+                            week_day: Time.now.wday, month_day: Time.now.day))}
+  def run_today?
+    Schedule.where('job_id = :job_id AND (week_day = :week_day OR month_day = :month_day)',
+                    job_id: self.id, week_day: Time.now.wday, month_day: Time.now.day).first.present?
   end
 
-  def self.ip4_range1_regexp
-    IP4_RANGE1_REGEXP
-  end
-
-  def self.ip4_d1_regexp
-    IP4_D1_REGEXP
-  end
-
-  def self.ip4_d1_2_regexp
-    IP4_D1_2_REGEXP
-  end
-
-  def self.ip4_d1_3_regexp
-    IP4_D1_3_REGEXP
-  end
-
-  def self.ip4_d4_regexp
-    IP4_D4_REGEXP
-  end
-
-  def self.dns_name_regexp
-    DNS_NAME_REGEXP
-  end
-
-  def self.legalities
-    LEGALITIES
-  end
-
-  def self.protocols
-    PROTOCOLS
-  end
-
-  def self.show_legality(legality)
-    if legality == 1
-      I18n.t('messages.message_yes')
-    elsif legality == 0
-      I18n.t('messages.message_no')
-    else
-      I18n.t('messages.unknown')
-    end
-  end
-
-  def show_legality
-    if self.legality?
-      I18n.t('messages.message_yes')
-    else
-      I18n.t('messages.message_no')
-    end
-  end
-
-  def show_host
-    if port.present?
-      ''
-    else
-        I18n.t('activerecord.attributes.scanned_port.host')
-    end
-  end
-
-  def self.legality_key(state, host, port, protocol)
-    service = Service.where(host: host, port: port, protocol: protocol).first
-    if state == :closed
-      legality = 3 # no means
-    else
-      if service.present?
-        if service.legality == 1
-          legality = 1 # true
-        else
-          legality = 0 #false
-        end
-      else
-        legality = 2 # unknown
+  def self.find_by_dj_id(delayed_job_id)
+    delayed_job = Delayed::Job.where(id: delayed_job_id).first
+    if delayed_job.present?
+      job_data = YAML.load(delayed_job.handler).job_data
+      if job_data['job_class'] == 'ScanJob'
+        s = job_data['arguments'][0]['_aj_globalid']
+        job_id = /\d+$/.match(s)[0].to_i
+        Job.where(id: job_id).first
       end
     end
-    legality
-  end
-
-  # Make array of ip addresses from array of ip adddresses and ip ranges
-  # Example:
-  #   Service.normilized_hosts(['192.168.1.1', '192.168.1.2-192.168.1.3', '172.16.1-2']) ->
-  #   ['192.168.1.1', '192.168.1.2', '192.168.1.3', '172.16.1.1', '172.16.1.2']
-  def self.normilize_hosts(hosts)
-    normilized_hosts = []
-    hosts.each do |host|
-      if /\A(#{ip4_regexp})-(#{ip4_regexp})\z/ =~ host
-        range = /\A(?<start_ip>#{ip4_regexp})-(?<end_ip>#{ip4_regexp})\z/.match(host)
-        normilized_hosts += (IPAddr.new(range[:start_ip])..IPAddr.new(range[:end_ip])).map(&:to_s).to_a
-      elsif /\A(#{ip4_regexp})\z/ =~ host
-        normilized_hosts << host
-      elsif /\A(#{Service.ip4_d1_3_regexp})(#{Service.ip4_d4_regexp})-(#{Service.ip4_d4_regexp})\z/ =~ host
-        range2 = /\A(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\z/.match(host)
-        normilized_hosts += (IPAddr.new(range2[:start_ip_d1_3] << range2[:start_ip_d4])..IPAddr.new(range2[:start_ip_d1_3] << range2[:end_ip_d4])).map(&:to_s).to_a
-      end
-    end
-    normilized_hosts.uniq
   end
 
   private
+  # check port range like '21' or '80-123' or '110; 21-25;'
+  def ports_format
+    err = false
+    ports.split(',').each do |port_range|
+      ports_list = port_range.split('-')
+      if ports_list.length > 2
+          err = true
+      elsif ports_list.length == 2
+        if ports_list[0].to_i > ports_list[1].to_i
+          err = true
+        end
+      end
+      ports_list.each do |port|
+        unless /^\s*\d*$\s*/ =~ port
+          err = true
+        end
+        unless (0..65535).cover? port.to_i
+          err = true
+        end
+      end
+    end
+    if err
+      errors[:ports] << I18n.t('errors.messages.must_be_port_or_range')
+    end
+  end
 
-  def host_is_ip4_or_range
-    range = /\A\s*(?<start_ip>#{Service.ip4_regexp})-(?<end_ip>#{Service.ip4_regexp})\s*\z/.match(host)
-    range2 = /\A\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})(?<start_ip_d4>#{Service.ip4_d4_regexp})-(?<end_ip_d4>#{Service.ip4_d4_regexp})\s*\z/.match(host)
-    unless /\A\s*#{Service.ip4_regexp}\s*\z/ =~ host || range || range2
-      errors[:host] << I18n.t('errors.messages.must_be_ip4_or_range')
-    end
-    # check the second ip in range is greater then the first ip
-    if range
-      if IPAddr.new(range[:start_ip]).to_i > IPAddr.new(range[:end_ip]).to_i
-        errors[:host] << I18n.t('errors.messages.must_be_ip4_or_range')
+  def hosts_format
+    err = false
+    hosts_list = hosts.split(';')
+    hosts_list.each do |host|
+      ip = /^\s*#{Service.ip4_regexp}\s*$/.match(host)
+      dns_name =  /^\s*#{Service.dns_name_regexp}\s*$/.match(host)
+      # range like 10.1.1.1-1.1.1.2
+      range = /^\s*(?<start_ip>#{Service.ip4_regexp})
+              -(?<end_ip>#{Service.ip4_regexp})\s*$/x
+              .match(host)
+      # range like nmap format 10.1.1.1-10
+      range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})
+               (?<start_ip_d4>#{Service.ip4_d4_regexp})-
+               (?<end_ip_d4>#{Service.ip4_d4_regexp})
+               \s*$/x
+               .match(host)
+      # range like 10.1.1.*
+      range3 = /^\s*(?<start_ip>#{Service.ip4_d1_3_regexp})\*\s*$/ =~ host
+      if ip || range || range2 || range3 || dns_name
+        if range
+          err = IPAddr.new(range[:start_ip]).to_i > IPAddr.new(range[:end_ip]).to_i
+        elsif range2
+          err = range2[:start_ip_d4].to_i > range2[:end_ip_d4].to_i
+        end
+      else
+        err = true
       end
-    elsif range2
-      if range2[:start_ip_d4].to_i > range2[:end_ip_d4].to_i
-        errors[:host] << I18n.t('errors.messages.must_be_ip4_or_range')
+    end
+    if err
+      errors[:hosts] << I18n.t('errors.messages.must_be_ip4_or_range')
+    end
+  end
+
+  def convert_hosts
+    new_hosts_list = []
+    self.hosts.split(';').each do |host|
+      range = Service.ip4_range1_regexp.match(host)
+      if range
+        new_hosts_list << to_nmap_range(range)
+      else
+        new_hosts_list << host
       end
     end
+    self.hosts = new_hosts_list.join(';')
+  end
+
+  # make range like 192.168.1-16 (nmap supported format) from range like 192.168.1-192.168.16
+  def to_nmap_range(range)
+    case
+    when d1_3_eq?(range)
+      <<-IP.tr(" \n\t", '')
+        #{range[:start_ip_d1]}.
+        #{range[:start_ip_d2]}.
+        #{range[:start_ip_d3]}.
+        #{range[:start_ip_d4]}-#{range[:end_ip_d4]}
+      IP
+    when d1_2_eq?(range)
+      <<-IP.tr(" \n\t", '')
+        #{range[:start_ip_d1]}.
+        #{range[:start_ip_d2]}.
+        #{range[:start_ip_d3]}-#{range[:end_ip_d3]}.
+        #{range[:start_ip_d4]}-#{range[:end_ip_d4]}
+      IP
+    when d1_eq?(range)
+      <<-IP.tr(" \n\t", '')
+        #{range[:start_ip_d1]}.
+        #{range[:start_ip_d2]}-#{range[:end_ip_d2]}.
+        #{range[:start_ip_d3]}-#{range[:end_ip_d3]}.
+        #{range[:start_ip_d4]}-#{range[:end_ip_d4]}
+      IP
+    end
+  end
+
+  def d1_3_eq?(range)
+    range[:start_ip_d1] == range[:end_ip_d1] &&
+    range[:start_ip_d2] == range[:end_ip_d2] &&
+    range[:start_ip_d3] == range[:end_ip_d3]
+  end
+
+  def d1_2_eq?(range)
+    range[:start_ip_d1] == range[:end_ip_d1] &&
+    range[:start_ip_d2] == range[:end_ip_d2]
+  end
+
+  def d1_eq?(range)
+    range[:start_ip_d1] == range[:end_ip_d1]
   end
 end
