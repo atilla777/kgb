@@ -64,35 +64,146 @@ class Job < ActiveRecord::Base
   end
 
   def hosts_format
-    err = false
+    result = :invalid
     hosts_list = hosts.split(';')
     hosts_list.each do |host|
-      ip = /^\s*#{Service.ip4_regexp}\s*$/.match(host)
-      dns_name =  /^\s*#{Service.dns_name_regexp}\s*$/.match(host)
-      # range like 10.1.1.1-1.1.1.2
-      range = /^\s*(?<start_ip>#{Service.ip4_regexp})
-              -(?<end_ip>#{Service.ip4_regexp})\s*$/x
-              .match(host)
-      # range like nmap format 10.1.1.1-10
-      range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})
-               (?<start_ip_d4>#{Service.ip4_d4_regexp})-
-               (?<end_ip_d4>#{Service.ip4_d4_regexp})
-               \s*$/x
-               .match(host)
-      # range like 10.1.1.*
-      range3 = /^\s*(?<start_ip>#{Service.ip4_d1_3_regexp})\*\s*$/ =~ host
-      if ip || range || range2 || range3 || dns_name
-        if range
-          err = IPAddr.new(range[:start_ip]).to_i > IPAddr.new(range[:end_ip]).to_i
-        elsif range2
-          err = range2[:start_ip_d4].to_i > range2[:end_ip_d4].to_i
-        end
-      else
-        err = true
-      end
+      result = if ip4?(host)
+                 ip4?(host)
+               elsif ip4_cidr?(host)
+                 ip4_cidr?(host)
+               elsif ip_range1?(host)
+                 ip_range1?(host)
+               elsif ip_range2?(host)
+                 ip_range2?(host)
+               elsif ip_range2_2?(host)
+                 ip_range2_2?(host)
+               elsif ip_range2_3?(host)
+                 ip_range2_3?(host)
+               elsif ip_range3?(host)
+                 ip_range3?(host)
+               elsif dns_name?(host)
+                 dns_name?(host)
+               else
+                 :invalid
+               end
     end
-    if err
+    if result == :invalid
       errors[:hosts] << I18n.t('errors.messages.must_be_ip4_or_range')
+    end
+  end
+
+  def ip4?(host)
+    if /^\s*#{Service.ip4_regexp}\s*$/.match(host)
+      :valid
+    else
+      false
+    end
+  end
+
+  # range loke 10.1.1.0/24
+  def ip4_cidr?(host)
+    if /^\s*#{Service.ip4_cidr_regexp}\s*$/.match(host)
+      :valid
+    else
+      false
+    end
+  end
+
+  # range like 10.1.1.1-1.1.1.2
+  def ip_range1?(host)
+    range = /^\s*(?<start_ip>#{Service.ip4_regexp})
+            -(?<end_ip>#{Service.ip4_regexp})\s*$/x
+            .match(host)
+    if range
+      IPAddr.new(range[:start_ip]).to_i < IPAddr.new(range[:end_ip]).to_i ? :valid : :invalid
+    else
+      false
+    end
+  end
+
+  # range like nmap format 10.1.1.1-10
+  def ip_range2?(host)
+    range2 = /^\s*(?<start_ip_d1_3>#{Service.ip4_d1_3_regexp})
+             (?<start_ip_d4>#{Service.ip4_d4_regexp})-
+             (?<end_ip_d4>#{Service.ip4_d4_regexp})
+             \s*$/x
+             .match(host)
+    if range2
+      range2[:start_ip_d4].to_i < range2[:end_ip_d4].to_i ? :valid : :invalid
+    else
+      false
+    end
+  end
+
+  # range like nmap format 10.1.1-10.1-10
+  def ip_range2_2?(host)
+    range2_2 = /^\s*(?<start_ip_d1_2>#{Service.ip4_d1_2_regexp})
+             (?<start_ip_d3>#{Service.ip4_d_regexp})-
+             (?<end_ip_d3>#{Service.ip4_d_regexp}).
+             (?<start_ip_d4>#{Service.ip4_d4_regexp})-
+             (?<end_ip_d4>#{Service.ip4_d4_regexp})
+             \s*$/x
+             .match(host)
+    if range2_2
+      if range2_2[:start_ip_d4].to_i > range2_2[:end_ip_d4].to_i
+        :invalid
+      elsif range2_2[:start_ip_d3].to_i > range2_2[:end_ip_d3].to_i
+        :invalid
+      else
+        :valid
+      end
+    else
+      false
+    end
+  end
+
+  # range like nmap format 10.1-10.1-10.1-10
+  def ip_range2_3?(host)
+    range2_3 = /^\s*(?<start_ip_d1_2>#{Service.ip4_d_regexp}).
+             (?<start_ip_d2>#{Service.ip4_d_regexp})-
+             (?<end_ip_d2>#{Service.ip4_d_regexp}).
+             (?<start_ip_d3>#{Service.ip4_d_regexp})-
+             (?<end_ip_d3>#{Service.ip4_d_regexp}).
+             (?<start_ip_d4>#{Service.ip4_d4_regexp})-
+             (?<end_ip_d4>#{Service.ip4_d4_regexp})
+             \s*$/x
+             .match(host)
+    if range2_3
+      if range2_3[:start_ip_d4].to_i > range2_3[:end_ip_d4].to_i
+        :invalid
+      elsif range2_3[:start_ip_d3].to_i > range2_3[:end_ip_d3].to_i
+        :invalid
+      elsif range2_3[:start_ip_d2].to_i > range2_3[:end_ip_d2].to_i
+        :invalid
+      else
+        :valid
+      end
+    else
+      false
+    end
+  end
+
+  # range like 10.1.1.*
+  def ip_range3?(host)
+    case
+    when /^\s*(?<start_ip>#{Service.ip4_d1_3_regexp})\*\s*$/ =~ host
+      :valid
+    when /^\s*(?<start_ip>#{Service.ip4_d1_2_regexp})\*.\*\s*$/ =~ host
+      :valid
+    when /^\s*(?<start_ip>#{Service.ip4_d_regexp}).\*.\*.\*\s*$/ =~ host
+      :valid
+    else
+      false
+    end
+  end
+
+  def dns_name?(host)
+    if /^\s*#{Service.wrong_ip4_regexp}\s*$/.match(host) # detect IP4 addresses
+      false
+    elsif /^\s*#{Service.dns_name_regexp}\s*$/.match(host)
+      :valid
+    else
+      false
     end
   end
 
