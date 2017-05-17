@@ -2,6 +2,7 @@ class OrganizationsController < ApplicationController
   before_action :set_organization, only: [:show, :edit, :update, :destroy, :report]
   before_action :set_date, only: [:show, :report]
   before_action :set_services, only: [:show, :report]
+  before_action :set_scans, only: [:show, :report]
   before_action :set_hosts, only: [:show, :report]
   before_action :set_jobs, only: [:show, :report]
   before_action :reset_previous_action, only: [:index, :show]
@@ -127,6 +128,35 @@ class OrganizationsController < ApplicationController
                       .order(host: :asc)
                       .includes(:job)
   end
+  
+  def set_scans
+    organization_hosts = @organization.services.group(:host).pluck(:host)
+    normilized_organization_hosts = Service.normilize_hosts(organization_hosts)
+    @scans = ScannedPort.where("scanned_ports.host IN (#{normilized_organization_hosts.map{|h| "'#{h}'"}.join(', ')})")
+                      .select('scanned_ports.*, s.id AS s_id, s.legality AS s_legality')
+                      .joins(%Q(
+                               INNER JOIN
+                                 (SELECT
+                                    scanned_ports.job_id,
+                                    MAX(scanned_ports.job_time) AS 'max_time' FROM scanned_ports
+                                  WHERE scanned_ports.job_time <= '#{@selected_date} 23:59:59'
+                                  GROUP BY scanned_ports.job_id)a
+                               ON a.job_id = scanned_ports.job_id
+                               AND a.max_time = scanned_ports.job_time
+                              )
+                           )
+                      .joins(%Q(
+                             LEFT OUTER JOIN services AS s
+                             ON s.host = scanned_ports.host
+                             AND s.port = scanned_ports.port
+                             AND s.protocol = scanned_ports.protocol
+                             AND s.organization_id = #{@organization.id}
+                             )
+                            )
+                      .distinct
+                      .order(host: :asc)
+                      .includes(:job)
+  end
 
   def set_hosts
     @hosts = Service.where(organization_id: @organization.id)
@@ -166,7 +196,7 @@ class OrganizationsController < ApplicationController
     text_style.first_line_indent = 400
 
     document.paragraph(header_style).apply(header_font_style) << "Отчет о сетевых ресурсах организации #{@organization.name}"
-    document.paragraph(header_style).apply(text_font_style) << <<~TEXT
+    document.paragraph(header_style).apply(text_font_style) << <<-TEXT
       (отчет сгенерирован #{Time.now.strftime('%d.%m.%Y')}, открытые порты по состоянию на #{DateTime.parse(@selected_date).strftime('%d.%m.%Y')})
     TEXT
 
@@ -208,7 +238,7 @@ class OrganizationsController < ApplicationController
     document.paragraph(text_style).line_break
     document.paragraph(text_style).apply(header_font_style) << 'Открытые порты организации:'
     @active_services.each_with_index do |service, i|
-      document.paragraph(text_style).apply(text_font_style) << <<~TEXT
+      document.paragraph(text_style).apply(text_font_style) << <<-TEXT
         #{i + 1}. порт - #{service.port}, 
         состояние - #{service.show_state}, 
         хост - #{service.host}, 
@@ -225,7 +255,7 @@ class OrganizationsController < ApplicationController
     document.paragraph(text_style).line_break
     document.paragraph(text_style).apply(header_font_style) << 'Сервисы организации:'
     @services.each_with_index do |service, i|
-      document.paragraph(text_style).apply(text_font_style) << <<~TEXT
+      document.paragraph(text_style).apply(text_font_style) << <<-TEXT
         #{i + 1}. #{service.name}: 
         порт - #{service.port}, 
         хост - #{service.host}, 
