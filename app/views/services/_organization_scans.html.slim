@@ -1,0 +1,37 @@
+br
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th = t('activerecord.attributes.scanned_port.job_time')
+      th = t('activerecord.attributes.scanned_port.job_id')
+      th = t('activerecord.attributes.scanned_port.host')
+      th = t('activerecord.attributes.scanned_port.port')
+      th = t('activerecord.attributes.scanned_port.protocol')
+      th = t('activerecord.attributes.scanned_port.state')
+      th = t('activerecord.attributes.service.legality')
+      th = t('activerecord.attributes.scanned_port.legality')
+      th = t('activerecord.attributes.scanned_port.service')
+      th = t('activerecord.attributes.scanned_port.product')
+      th
+
+  tbody
+    - @scans.each do |scanned_port|
+      tr
+        td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%S")
+        td = scanned_port.job.name
+        td = scanned_port.host
+        td = "<#{scanned_port.port}>"
+        td = scanned_port.protocol
+        td = scanned_port.show_state
+        td = Service.show_legality(scanned_port.s_legality)
+        td = scanned_port.show_legality
+        td = scanned_port.service
+        td = scanned_port.show_product
+        td
+          - if scanned_port.s_legality.present?
+            = link_to service_path(scanned_port.s_id.to_i), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('actions.view') do
+              i.glyphicon.glyphicon-info-sign aria-hidden="true"
+          - else
+            = link_to new_service_path(service: {organization_id: @organization.id, host: scanned_port.host, port: scanned_port.port, protocol: scanned_port.protocol, service: "#{scanned_port.service} #{@organization.name}"}), class: 'btn btn-default btn-xs', 'data-toggle' => 'tooltip', 'data-placement' => 'top', title: t('helpers.submit.create', model: Service.model_name.human) do
+              span.text-info
+                i.glyphicon.glyphicon-plus-sign aria-hidden="true"
