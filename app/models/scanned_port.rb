@@ -40,9 +40,9 @@ class ScannedPort < ActiveRecord::Base
 
   def show_product
     result = []
-    result << product if product
-    result << product_version if product_version
-    result << product_extrainfo if product_extrainfo
+    result << product if product.present?
+    result << product_version if product_version.present?
+    result << product_extrainfo if product_extrainfo.present?
     result.join(', ')
   end
 end
