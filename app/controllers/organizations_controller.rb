@@ -196,7 +196,7 @@ class OrganizationsController < ApplicationController
     text_style.first_line_indent = 400
 
     document.paragraph(header_style).apply(header_font_style) << "Отчет о сетевых ресурсах организации #{@organization.name}"
-    document.paragraph(header_style).apply(text_font_style) << <<-TEXT
+    document.paragraph(header_style).apply(text_font_style) << <<~TEXT
       (отчет сгенерирован #{Time.now.strftime('%d.%m.%Y')}, открытые порты по состоянию на #{DateTime.parse(@selected_date).strftime('%d.%m.%Y')})
     TEXT
 
@@ -238,7 +238,7 @@ class OrganizationsController < ApplicationController
     document.paragraph(text_style).line_break
     document.paragraph(text_style).apply(header_font_style) << 'Открытые порты организации:'
     @active_services.each_with_index do |service, i|
-      document.paragraph(text_style).apply(text_font_style) << <<-TEXT
+      document.paragraph(text_style).apply(text_font_style) << <<~TEXT
         #{i + 1}. порт - #{service.port}, 
         состояние - #{service.show_state}, 
         хост - #{service.host}, 
@@ -255,7 +255,7 @@ class OrganizationsController < ApplicationController
     document.paragraph(text_style).line_break
     document.paragraph(text_style).apply(header_font_style) << 'Сервисы организации:'
     @services.each_with_index do |service, i|
-      document.paragraph(text_style).apply(text_font_style) << <<-TEXT
+      document.paragraph(text_style).apply(text_font_style) << <<~TEXT
         #{i + 1}. #{service.name}: 
         порт - #{service.port}, 
         хост - #{service.host}, 
