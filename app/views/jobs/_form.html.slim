@@ -40,7 +40,7 @@ javascript:
   .form-group
     = f.label :hosts, class: 'col-sm-2 control-label required'
     .col-sm-10
-      = f.text_field :hosts, class: 'form-control', placeholder: 'адрес или адреса (192.168.1.1; 10.1.1.1-255; 172.16.1.*; www.ya.ru)'
+      = f.text_field :hosts, class: 'form-control', placeholder: 'адрес или адреса (192.168.1.1; 10.1.1.0/24; 10.1.1.1-255; 10.0.0.0-10.255.255.255; 172.16.1.*; www.ya.ru)'
   .form-group
     = f.label :description, class: 'col-sm-2 control-label'
     .col-sm-10
