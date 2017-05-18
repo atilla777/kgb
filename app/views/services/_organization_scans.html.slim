@@ -18,7 +18,7 @@ table.display.table.table-striped.table-bordered#index_table
     - @scans.each do |scanned_port|
       tr
         td = scanned_port.job_time.strftime("%d.%m.%Y-%H.%m.%S")
-        td = scanned_port.job.name
+        td = scanned_port.job.name if scanned_port.job
         td = scanned_port.host
         td = "<#{scanned_port.port}>"
         td = scanned_port.protocol
