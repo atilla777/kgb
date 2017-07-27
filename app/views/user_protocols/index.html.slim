@@ -4,7 +4,8 @@ h3
 table.display.table.table-striped.table-bordered#index_table
   thead
     tr
-      th =t('activerecord.attributes.user_protocol.created_at')
+      th.default_sort data-sort = 'desc'
+        =t('activerecord.attributes.user_protocol.created_at')
       th =t('activerecord.attributes.user_protocol.user')
       th =t('activerecord.attributes.user_protocol.ip_address')
       th =t('activerecord.attributes.user_protocol.action')
