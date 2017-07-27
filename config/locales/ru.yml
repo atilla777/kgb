@@ -51,6 +51,7 @@ ru:
   navigations:
     service: Обслуживание
     backup_and_clean: Резервирование и очистка
+    user_protocols: Протокол действий пользователей
     main_info: Основная информация
     week_days: Дни недели
     roles: Роли
@@ -88,6 +89,7 @@ ru:
     view: Показать
     edit: Редактировать
     delete: Удалить
+    delete_all: Удалить все записи
     confirm: Вы уверены?
     back: Назад
     new: Новая запись -
@@ -112,6 +114,8 @@ ru:
     goodbay: Всего доброго!
   activerecord:
     models:
+      user_protocol:
+        other: Протокол действий пользователей
       organization:
         one: Организация
         other: Организации
@@ -134,6 +138,13 @@ ru:
         one: Опция сканирования
         other: Опции сканирования
     attributes:
+      user_protocol:
+        ip_address: IP адресс
+        user: Пользователь
+        description: Описание
+        controller: Контроллер
+        action: Действие
+        created_at: Время действия
       option_set:
         name: Название
         description: Описание

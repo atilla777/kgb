@@ -82,6 +82,7 @@ class ServicesController < ApplicationController
         flash[:success] = t('flashes.create', model: Service.model_name.human)
         format.html { redirect_to session.delete(:return_to) || services_path }
         format.json { render :show, status: :created, location: @service }
+        protocol_action("создание сервиса #{@service.name}")
       else
         format.html { render :new }
         format.json { render json: @service.errors, status: :unprocessable_entity }
@@ -92,12 +93,14 @@ class ServicesController < ApplicationController
   def legalise
     authorize @service
     @service.update_attribute :legality, 1
+    protocol_action("легализация сервиса #{@service.name}")
     render 'dashboard/detected_services_renew'
   end
 
   def unlegalise
     authorize @service
     @service.update_attribute :legality, 0
+    protocol_action("делегализация сервиса #{@service.name}")
     render 'dashboard/detected_services_renew'
   end
 
@@ -110,6 +113,7 @@ class ServicesController < ApplicationController
         flash[:success] = t('flashes.update', model: Service.model_name.human)
         format.html { redirect_to session.delete(:return_to) || services_path }
         format.json { render :show, status: :ok, location: @service }
+        protocol_action("редактирование сервиса #{@service.name}")
       else
         format.html { render :edit }
         format.json { render json: @service.errors, status: :unprocessable_entity }
@@ -122,6 +126,7 @@ class ServicesController < ApplicationController
   def destroy
     authorize @service
     @service.destroy
+    protocol_action("удаление сервиса #{@service.name}")
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Service.model_name.human)
       format.html { redirect_to session.delete(:return_to) }

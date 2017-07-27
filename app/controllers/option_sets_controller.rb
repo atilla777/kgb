@@ -35,6 +35,7 @@ class OptionSetsController < ApplicationController
         flash[:success] = t('flashes.create', model: OptionSet.model_name.human)
         format.html { redirect_to @option_set}
         format.json { render :show, status: :created, location: @option_set }
+        protocol_action("создание опций #{@option_set.name}")
       else
         format.html { render :new }
         format.json { render json: @option_set.errors, status: :unprocessable_entity }
@@ -51,6 +52,7 @@ class OptionSetsController < ApplicationController
         flash[:success] = t('flashes.update', model: OptionSet.model_name.human)
         format.html { redirect_to @option_set}
         format.json { render :show, status: :ok, location: @option_set }
+        protocol_action("редактирование опций #{@option_set.name}")
       else
         format.html { render :edit }
         format.json { render json: @option_set.errors, status: :unprocessable_entity }
@@ -63,6 +65,7 @@ class OptionSetsController < ApplicationController
   def destroy
     authorize @option_set
     @option_set.destroy
+    protocol_action("удаление опций #{@option_set.name}")
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: OptionSet.model_name.human)
       format.html { redirect_to option_sets_url}

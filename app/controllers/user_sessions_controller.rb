@@ -11,6 +11,7 @@ class UserSessionsController < ApplicationController
     if @user_session.save
       flash[:success] = t('user_sessions.welcome')
       redirect_to root_path
+      protocol_action("вход пользователя #{current_user.name}")
     else
       flash[:danger] = t('user_sessions.wrong')
       render :new, layout: false

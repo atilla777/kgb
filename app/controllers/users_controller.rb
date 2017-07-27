@@ -53,6 +53,7 @@ class UsersController < ApplicationController
         flash[:success] = t('flashes.create', model: User.model_name.human)
         format.html { redirect_to session.delete(:return_to) || users_path }
         format.json { render :show, status: :created, location: @user }
+        protocol_action("создание пользователя #{@user.name}")
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -69,6 +70,7 @@ class UsersController < ApplicationController
         flash[:success] = t('flashes.update', model: User.model_name.human)
         format.html { redirect_to session.delete(:return_to) || users_path}
         format.json { render :show, status: :ok, location: @user }
+        protocol_action("редактирование пользователя #{@user.name}")
       else
         format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -81,6 +83,7 @@ class UsersController < ApplicationController
   def destroy
     authorize @user
     @user.destroy
+    protocol_action("удаление пользователя #{@user.name}")
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: User.model_name.human)
       format.html { redirect_to session.delete(:return_to) }

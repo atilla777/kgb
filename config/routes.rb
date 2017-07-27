@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root 'organizations#index'
 
+  get '/user_protocols', to: 'user_protocols#index', as: :protocols
+  delete '/user_protocols', to: 'user_protocols#destroy_all', as: :protocols_destroy_all
+
   get 'dj_manager/index', as: :dj_index
   get 'dj_manager/:id' => "dj_manager#show", as: :dj_show
 

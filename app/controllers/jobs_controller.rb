@@ -8,6 +8,7 @@ class JobsController < ApplicationController
   def scan
     authorize @job
     active_job = ScanJob.perform_later(@job, 'now')
+    protocol_action("запуск работы пользователем #{@job.name}")
     flash[:success] = "#{t('flashes.run')} ID задачи = #{active_job.provider_job_id}"
     redirect_to session.delete(:return_to)
   end
@@ -63,6 +64,7 @@ class JobsController < ApplicationController
         #start_job_if_planned_today @job
         format.html { redirect_to session.delete(:return_to) || jobs_path}
         format.json { render :show, status: :created, location: @job }
+        protocol_action("создание работы #{@job.name}")
       else
         format.html { render :new }
         format.json { render json: @job.errors, status: :unprocessable_entity }
@@ -79,6 +81,7 @@ class JobsController < ApplicationController
         flash[:success] = t('flashes.update', model: Job.model_name.human)
         format.html { redirect_to session.delete(:return_to) || jobs_path}
         format.json { render :show, status: :ok, location: @job }
+        protocol_action("редактирование работы #{@job.name}")
       else
         format.html { render :edit }
         format.json { render json: @job.errors, status: :unprocessable_entity }
@@ -91,6 +94,7 @@ class JobsController < ApplicationController
   def destroy
     authorize @job
     @job.destroy
+    protocol_action("удаление работы #{@job.name}")
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Job.model_name.human)
       format.html { redirect_to session.delete(:return_to) }

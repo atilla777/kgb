@@ -42,6 +42,7 @@ class OrganizationsController < ApplicationController
         flash[:success] = t('flashes.create', model: Organization.model_name.human)
         format.html { redirect_to @organization}
         format.json { render :show, status: :created, location: @organization }
+        protocol_action("создание организации #{@organization.name}")
       else
         format.html { render :new }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
@@ -58,6 +59,7 @@ class OrganizationsController < ApplicationController
         flash[:success] = t('flashes.update', model: Organization.model_name.human)
         format.html { redirect_to @organization}
         format.json { render :show, status: :ok, location: @organization }
+        protocol_action("редактирование организации #{@organization.name}")
       else
         format.html { render :edit }
         format.json { render json: @organization.errors, status: :unprocessable_entity }
@@ -70,6 +72,7 @@ class OrganizationsController < ApplicationController
   def destroy
     authorize @organization
     @organization.destroy
+    protocol_action("удаление организации #{@organization.name}")
     respond_to do |format|
       flash[:success] = t('flashes.destroy', model: Organization.model_name.human)
       format.html { redirect_to organizations_url}

@@ -1,0 +1,27 @@
+h3
+  span.text-primary = UserProtocol.model_name.human count: 2
+
+table.display.table.table-striped.table-bordered#index_table
+  thead
+    tr
+      th =t('activerecord.attributes.user_protocol.created_at')
+      th =t('activerecord.attributes.user_protocol.user')
+      th =t('activerecord.attributes.user_protocol.ip_address')
+      th =t('activerecord.attributes.user_protocol.action')
+      th =t('activerecord.attributes.user_protocol.controller')
+      th  =t('activerecord.attributes.user_protocol.description')
+
+  tbody
+    - @user_protocols.each do |user_protocol|
+      tr
+        td = user_protocol.created_at.strftime("%Y.%m.%d %H:%M")
+        td = user_protocol.user.name if user_protocol.user
+        td = user_protocol.ip_address
+        td = user_protocol.action
+        td = user_protocol.controller
+        td = user_protocol.description
+
+br
+
+= link_to protocols_destroy_all_path, data: {:confirm => 'Are you sure?'}, :method => :delete do
+  span.btn.btn-danger = t('actions.delete_all')

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170427172729) do
+ActiveRecord::Schema.define(version: 20170727133953) do
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -142,6 +142,21 @@ ActiveRecord::Schema.define(version: 20170427172729) do
   add_index "services", ["organization_id"], name: "index_services_on_organization_id"
   add_index "services", ["port"], name: "index_services_on_port"
   add_index "services", ["protocol"], name: "index_services_on_protocol"
+
+  create_table "user_protocols", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "ip_address"
+    t.string   "action"
+    t.string   "controller"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "user_protocols", ["action"], name: "index_user_protocols_on_action"
+  add_index "user_protocols", ["controller"], name: "index_user_protocols_on_controller"
+  add_index "user_protocols", ["user_id"], name: "index_user_protocols_on_user_id"
+  add_index "user_protocols", [nil], name: "index_user_protocols_on_ip_adress"
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
