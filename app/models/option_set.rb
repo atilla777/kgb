@@ -93,7 +93,7 @@ class OptionSet < ActiveRecord::Base
   end
 
   def top_ports=(value)
-    options[:top_ports] = value.to_i if value.present?
+    options[:top_ports] = value.present? ? value.to_i : nil
   end
 
   def aggressive_timing
